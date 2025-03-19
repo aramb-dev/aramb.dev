@@ -1,25 +1,36 @@
-- name: FTP Deploy
-  uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-  with:
-    server: 167.88.45.24  # FTP server
-    username: arambilal  # FTP username
-    password: ${{ secrets.password }}  # FTP password (stored in GitHub Secrets)
-    
-    # Optional configurations
-    port: # Specify port if needed
-    protocol: # ftp, ftps, or ftps-legacy
-    
-    # Local and server directories
-    local-dir: # Specify local directory (must end with a trailing slash)
-    server-dir: /home/arambilal/web/aramb.dev/public_html  # Server directory (must end with a trailing slash)
-    
-    # Deployment state tracking
-    state-name: /home/arambilal/web/aramb.dev/.github-deploy-state.json
-    
-    # Additional options
-    dry-run: false  # Set to true to simulate deployment without making changes
-    dangerous-clean-slate: false  # Set to true to wipe server-dir before deployment
-    exclude: # Add glob patterns to exclude files (e.g., node_modules, .git)
-    log-level: standard  # Options: minimal, standard, verbose
-    security: # strict or loose
-    timeout: # Timeout in milliseconds for FTP operations
+name: Server Prod Deploy
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 167.88.45.24  # FTP server
+          username: arambilal  # FTP username
+          password: ${{ secrets.password }}  # FTP password (stored in GitHub Secrets)
+
+          # Optional configurations
+          port: 21  # Specify port if needed (default is 21 for FTP)
+          protocol: ftps  # ftp, ftps, or ftps-legacy
+
+          # Local and server directories
+          server-dir: /home/arambilal/web/aramb.dev/public_html/  # Server directory (must end with a trailing slash)
+
+          # Deployment state tracking
+          state-name: /home/arambilal/web/aramb.dev/.github-deploy-state.json
+
+          # Additional options
+          dry-run: false  # Set to true to simulate deployment without making changes
+          exclude: .git/**  # Add glob patterns to exclude files (e.g., node_modules, .git)
+          log-level: standard  # Options: minimal, standard, verbose
