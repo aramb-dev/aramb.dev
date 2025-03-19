@@ -1,34 +1,25 @@
- - name: FTP Deploy
-  # You may pin to the exact commit or the version.
-  # uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65
+- name: FTP Deploy
   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
   with:
-    # ftp server
-    server: 167.88.45.24
-    # ftp username
-    username: arambilal
-    # ftp password
-    password: ${{ secrets.password }}
-    # Server port to connect to (read your web hosts docs)
-    port: # optional
-    # protocol to deploy with - ftp, ftps, or ftps-legacy
-    protocol: # optional
-    # Folder to upload from, must end with trailing slash /
-    local-dir: # optional
-    # Path to upload to on the server. Must end with trailing slash /
-    server-dir: /home/arambilal/web/aramb.dev/public_html
-    # Path and name of the state file - this file is used to track which files have been deployed
+    server: 167.88.45.24  # FTP server
+    username: arambilal  # FTP username
+    password: ${{ secrets.password }}  # FTP password (stored in GitHub Secrets)
+    
+    # Optional configurations
+    port: # Specify port if needed
+    protocol: # ftp, ftps, or ftps-legacy
+    
+    # Local and server directories
+    local-dir: # Specify local directory (must end with a trailing slash)
+    server-dir: /home/arambilal/web/aramb.dev/public_html  # Server directory (must end with a trailing slash)
+    
+    # Deployment state tracking
     state-name: /home/arambilal/web/aramb.dev/.github-deploy-state.json
-    # Prints which modifications will be made with current config options, but doesnt actually make any changes
-    dry-run: # optional
-    # Deletes ALL contents of server-dir, even items in excluded with exclude argument
-    dangerous-clean-slate: # optional
-    # An array of glob patterns, these files will not be included in the publish/delete process
-    exclude: # optional
-    # How verbose should the information be - minimal, standard, or verbose
-    log-level: standard
-    # strict or loose
-    security: # optional
-    # Timeout in milliseconds for FTP operations
-    timeout: # optional
-          
+    
+    # Additional options
+    dry-run: false  # Set to true to simulate deployment without making changes
+    dangerous-clean-slate: false  # Set to true to wipe server-dir before deployment
+    exclude: # Add glob patterns to exclude files (e.g., node_modules, .git)
+    log-level: standard  # Options: minimal, standard, verbose
+    security: # strict or loose
+    timeout: # Timeout in milliseconds for FTP operations
