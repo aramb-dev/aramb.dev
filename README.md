@@ -1,3 +1,5 @@
+
+[![Server Prod Deploy](https://github.com/aramb-dev/aramb.dev/actions/workflows/main.yml/badge.svg)](https://github.com/aramb-dev/aramb.dev/actions/workflows/main.yml)
 ![](https://hit.yhype.me/github/profile?user_id=65731416)
 
 ## 👋 Introduction
