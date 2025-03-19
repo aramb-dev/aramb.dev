@@ -1,5 +1,7 @@
 
 [![Server Prod Deploy](https://github.com/aramb-dev/aramb.dev/actions/workflows/main.yml/badge.svg)](https://github.com/aramb-dev/aramb.dev/actions/workflows/main.yml)
+[<img alt="Deployed with FTP Deploy Action" src="https://img.shields.io/badge/Deployed With-FTP DEPLOY ACTION-%3CCOLOR%3E?style=for-the-badge&color=2b9348">](https://github.com/SamKirkland/FTP-Deploy-Action)
+
 ![](https://hit.yhype.me/github/profile?user_id=65731416)
 
 ## 👋 Introduction
