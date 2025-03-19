@@ -8,7 +8,7 @@
     # ftp username
     username: arambilal
     # ftp password
-    password: w(gsV2(RMEsCw2Ca
+    password: ${{ secrets.password }}
     # Server port to connect to (read your web hosts docs)
     port: # optional
     # protocol to deploy with - ftp, ftps, or ftps-legacy
