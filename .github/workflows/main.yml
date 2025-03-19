@@ -28,7 +28,7 @@ jobs:
           server-dir: home/arambilal/web/aramb.dev/public_html/  # Server directory (must end with a trailing slash)
 
           # Deployment state tracking
-          state-name: /home/arambilal/web/aramb.dev/.github-deploy-state.json
+          state-name: ../.github-deploy-state.json
 
           # Additional options
           dry-run: false  # Set to true to simulate deployment without making changes
