@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="250" viewBox="0 0 300 250" fill="none">
+  <!-- Background rectangle -->
+  <rect width="300" height="250" rx="8" fill="#FFFFFF" />
+
+  <!-- Define fonts for consistent rendering -->
+  <defs>
+    <style type="text/css"><![CDATA[
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
+      .label { font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+      .formula-title { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-weight: 700; font-size: 16px; fill: #111827; text-anchor: end; }
+      .formula-text { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; fill: #111827; text-anchor: end; }
+      .side-label { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; fill: #111827; text-anchor: middle; }
+      .var-label { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 16px; fill: #047857; text-anchor: middle; }
+      .copyright { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 10px; fill: #6B7280; text-anchor: end; }
+    ]]></style>
+  </defs>
+
+  <!-- Right triangle -->
+  <path d="M60 200 L60 80 L220 200 Z" fill="#E5E7EB" stroke="#4B5563" stroke-width="2" />
+
+  <!-- Angle theta marker and label (adjusted) -->
+  <path d="M68 200 A20 20 0 0 1 61.6 184.8" stroke="#047857" stroke-width="2" fill="none" />
+  <text x="72" y="188" class="var-label">θ</text>
+
+  <!-- Labels for sides (rotated and positioned) -->
+  <text x="140" y="215" class="side-label">adjacent</text>
+  <text x="45" y="140" class="side-label" transform="rotate(-90 45 140)">opposite</text>
+  <text x="140" y="135" class="side-label" transform="rotate(-36.87 140 135)">hypotenuse</text>
+
+  <!-- Side variable labels (a, b, h) -->
+  <text x="75" y="145" class="var-label">a</text> <!-- Opposite side -->
+  <text x="135" y="185" class="var-label">b</text> <!-- Adjacent side -->
+  <text x="155" y="150" class="var-label">h</text> <!-- Hypotenuse -->
+
+  <!-- Right angle marker (at vertex 60, 80) -->
+  <path d="M60 90 L70 90 L70 80" stroke="#4B5563" stroke-width="2" fill="none" />
+
+  <!-- Formulas -->
+  <text x="280" y="35" class="formula-title">Basic Formulas</text>
+  <text x="280" y="65" class="formula-text">sin θ = a/h</text>
+  <text x="280" y="90" class="formula-text">cos θ = b/h</text>
+  <text x="280" y="115" class="formula-text">tan θ = a/b</text>
+
+  <!-- Copyright notice -->
+  <text x="290" y="240" class="copyright">© aramb-dev</text>
+</svg>
