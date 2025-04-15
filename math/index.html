@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Collection of mathematics notes, examples, and explanations by Abdur-Rahmān Bilāl.">
+    <meta property="og:url" content="https://aramb.dev/math">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Collection of mathematics notes, examples, and explanations by Abdur-Rahmān Bilāl.">
+    <meta property="og:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math">
+    <meta name="twitter:title" content="Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Collection of mathematics notes, examples, and explanations by Abdur-Rahmān Bilāl.">
+    <meta name="twitter:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Math Notes</h1>
+                <p class="text-gray-100">My personal collection of mathematics notes, examples, and explanations.</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+
+        <h2 class="text-2xl font-bold mb-6">Note Entries</h2>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4">Trigonometric Functions</h3>
+            <div class="flex flex-col md:flex-row gap-6 items-center">
+                <div class="md:w-1/2">
+                    <img src="../assets/img/definitions-relationships-functions-sin-cos-example-A.webp"
+                        alt="Trigonometric Functions" class="rounded-lg shadow-sm">
+                </div>
+                <div class="md:w-1/2">
+                    <p class="text-gray-700 mb-4">In the unit circle, we can visualize the relationship between sine
+                        and cosine functions. For any angle θ:</p>
+                    <ul class="list-disc pl-5 mb-4 text-gray-700">
+                        <li>sin(θ) represents the y-coordinate</li>
+                        <li>cos(θ) represents the x-coordinate</li>
+                        <li>The fundamental identity sin²(θ) + cos²(θ) = 1 is derived from the Pythagorean theorem
+                        </li>
+                    </ul>
+                    <div class="bg-gray-50 p-4 rounded">
+                        <p class="text-center">$$\sin^2 \theta + \cos^2 \theta = 1$$</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <section>
+            <div class="bg-green-50 rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Request a Topic</h2>
+                <p class="text-gray-700 mb-4">Is there a math topic or concept you'd like me to cover? Feel free to
+                    reach out with suggestions!</p>
+                <a href="mailto:aramb@aramb.dev"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    Send a Request
+                </a>
+            </div>
+        </section> -->
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
