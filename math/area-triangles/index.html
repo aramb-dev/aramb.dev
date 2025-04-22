@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area of Triangles | Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Learn how to calculate the area of different types of triangles - right-angled, equilateral, isosceles, and using Heron's formula.">
+    <meta property="og:url" content="https://aramb.dev/math/area-triangles">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Area of Triangles | Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Learn how to calculate the area of different types of triangles - right-angled, equilateral, isosceles, and using Heron's formula.">
+    <meta property="og:image" content="../../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math/area-triangles">
+    <meta name="twitter:title" content="Area of Triangles | Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Learn how to calculate the area of different types of triangles - right-angled, equilateral, isosceles, and using Heron's formula.">
+    <meta name="twitter:image" content="../../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        /* Triangle calculator styles */
+        .triangle-calculator input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        .triangle-calculator input:focus {
+            outline: none;
+            border-color: #047857;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+        }
+    </style>
+    <link rel="icon" type="image/png" href="../../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../../assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+
+            // Triangle calculator functionality
+            const baseInput = document.getElementById('triangle-base');
+            const heightInput = document.getElementById('triangle-height');
+            const resultElement = document.getElementById('triangle-result');
+
+            function calculateArea() {
+                const base = parseFloat(baseInput.value);
+                const height = parseFloat(heightInput.value);
+
+                if (!isNaN(base) && !isNaN(height) && base > 0 && height > 0) {
+                    const area = (base * height) / 2;
+                    resultElement.textContent = area.toFixed(2) + " square units";
+                    resultElement.classList.remove('text-red-500');
+                    resultElement.classList.add('text-green-600');
+                } else {
+                    resultElement.textContent = "Please enter valid positive values for both base and height.";
+                    resultElement.classList.remove('text-green-600');
+                    resultElement.classList.add('text-red-500');
+                }
+            }
+
+            baseInput.addEventListener('input', calculateArea);
+            heightInput.addEventListener('input', calculateArea);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/" class="text-white hover:underline">Math Notes</a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Area of Triangles</h1>
+                <p class="text-gray-100">Calculating the area of triangles using different methods</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <!-- Triangle Calculator Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Triangle Area Calculator</h2>
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <img src="../../assets/img/triangle_area_diagram.webp" alt="Triangle area diagram"
+                        class="w-full max-w-sm mx-auto rounded-lg shadow-sm">
+                </div>
+                <div class="md:w-1/2">
+                    <div class="triangle-calculator">
+                        <div class="mb-4">
+                            <label for="triangle-base" class="block text-gray-700 font-medium mb-2">Base (b):</label>
+                            <input type="number" id="triangle-base" placeholder="Enter base length" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="triangle-height" class="block text-gray-700 font-medium mb-2">Height
+                                (h):</label>
+                            <input type="number" id="triangle-height" placeholder="Enter height length" min="0"
+                                step="0.01" class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="font-medium mb-2">Formula: Area = ½ × b × h</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">Area =</span>
+                                <span id="triangle-result" class="text-green-600 font-medium">Enter values to
+                                    calculate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <article class="prose max-w-none">
+                <h2>What is the Area of a Triangle?</h2>
+                <p>The <strong>area of a triangle</strong> is defined as the total region that is enclosed by the three
+                    sides of any
+                    particular triangle. Basically, it is equal to half of the base times height, i.e. <strong>A = ½ × b
+                        ×
+                        h</strong>. To find the area of a triangle, we need to know the base (b) and height (h).</p>
+
+                <p>This formula is applicable to all types of triangles, whether scalene, isosceles or equilateral. The
+                    base and height of
+                    the triangle must be perpendicular to each other. The unit of area is measured in square units (m²,
+                    cm²).</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Standard formula for triangle area:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$A = \frac{1}{2} \times b \times h$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">where b is the base and h is the height of the triangle</p>
+                </div>
+
+                <div class="my-6">
+                    <img src="https://cdn1.byjus.com/wp-content/uploads/2020/02/Area-of-Triangle-1.png"
+                        alt="Area of Triangle" class="mx-auto rounded-lg shadow-sm">
+                </div>
+
+                <h3>Example:</h3>
+                <p>What is the area of a triangle with base b = 3 cm and height h = 4 cm?</p>
+                <p>Using the formula:</p>
+                <p>Area of a Triangle, A = ½ × b × h</p>
+                <p>= ½ × 3 (cm) × 4 (cm)</p>
+                <p>= 1.5 (cm) × 4 (cm)</p>
+                <p>= 6 cm²</p>
+
+                <p>Apart from the above formula, we have Heron's formula to calculate the triangle's area when we know
+                    the length of its three sides. Also, trigonometric functions are used to find the area when we know
+                    two sides and the angle formed between them in a triangle.</p>
+
+                <h2>Area Formulas for Different Triangle Types</h2>
+
+                <h3>Area of a Right-Angled Triangle</h3>
+                <p>A right-angled triangle has one angle equal to 90°. The height of the triangle will be the length of
+                    the perpendicular side.</p>
+
+                <div class="my-6">
+                    <img src="https://cdn1.byjus.com/wp-content/uploads/2020/02/Area-of-Triangle-2.png"
+                        alt="Area of a right angled triangle" class="mx-auto rounded-lg shadow-sm">
+                </div>
+
+                <p><strong>Area of a Right Triangle</strong> = A = ½ × Base × Height (Perpendicular distance)</p>
+                <p>From the above figure, Area of triangle ACB = ½ × a × b</p>
+
+                <h3>Area of an Equilateral Triangle</h3>
+                <p>An equilateral triangle has all three sides equal. The perpendicular drawn from the vertex to the
+                    base divides the base into two equal parts.</p>
+
+                <div class="my-6">
+                    <img src="https://cdn1.byjus.com/wp-content/uploads/2020/02/Area-of-Triangle-3.png"
+                        alt="Area of an equilateral triangle" class="mx-auto rounded-lg shadow-sm">
+                </div>
+
+                <p><strong>Area of an Equilateral Triangle</strong> = A = (√3)/4 × side²</p>
+
+                <h3>Area of an Isosceles Triangle</h3>
+                <p>An isosceles triangle has two equal sides and two equal angles opposite to these sides.</p>
+
+                <div class="my-6">
+                    <img src="https://cdn1.byjus.com/wp-content/uploads/2020/02/Area-of-Triangle-4.png"
+                        alt="Area of an isosceles triangle" class="mx-auto rounded-lg shadow-sm">
+                </div>
+
+                <p><strong>Area of an Isosceles Triangle</strong> = ¼b√(4a² - b²)</p>
+                <p>Where a is the length of the two equal sides and b is the length of the third side (the base).</p>
+
+                <h3>Area of a Triangle Using Heron's Formula</h3>
+                <p>When we know the lengths of all three sides of a triangle, we can use Heron's formula:</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <div class="bg-white p-3 rounded">
+                        $$A = \sqrt{s(s-a)(s-b)(s-c)}$$
+                        <p class="mt-2">where s = \frac{a + b + c}{2} (semi-perimeter)</p>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">a, b, and c are the lengths of the three sides of the triangle
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Explore More Math Topics</h2>
+            <p class="text-gray-700 mb-4">Check out other math topics or return to the main math notes section.</p>
+            <div class="flex gap-4">
+                <a href="/math/"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Math Notes
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
