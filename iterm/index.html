@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTerm2 Configuration | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="My personal iTerm2 terminal configuration with explanation, settings guide, and downloadable files.">
+    <meta property="og:url" content="https://aramb.dev/iterm">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="iTerm2 Configuration | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="My personal iTerm2 terminal configuration with explanation, settings guide, and downloadable files.">
+    <meta property="og:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/iterm">
+    <meta name="twitter:title" content="iTerm2 Configuration | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="My personal iTerm2 terminal configuration with explanation, settings guide, and downloadable files.">
+    <meta name="twitter:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .iterm-card:hover .iterm-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        pre {
+            overflow-x: auto;
+            padding: 1rem;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 0.375rem;
+            margin: 1rem 0;
+        }
+
+        code {
+            font-family: Monaco, Menlo, 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-window {
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .terminal-header {
+            background: #e4e4e4;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .dot-red {
+            background-color: #ff5f56;
+        }
+
+        .dot-yellow {
+            background-color: #ffbd2e;
+        }
+
+        .dot-green {
+            background-color: #27c93f;
+        }
+
+        .terminal-body {
+            background-color: #1e1e1e;
+            padding: 16px;
+            color: #fff;
+            font-family: Monaco, Menlo, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .file-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .file-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">My iTerm2 Configuration</h1>
+                <p class="text-gray-100">A guide to my personal terminal setup with downloadable configuration files</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-body">
+                            <p>aramb@localhost ~ $ echo "Welcome to my iTerm setup!"</p>
+                            <p>Welcome to my iTerm setup!</p>
+                            <p>aramb@localhost ~ $ _</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-xl font-bold mb-4">About My Setup</h2>
+                    <p class="text-gray-700 mb-4">
+                        I've customized my iTerm2 terminal for both functionality and aesthetics. This configuration
+                        features:
+                    </p>
+                    <ul class="list-disc pl-5 mb-4 space-y-1 text-gray-700">
+                        <li>Custom color scheme that adapts to light/dark mode</li>
+                        <li>Optimized key mappings for improved productivity</li>
+                        <li>Configured for integration with modern tools</li>
+                        <li>Visual bell and notification settings</li>
+                        <li>Customized cursor and text rendering</li>
+                    </ul>
+                    <p class="text-gray-700">
+                        On this page, you'll find my complete configuration files and step-by-step instructions for
+                        setting up your own terminal environment.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6">Configuration Features</h2>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Color Scheme</h3>
+                    <p class="text-gray-700 mb-3">
+                        My color scheme uses different palettes for light and dark modes. The dark mode features a sleek
+                        dark background with vibrant, readable text colors, while light mode uses a crisp white
+                        background with dark text for better daytime readability.
+                    </p>
+                    <div class="grid grid-cols-4 gap-2" id="color-palette">
+                        <button class="h-10 rounded bg-black relative group cursor-pointer" data-color="#000000"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #000000 (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-red-600 relative group cursor-pointer" data-color="#DC2626"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #DC2626 (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-green-600 relative group cursor-pointer" data-color="#059669"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #059669 (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-yellow-500 relative group cursor-pointer" data-color="#EAB308"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #EAB308 (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-blue-600 relative group cursor-pointer" data-color="#2563EB"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #2563EB (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-purple-600 relative group cursor-pointer" data-color="#9333EA"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #9333EA (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-teal-500 relative group cursor-pointer" data-color="#14B8A6"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #14B8A6 (Click to copy)
+                            </div>
+                        </button>
+                        <button class="h-10 rounded bg-gray-300 relative group cursor-pointer" data-color="#D1D5DB"
+                            onclick="copyColor(this)">
+                            <div
+                                class="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 whitespace-nowrap transition-opacity">
+                                #D1D5DB (Click to copy)
+                            </div>
+                        </button>
+                    </div>
+                    <div id="copy-notification"
+                        class="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-16 opacity-0 transition-all duration-300">
+                        Copied to clipboard!
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Key Mappings</h3>
+                    <p class="text-gray-700 mb-3">
+                        I've set up custom key bindings that make terminal navigation more efficient. Some notable
+                        mappings include:
+                    </p>
+                    <ul class="list-disc pl-5 mb-4 text-gray-700">
+                        <li><strong>⌥←</strong> and <strong>⌥→</strong>: Jump between words</li>
+                        <li><strong>⌘↑</strong> and <strong>⌘↓</strong>: Scroll through output</li>
+                        <li><strong>⌘⇧←</strong> and <strong>⌘⇧→</strong>: Switch between tabs</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Integration Features</h3>
+                    <p class="text-gray-700 mb-3">
+                        The configuration includes built-in integration with:
+                    </p>
+                    <ul class="list-disc pl-5 mb-4 text-gray-700">
+                        <li>Shell Integration for better history tracking and navigation</li>
+                        <li>Smart selection for URLs, file paths, and IPs</li>
+                        <li>Customized AI prompt configuration</li>
+                        <li>SSH URL handling for seamless connections</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Visual Preferences</h3>
+                    <p class="text-gray-700 mb-3">
+                        My visual settings create a clean, distraction-free environment:
+                    </p>
+                    <ul class="list-disc pl-5 mb-4 text-gray-700">
+                        <li>Slight background transparency with blur effect</li>
+                        <li>Custom cursor style and blinking settings</li>
+                        <li>Visual bell instead of sound notifications</li>
+                        <li>Powerline-compatible font rendering</li>
+                        <li>Subtle timestamp display in the terminal</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6">Configuration Files</h2>
+            <p class="text-gray-700 mb-4">
+                Download my iTerm2 configuration files to set up your own environment. Each file serves a specific
+                purpose in the setup:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <a href="./aramb-dev.json" download
+                    class="file-card bg-gray-50 rounded-lg p-6 text-center hover:bg-gray-100 transition-colors">
+                    <div class="flex justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">aramb-dev.json</h3>
+                    <p class="text-sm text-gray-600">Color scheme and profile settings in JSON format</p>
+                </a>
+
+                <a href="./com.googlecode.iterm2.plist" download
+                    class="file-card bg-gray-50 rounded-lg p-6 text-center hover:bg-gray-100 transition-colors">
+                    <div class="flex justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">com.googlecode.iterm2.plist</h3>
+                    <p class="text-sm text-gray-600">Complete iTerm2 preferences file</p>
+                </a>
+
+                <a href="./key-bindings.itermkeymap" download
+                    class="file-card bg-gray-50 rounded-lg p-6 text-center hover:bg-gray-100 transition-colors">
+                    <div class="flex justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">key-bindings.itermkeymap</h3>
+                    <p class="text-sm text-gray-600">Keyboard shortcuts configuration</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6">Installation Guide</h2>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Prerequisites</h3>
+                <ol class="list-decimal pl-5 mb-4 space-y-2 text-gray-700">
+                    <li>Download and install <a href="https://iterm2.com/" target="_blank" rel="noopener noreferrer"
+                            class="text-green-600 hover:underline">iTerm2</a> if you haven't already</li>
+                    <li>Download the configuration files from the section above</li>
+                </ol>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Method 1: Import Color Preset</h3>
+                <ol class="list-decimal pl-5 mb-4 space-y-2 text-gray-700">
+                    <li>Open iTerm2</li>
+                    <li>Go to <strong>iTerm2 > Preferences > Profiles > Colors</strong></li>
+                    <li>Click on <strong>Color Presets...</strong> dropdown</li>
+                    <li>Select <strong>Import...</strong></li>
+                    <li>Navigate to and select the downloaded <code>aramb-dev.json</code> file</li>
+                    <li>Click on <strong>Color Presets...</strong> again and select <strong>aramb-dev</strong></li>
+                </ol>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Method 2: Import Key Bindings</h3>
+                <ol class="list-decimal pl-5 mb-4 space-y-2 text-gray-700">
+                    <li>Open iTerm2</li>
+                    <li>Go to <strong>iTerm2 > Preferences > Keys > Key Bindings</strong></li>
+                    <li>Click on <strong>Presets...</strong> dropdown</li>
+                    <li>Select <strong>Import...</strong></li>
+                    <li>Navigate to and select the downloaded <code>key-bindings.itermkeymap</code> file</li>
+                </ol>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Method 3: Complete Configuration</h3>
+                <ol class="list-decimal pl-5 mb-4 space-y-2 text-gray-700">
+                    <li>Quit iTerm2 completely</li>
+                    <li>Open Finder and press <strong>⌘+Shift+G</strong></li>
+                    <li>Enter <code>~/Library/Preferences/</code> and click Go</li>
+                    <li>Make a backup of your current <code>com.googlecode.iterm2.plist</code> file if it exists</li>
+                    <li>Copy the downloaded <code>com.googlecode.iterm2.plist</code> to this directory</li>
+                    <li>Restart iTerm2</li>
+                </ol>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Note:</strong> This method will replace your current iTerm2 settings. Make sure
+                                to back up your existing configuration first.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6">Advanced Configuration</h2>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Customizing the Profile</h3>
+                <p class="text-gray-700 mb-3">
+                    You can further personalize the profile by modifying:
+                </p>
+                <ul class="list-disc pl-5 mb-4 text-gray-700">
+                    <li>Font type and size (I use Monaco 12pt)</li>
+                    <li>Background transparency level (currently set to ~10%)</li>
+                    <li>Terminal window style and dimensions</li>
+                    <li>Status bar components and layout</li>
+                </ul>
+                <p class="text-gray-700">
+                    Access these settings through <strong>iTerm2 > Preferences > Profiles</strong> after importing the
+                    configuration.
+                </p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Shell Integration</h3>
+                <p class="text-gray-700 mb-3">
+                    My configuration includes iTerm2's shell integration features. To enable these fully:
+                </p>
+                <ol class="list-decimal pl-5 mb-4 space-y-2 text-gray-700">
+                    <li>Open iTerm2</li>
+                    <li>Go to <strong>iTerm2 > Install Shell Integration</strong></li>
+                    <li>Follow the on-screen instructions</li>
+                </ol>
+                <p class="text-gray-700">
+                    This enables features like command history tracking, better navigation, and more.
+                </p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">AI Integration</h3>
+                <p class="text-gray-700 mb-3">
+                    My configuration includes a custom AI prompt configuration that works with Hack Club's AI terminal
+                    integration:
+                </p>
+                <pre><code>AI Prompt: Return commands suitable for copy/pasting into \(shell) on \(uname).
+Do NOT include commentary NOR Markdown triple-backtick code blocks as your whole
+response will be copied into my terminal automatically.
+
+The script should do this: \(ai.prompt)</code></pre>
+                <p class="text-gray-700">
+                    This configuration is designed to produce clean command outputs that can be directly executed.
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6">Setting Examples</h2>
+
+            <div class="space-y-8">
+                <!-- Terminal Profile Example -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Profile & Terminal Settings</h3>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <img src="../assets/img/iterm-profile-example.png" alt="iTerm2 profile settings"
+                                class="rounded-lg shadow-md w-full">
+                            <p class="text-sm text-gray-500 mt-2 text-center">Profile configuration with custom options
+                            </p>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h4 class="font-medium text-gray-900 mb-2">Key Features:</h4>
+                            <ul class="list-disc pl-5 mb-4 space-y-1 text-gray-700">
+                                <li>Monaco font at 12pt for optimal readability</li>
+                                <li>10% background transparency with blur</li>
+                                <li>Cursor set to vertical bar with blink enabled</li>
+                                <li>Terminal type: xterm-256color for best compatibility</li>
+                                <li>Unicode normalization: NFC</li>
+                            </ul>
+                            <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                                <p class="font-medium mb-1">Recommended settings:</p>
+                                <p><code>Columns: 120</code></p>
+                                <p><code>Rows: 36</code></p>
+                                <p><code>Scrollback lines: 10000</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Color Scheme Example -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Color Scheme Configuration</h3>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-green-400 mb-1">aramb@macbook ~ $ ls -la</pre>
+                                <pre class="text-blue-400 mb-1">total 112</pre>
+                                <pre
+                                    class="text-white mb-1">drwxr-xr-x  15 aramb  staff    480 Feb 25 13:45 <span class="text-blue-300">.</span></pre>
+                                <pre
+                                    class="text-white mb-1">drwxr-xr-x   6 root   admin    192 Dec  9 09:12 <span class="text-blue-300">..</span></pre>
+                                <pre
+                                    class="text-white mb-1">-rw-r--r--   1 aramb  staff   3520 Feb 25 13:45 <span class="text-yellow-300">.bashrc</span></pre>
+                                <pre
+                                    class="text-white mb-1">-rw-r--r--   1 aramb  staff    157 Feb 25 13:38 <span class="text-yellow-300">.gitconfig</span></pre>
+                                <pre
+                                    class="text-white mb-1">drwxr-xr-x  12 aramb  staff    384 Feb 25 13:30 <span class="text-blue-300">Documents</span></pre>
+                                <pre
+                                    class="text-white mb-1">drwxr-xr-x  15 aramb  staff    480 Feb 25 13:12 <span class="text-blue-300">Projects</span></pre>
+                                <pre class="text-green-400">aramb@macbook ~ $ _</pre>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2 text-center">Dark mode terminal appearance</p>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h4 class="font-medium text-gray-900 mb-2">Color Palette:</h4>
+                            <div class="grid grid-cols-2 gap-2 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-black"></div>
+                                    <span class="text-sm">Black: #000000</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-red-600"></div>
+                                    <span class="text-sm">Red: #C91B00</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-green-600"></div>
+                                    <span class="text-sm">Green: #00C200</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-yellow-500"></div>
+                                    <span class="text-sm">Yellow: #C7C400</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-blue-600"></div>
+                                    <span class="text-sm">Blue: #0225C7</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded bg-purple-600"></div>
+                                    <span class="text-sm">Purple: #CA30C7</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                                <p class="font-medium mb-1">Color configuration:</p>
+                                <p>Both ANSI colors and bright versions are customized</p>
+                                <p>Background opacity: 90%</p>
+                                <p>Different color schemes for light/dark mode</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Mappings Example -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Key Mapping Configuration</h3>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <img src="../assets/img/iterm-keybindings-example.png" alt="iTerm2 key mappings"
+                                class="rounded-lg shadow-md w-full">
+                            <p class="text-sm text-gray-500 mt-2 text-center">Custom keyboard shortcuts configuration
+                            </p>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h4 class="font-medium text-gray-900 mb-2">Key Shortcut Examples:</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="py-2 px-3 text-left">Shortcut</th>
+                                            <th class="py-2 px-3 text-left">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌥←</td>
+                                            <td class="py-2 px-3">Move cursor one word left</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌥→</td>
+                                            <td class="py-2 px-3">Move cursor one word right</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌘↑</td>
+                                            <td class="py-2 px-3">Scroll one page up</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌘↓</td>
+                                            <td class="py-2 px-3">Scroll one page down</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌘⇧←</td>
+                                            <td class="py-2 px-3">Previous tab</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 font-mono">⌘⇧→</td>
+                                            <td class="py-2 px-3">Next tab</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shell Integration Example -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Shell Integration Features</h3>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <div class="terminal-window">
+                                <div class="terminal-header">
+                                    <div class="terminal-dot dot-red"></div>
+                                    <div class="terminal-dot dot-yellow"></div>
+                                    <div class="terminal-dot dot-green"></div>
+                                </div>
+                                <div class="terminal-body">
+                                    <p><span class="text-green-400">✓</span> aramb@macbook ~/Projects $ cd my-project
+                                    </p>
+                                    <p><span class="text-green-400">✓</span> aramb@macbook ~/Projects/my-project $ git
+                                        status</p>
+                                    <p class="text-green-400">On branch main</p>
+                                    <p class="text-green-400">Your branch is up to date with 'origin/main'.</p>
+                                    <p class="text-green-400">nothing to commit, working tree clean</p>
+                                    <p><span class="text-green-400">✓</span> aramb@macbook ~/Projects/my-project $ _</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2 text-center">Shell integration with command status
+                                indicators</p>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h4 class="font-medium text-gray-900 mb-2">Shell Integration Benefits:</h4>
+                            <ul class="list-disc pl-5 mb-4 space-y-1 text-gray-700">
+                                <li>Command status indicators (success/failure)</li>
+                                <li>Jump to previous commands with ⌘↑/⌘↓</li>
+                                <li>Command history tracking across sessions</li>
+                                <li>Automatic directory tracking</li>
+                                <li>Command timing information</li>
+                                <li>Integrated with iTerm2's toolbelt features</li>
+                                <li>Smart selection of file paths, URLs, and commands</li>
+                            </ul>
+                            <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                                <p class="font-medium mb-1">Installation:</p>
+                                <p><code>iTerm2 > Install Shell Integration</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Questions or Feedback?</h2>
+            <p class="text-gray-700 mb-4">If you have any questions about my iTerm2 setup or suggestions for
+                improvements, I'd love to hear from you!</p>
+            <a href="mailto:aramb@aramb.dev"
+                class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                Contact Me
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

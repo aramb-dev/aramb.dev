@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Learn about solids of rotation (revolution): how two-dimensional shapes create three-dimensional objects when rotated around an axis.">
+    <meta property="og:url" content="https://aramb.dev/math/solids-of-rotation">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Learn about solids of rotation (revolution): how two-dimensional shapes create three-dimensional objects when rotated around an axis.">
+    <meta property="og:image" content="../../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math/solids-of-rotation">
+    <meta name="twitter:title" content="Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Learn about solids of rotation (revolution): how two-dimensional shapes create three-dimensional objects when rotated around an axis.">
+    <meta name="twitter:image" content="../../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="../../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../../assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/" class="text-white hover:underline">Math Notes</a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Solids of Rotation</h1>
+                <p class="text-gray-100">Creating 3D objects by rotating 2D shapes around an axis</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <article class="prose max-w-none">
+                <h2 class="text-xl font-bold mb-4">What are Solids of Rotation?</h2>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="font-medium text-lg mb-2 text-green-700">Definition:</p>
+                    <p class="mb-2">A <strong>solid of rotation</strong> (or solid of revolution) is a three-dimensional
+                        object formed by rotating a two-dimensional shape around an axis that lies in the same plane.
+                    </p>
+                </div>
+
+                <p class="mb-4">
+                    Solids of rotation are an important concept in geometry and calculus. They help us understand how to
+                    create and calculate the properties of many common 3D objects like spheres, cylinders, and cones.
+                </p>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3">Real-World Visualization</h3>
+                <p class="mb-4">
+                    You can visualize solids of rotation by imagining a potter's wheel. When a potter places a curved
+                    tool against a spinning lump of clay, the resulting 3D shape is a solid of rotation. Similarly, many
+                    everyday objects like vases, wine glasses, and lampshades are solids of rotation.
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-6 items-center mb-6">
+                    <div class="md:w-1/2">
+                        <img src="../../assets/img/solids_of_rotation_example.webp" alt="Example of a solid of rotation"
+                            class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="text-gray-700">
+                            When a 2D shape rotates around an axis, every point in the shape traces out a circular path.
+                            These circular paths collectively form the 3D solid.
+                        </p>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold mt-8 mb-4">Common Solids of Rotation</h2>
+
+                <h3 class="text-lg font-semibold mb-3">1. Cylinder</h3>
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="md:w-1/2">
+                        <img src="../../assets/img/cylinder_rotation.webp" alt="Cylinder as a solid of rotation"
+                            class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="mb-2">A cylinder is formed by rotating a rectangle around an axis that coincides with
+                            one of its sides.</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Volume of a cylinder:</p>
+                            <div class="bg-white p-3 rounded">
+                                $$V = \pi r^2 h$$
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">where r is the radius and h is the height</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">2. Cone</h3>
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="md:w-1/2">
+                        <img src="../../assets/img/cone_rotation.webp" alt="Cone as a solid of rotation"
+                            class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="mb-2">A cone is formed by rotating a right triangle around an axis that coincides with
+                            one of its legs.</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Volume of a cone:</p>
+                            <div class="bg-white p-3 rounded">
+                                $$V = \frac{1}{3} \pi r^2 h$$
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">where r is the radius of the base and h is the height
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">3. Sphere</h3>
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="md:w-1/2">
+                        <img src="../../assets/img/sphere_rotation.webp" alt="Sphere as a solid of rotation"
+                            class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="mb-2">A sphere is formed by rotating a semicircle around its diameter.</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Volume of a sphere:</p>
+                            <div class="bg-white p-3 rounded">
+                                $$V = \frac{4}{3} \pi r^3$$
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">where r is the radius of the sphere</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">4. Torus (Ring)</h3>
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="md:w-1/2">
+                        <img src="../../assets/img/torus_rotation.webp" alt="Torus as a solid of rotation"
+                            class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="mb-2">A torus (donut shape) is formed by rotating a circle around an axis that does
+                            not intersect the circle.</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Volume of a torus:</p>
+                            <div class="bg-white p-3 rounded">
+                                $$V = 2\pi^2 R r^2$$
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">where R is the distance from the center of the tube to
+                                the center of the torus and r is the radius of the tube</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold mt-8 mb-4">Important Principles</h2>
+
+                <div class="bg-blue-50 p-5 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-blue-700">Key Concepts:</h3>
+                    <ul class="list-disc pl-5 mb-4 space-y-2 text-gray-700">
+                        <li>If the 2D shape touches the axis of rotation, the resulting 3D solid will be connected at
+                            that point.</li>
+                        <li>If the 2D shape does not touch the axis of rotation, the resulting 3D solid will have a hole
+                            through it (like a torus).</li>
+                        <li>The volume of a solid of rotation can be calculated using integral calculus (using the disk
+                            or shell method).</li>
+                        <li>In calculus, we often use the disk method when rotating around the x-axis and the shell
+                            method when rotating around the y-axis.</li>
+                    </ul>
+                </div>
+
+                <h2 class="text-xl font-bold mt-8 mb-4">Applications in Calculus</h2>
+
+                <p class="mb-4">
+                    In calculus, finding the volume of solids of rotation becomes more complex when dealing with curves
+                    rather than simple shapes. We use integration methods:
+                </p>
+
+                <h3 class="text-lg font-semibold mb-2">Disk Method</h3>
+                <p class="mb-4">
+                    Used when rotating around the x-axis. The volume is:
+                </p>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div class="bg-white p-3 rounded">
+                        $$V = \pi \int_{a}^{b} [f(x)]^2 \, dx$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">where f(x) is the function being rotated, from x=a to x=b</p>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-2">Shell Method</h3>
+                <p class="mb-4">
+                    Used when rotating around the y-axis. The volume is:
+                </p>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div class="bg-white p-3 rounded">
+                        $$V = 2\pi \int_{a}^{b} x \cdot f(x) \, dx$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">where f(x) is the function being rotated, from x=a to x=b</p>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+                    <p class="text-sm text-yellow-800">
+                        <strong>Note:</strong> This page presents an introduction to solids of rotation. For more
+                        detailed explanations and practice problems, consider visiting comprehensive mathematics
+                        resources or textbooks on calculus and geometry.
+                    </p>
+                </div>
+
+                <p class="text-sm text-gray-600 mt-8">
+                    Concepts based on standard mathematical principles. Visualization inspired by materials from various
+                    educational resources.
+                </p>
+            </article>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Explore More Math Topics</h2>
+            <p class="text-gray-700 mb-4">Check out other math topics or return to the main math notes section.</p>
+            <div class="flex gap-4">
+                <a href="/math/"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Math Notes
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
