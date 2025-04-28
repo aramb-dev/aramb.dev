@@ -4,113 +4,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self-Hosted AI on AWS EC2 - Deployment Guide</title>
+    <title>DeepSeek AI on AWS EC2 | Self-Hosted AI Research</title>
+    <meta name="description"
+        content="Deployment guide for implementing DeepSeek models on AWS EC2, including instance recommendations and cost estimates.">
+    <meta property="og:url" content="https://aramb.dev/aws-research/deepseek">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DeepSeek AI on AWS EC2 | Self-Hosted AI Research">
+    <meta property="og:description"
+        content="Deployment guide for implementing DeepSeek models on AWS EC2, including instance recommendations and cost estimates.">
+    <meta property="og:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/aws-research/deepseek">
+    <meta name="twitter:title" content="DeepSeek AI on AWS EC2 | Self-Hosted AI Research">
+    <meta name="twitter:description"
+        content="Deployment guide for implementing DeepSeek models on AWS EC2, including instance recommendations and cost estimates.">
+    <meta name="twitter:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-        }
-
-        .section {
-            background: white;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        code {
-            background: #f8f9fa;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
         pre {
-            background: #282c34;
+            background-color: #282c34;
             color: #abb2bf;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 1rem;
+            border-radius: 0.5rem;
             overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+        code {
+            background-color: #f0f0f0;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .warning {
-            color: #c0392b;
-            background: #f9ebea;
-            padding: 15px;
-            border-left: 4px solid #c0392b;
-            margin: 20px 0;
+        pre code {
+            background-color: transparent;
+            padding: 0;
         }
     </style>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+    <!-- Add smooth scrolling to the entire site -->
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
 </head>
 
-<body>
-    <h1>Self-Hosted AI on AWS EC2 Deployment Guide</h1>
-
-    <!-- Instance Recommendation -->
-    <div class="section">
-        <h2>1. EC2 Instance Recommendations</h2>
-        <div class="grid">
-            <div>
-                <h3>GPU Instance (g4dn.xlarge)</h3>
-                <ul>
-                    <li>vCPU: 4</li>
-                    <li>RAM: 16GB</li>
-                    <li>GPU: NVIDIA T4 (16GB VRAM)</li>
-                    <li>Cost: ~$380/month (24/7)</li>
-                </ul>
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4 mb-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/aws-research/" class="text-white hover:underline">AWS Research</a>
+                <span class="text-gray-200">/</span>
+                <span>DeepSeek</span>
             </div>
-            <div>
-                <h3>CPU Instance (t3.xlarge)</h3>
-                <ul>
-                    <li>vCPU: 4</li>
-                    <li>RAM: 16GB</li>
-                    <li>Cost: ~$120/month (24/7)</li>
-                </ul>
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">DeepSeek AI on AWS EC2</h1>
+                <p class="text-xl">Self-Hosted AI Deployment Guide</p>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Deployment Script -->
-    <div class="section">
-        <h2>2. Auto-Setup Script</h2>
-        <pre><code>#!/bin/bash
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <!-- Instance Recommendation -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">EC2 Instance Recommendations</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">GPU Instance (g4dn.xlarge)</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>vCPU: 4</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>RAM: 16GB</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>GPU: NVIDIA T4 (16GB VRAM)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Cost: ~$380/month (24/7)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">CPU Instance (t3.xlarge)</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>vCPU: 4</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>RAM: 16GB</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Cost: ~$120/month (24/7)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deployment Script -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Auto-Setup Script</h2>
+            </div>
+            <div class="p-6">
+                <pre><code>#!/bin/bash
 # Install Docker and NVIDIA drivers
 sudo apt-get update
 sudo apt-get install -y docker.io nvidia-driver-535
@@ -130,13 +193,21 @@ docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama --
 # Install Code-Server
 curl -fsSL https://code-server.dev/install.sh | sh
 sudo systemctl enable --now code-server@$USER</code></pre>
-    </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <p class="text-blue-700">This script automatically installs all required components including
+                        Docker, NVIDIA drivers, and sets up both Ollama and Code-Server for development.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Nginx Configuration -->
-    <div class="section">
-        <h2>3. Server Configuration</h2>
-        <h3>Nginx Proxy Setup</h3>
-        <pre><code>server {
+        <!-- Nginx Configuration -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Server Configuration</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Nginx Proxy Setup</h3>
+                <pre><code>server {
     listen 80;
     server_name your-domain.com;
 
@@ -147,47 +218,67 @@ sudo systemctl enable --now code-server@$USER</code></pre>
     }
 }</code></pre>
 
-        <h3>SSL Setup</h3>
-        <pre><code>sudo certbot --nginx -d your-domain.com -d code.your-domain.com</code></pre>
-    </div>
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">SSL Setup</h3>
+                <pre><code>sudo certbot --nginx -d your-domain.com -d code.your-domain.com</code></pre>
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <p class="text-yellow-700">Make sure to replace <code>your-domain.com</code> with your actual domain
+                        before running these commands.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Cost Estimates -->
-    <div class="section">
-        <h2>4. Monthly Cost Estimates</h2>
-        <table>
-            <tr>
-                <th>Component</th>
-                <th>GPU Instance</th>
-                <th>CPU Instance</th>
-            </tr>
-            <tr>
-                <td>Instance (12hr/day)</td>
-                <td>$190</td>
-                <td>$60</td>
-            </tr>
-            <tr>
-                <td>EBS Storage (100GB)</td>
-                <td>$10</td>
-                <td>$10</td>
-            </tr>
-            <tr>
-                <td>Data Transfer</td>
-                <td>$5</td>
-                <td>$5</td>
-            </tr>
-            <tr>
-                <td><strong>Total</strong></td>
-                <td><strong>$205</strong></td>
-                <td><strong>$75</strong></td>
-            </tr>
-        </table>
-    </div>
+        <!-- Cost Estimates -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Monthly Cost Estimates</h2>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border border-green-300 px-4 py-2 text-left text-green-800">Component</th>
+                            <th class="border border-green-300 px-4 py-2 text-left text-green-800">GPU Instance</th>
+                            <th class="border border-green-300 px-4 py-2 text-left text-green-800">CPU Instance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Instance (12hr/day)</td>
+                            <td class="border border-gray-300 px-4 py-2">$190</td>
+                            <td class="border border-gray-300 px-4 py-2">$60</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-2">EBS Storage (100GB)</td>
+                            <td class="border border-gray-300 px-4 py-2">$10</td>
+                            <td class="border border-gray-300 px-4 py-2">$10</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Data Transfer</td>
+                            <td class="border border-gray-300 px-4 py-2">$5</td>
+                            <td class="border border-gray-300 px-4 py-2">$5</td>
+                        </tr>
+                        <tr class="bg-green-50 font-bold">
+                            <td class="border border-green-300 px-4 py-2">Total</td>
+                            <td class="border border-green-300 px-4 py-2">$205</td>
+                            <td class="border border-green-300 px-4 py-2">$75</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-4 text-gray-700">
+                    <p>These estimates are based on running the instance 12 hours per day, which can be achieved using
+                        the auto-shutdown implementation described below.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Auto-Shutdown -->
-    <div class="section">
-        <h2>5. Auto-Shutdown Implementation</h2>
-        <h3>AWS Lambda Script</h3>
-        <pre><code>import boto3
+        <!-- Auto-Shutdown -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Auto-Shutdown Implementation</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">AWS Lambda Script</h3>
+                <pre><code>import boto3
 import datetime
 
 def lambda_handler(event, context):
@@ -200,41 +291,144 @@ def lambda_handler(event, context):
 
     return {'statusCode': 200}</code></pre>
 
-        <h3>EC2 Cron Solution</h3>
-        <pre><code>0 2 * * * /usr/sbin/shutdown -h now</code></pre>
-    </div>
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">EC2 Cron Solution</h3>
+                <pre><code>0 2 * * * /usr/sbin/shutdown -h now</code></pre>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <p class="text-blue-700">Setting up auto-shutdown can significantly reduce your costs by ensuring
+                        the instance is only running when needed.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Checklist -->
-    <div class="section">
-        <h2>Implementation Checklist</h2>
-        <table>
-            <tr>
-                <th>Component</th>
-                <th>Status</th>
-            </tr>
-            <tr>
-                <td>EC2 Instance Setup</td>
-                <td>✅ Ready</td>
-            </tr>
-            <tr>
-                <td>Automated Deployment</td>
-                <td>✅ Script Provided</td>
-            </tr>
-            <tr>
-                <td>SSL Configuration</td>
-                <td>✅ Certbot Integrated</td>
-            </tr>
-            <tr>
-                <td>Cost Management</td>
-                <td>✅ Lambda + Cron</td>
-            </tr>
-        </table>
-    </div>
+        <!-- Checklist -->
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Implementation Checklist</h2>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border border-green-300 px-4 py-2 text-left text-green-800">Component</th>
+                            <th class="border border-green-300 px-4 py-2 text-left text-green-800">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">EC2 Instance Setup</td>
+                            <td class="border border-gray-300 px-4 py-2">✅ Ready</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-2">Automated Deployment</td>
+                            <td class="border border-gray-300 px-4 py-2">✅ Script Provided</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">SSL Configuration</td>
+                            <td class="border border-gray-300 px-4 py-2">✅ Certbot Integrated</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-2">Cost Management</td>
+                            <td class="border border-gray-300 px-4 py-2">✅ Lambda + Cron</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-    <div class="warning">
-        <strong>Important:</strong> Remember to replace placeholders (your-domain.com, your-instance-id)
-        with your actual values before deployment.
-    </div>
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg mb-12">
+            <h3 class="text-xl font-semibold mb-2 text-yellow-800">Important Note</h3>
+            <p class="text-yellow-700">Remember to replace placeholders (your-domain.com, your-instance-id) with your
+                actual values before deployment.</p>
+        </div>
+
+        <div class="mt-12 p-6 bg-green-50 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Looking for Other Resources?</h2>
+            <p class="text-gray-700 mb-4">
+                Check out my other AWS research pages:
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="../gemini/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Gemini AI Setup
+                </a>
+                <a href="../flowith/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Flowith AI Deployment
+                </a>
+                <a href="../grok/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Grok AI Configuration
+                </a>
+                <a href="../manus/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Manus AI Implementation
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-white hover:text-green-400">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-white hover:text-green-400">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-white hover:text-green-400">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for copy functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find all pre tags
+            const preTags = document.querySelectorAll('pre');
+
+            // Add copy button to each pre tag
+            preTags.forEach(function (preTag, index) {
+                // Create a wrapper div with relative positioning
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative';
+
+                // Create the copy button
+                const copyButton = document.createElement('button');
+                copyButton.id = `copy-script-button-${index}`;
+                copyButton.className = 'absolute top-2 right-2 bg-green-600 text-white rounded p-1 text-xs hover:bg-green-700';
+                copyButton.textContent = 'Copy Script';
+
+                // Get the parent of the pre tag
+                const parent = preTag.parentNode;
+
+                // Replace pre with wrapper
+                parent.replaceChild(wrapper, preTag);
+
+                // Add button and pre to wrapper
+                wrapper.appendChild(copyButton);
+                wrapper.appendChild(preTag);
+
+                // Add click event to copy button
+                copyButton.addEventListener('click', function () {
+                    const scriptContent = preTag.textContent;
+                    if (scriptContent) {
+                        navigator.clipboard.writeText(scriptContent)
+                            .then(() => {
+                                // Visual feedback that copying worked
+                                const originalText = this.textContent;
+                                this.textContent = 'Copied!';
+                                setTimeout(() => {
+                                    this.textContent = originalText;
+                                }, 2000);
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy: ', err);
+                            });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

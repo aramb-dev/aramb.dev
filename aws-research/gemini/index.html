@@ -4,55 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Build Your Own Cloud AI Dev Box: Self-Hosting on AWS EC2</title>
+    <title>Gemini AI on AWS EC2 | Self-Hosted AI Research</title>
+    <meta name="description"
+        content="Build your own cloud AI development environment using AWS EC2, Ollama for running models, and Code-Server">
+    <meta property="og:url" content="https://aramb.dev/aws-research/gemini">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Gemini AI on AWS EC2 | Self-Hosted AI Research">
+    <meta property="og:description"
+        content="Build your own cloud AI development environment using AWS EC2, Ollama for running models, and Code-Server">
+    <meta property="og:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/aws-research/gemini">
+    <meta name="twitter:title" content="Gemini AI on AWS EC2 | Self-Hosted AI Research">
+    <meta name="twitter:description"
+        content="Build your own cloud AI development environment using AWS EC2, Ollama for running models, and Code-Server">
+    <meta name="twitter:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 2em;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: #0056b3;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 0.3em;
-        }
-
-        h1 {
-            font-size: 2.2em;
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin-top: 1.5em;
-        }
-
-        h3 {
-            font-size: 1.4em;
-            margin-top: 1.2em;
-        }
-
-        code {
-            background-color: #e9ecef;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-family: monospace;
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
         pre {
-            background-color: #343a40;
-            color: #f8f9fa;
-            padding: 1em;
-            border-radius: 5px;
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
             overflow-x: auto;
-            white-space: pre-wrap;
-            /* Allow wrapping */
-            word-wrap: break-word;
-            /* Break long words */
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+        }
+
+        code {
+            background-color: #f0f0f0;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
         }
 
         pre code {
@@ -63,208 +57,269 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-
-        th,
-        td {
-            border: 1px solid #dee2e6;
-            padding: 0.75em;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        th {
-            background-color: #e9ecef;
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            background-color: #fff;
-            padding: 2em;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            margin: 1rem 0;
         }
 
         .note {
-            background-color: #fff3cd;
-            border-left: 5px solid #ffeeba;
-            padding: 1em;
-            margin: 1em 0;
+            @apply bg-blue-50 border-l-4 border-blue-500 p-4 my-4;
         }
 
         .recommendation {
-            background-color: #d1ecf1;
-            border-left: 5px solid #bee5eb;
-            padding: 1em;
-            margin: 1em 0;
+            @apply bg-green-50 border-l-4 border-green-500 p-4 my-4;
         }
 
         .warning {
-            background-color: #f8d7da;
-            border-left: 5px solid #f5c6cb;
-            padding: 1em;
-            margin: 1em 0;
+            @apply bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4;
         }
     </style>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+    <!-- Add smooth scrolling to the entire site -->
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
 </head>
 
-<body>
-    <div class="container">
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4 mb-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/aws-research/" class="text-white hover:underline">AWS Research</a>
+                <span class="text-gray-200">/</span>
+                <span>Gemini</span>
+            </div>
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">Build Your Own Cloud AI Dev Box</h1>
+                <p class="text-xl">A Guide to Self-Hosting on AWS EC2</p>
+            </div>
+        </div>
+    </header>
 
-        <h1>Build Your Own Cloud AI Dev Box: A Guide to Self-Hosting on AWS EC2</h1>
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+            <p class="mb-4">Ditch the SaaS fees and run your own powerful AI development environment on AWS. Get the
+                convenience of cloud
+                AI tools like Replit Ghostwriter or Cursor AI, but with full control, local models, and optimized costs.
+            </p>
 
-        <p>Ditch the SaaS fees and run your own powerful AI development environment on AWS. Get the convenience of cloud
-            AI tools like Replit Ghostwriter or Cursor AI, but with full control, local models, and optimized costs.</p>
-
-        <p>This guide details how to set up a personal, cost-effective AI development server using AWS EC2, Ollama for
-            running models, Code-Server for a browser-based VS Code experience, and Nginx for secure access.</p>
-
-        <h2>Why Self-Host Your AI Assistant?</h2>
-        <ul>
-            <li><strong>Control & Customization:</strong> Run any model compatible with Ollama or LocalGPT. Tweak
-                settings, manage your data privately, and choose your hardware.</li>
-            <li><strong>Cost Savings:</strong> Avoid recurring monthly SaaS fees. Pay only for the AWS resources you
-                consume, significantly reduced by using Spot Instances and automated shutdowns during idle times.</li>
-            <li><strong>Performance:</strong> Leverage powerful AWS GPU instances (like the G5 family) for much faster
-                AI model inference compared to typical local machines.</li>
-            <li><strong>Learning Opportunity:</strong> Gain valuable hands-on experience with cloud infrastructure (EC2,
-                IAM, Nginx, Docker) and AI model deployment practices.</li>
-        </ul>
-
-        <h2>Choosing Your AWS Hardware: EC2 Instance Guide</h2>
-
-        <h3>The Importance of GPUs (Especially VRAM)</h3>
-        <p>Running Large Language Models (LLMs) effectively is often limited by the amount of Video RAM (VRAM) available
-            on the GPU. Model size (billions of parameters) directly impacts VRAM usage. Techniques like
-            <strong>quantization</strong> (reducing the numerical precision of model weights) can significantly lower
-            VRAM needs, but overly aggressive quantization might reduce model quality.</p>
-        <p>For developer tasks (code generation, complex instructions), maintaining model quality is key. Aim for enough
-            VRAM to run your desired models with at least 4-bit or 5-bit quantization (e.g., Q4_K_M GGUF) for a good
-            balance.</p>
-        <p><strong>Estimated VRAM Needs (Quantized Models):</strong></p>
-        <ul>
-            <li>~7-13B models (e.g., Llama 3 8B, Mistral 7B, DeepSeek Coder 6.7B, Phi-3-mini): ~4-12 GB (Q4)</li>
-            <li>Mixtral 8x7B: ~27-30 GB (Q4), ~24GB (3.5bpw EXL2)</li>
-            <li>Llama 3 70B: ~40-50 GB (Q4/Q5), ~75GB (Q8), ~140GB+ (FP16)</li>
-        </ul>
-        <div class="note">
-            <p><strong>Note:</strong> Running large models like Llama 3 70B on GPUs with insufficient VRAM (e.g., 24GB)
-                requires offloading layers to system RAM, which drastically slows down inference speed.</p>
+            <p>This guide details how to set up a personal, cost-effective AI development server using AWS EC2, Ollama
+                for
+                running models, Code-Server for a browser-based VS Code experience, and Nginx for secure access.</p>
         </div>
 
-        <h3>G5 Instances Recommended</h3>
-        <p>AWS EC2 G5 instances, featuring NVIDIA A10G GPUs (24GB VRAM each), are generally the best choice for this
-            workload. They offer significantly better ML inference performance and price/performance compared to the
-            older G4dn instances (NVIDIA T4, 16GB VRAM). The extra VRAM per GPU is also a major advantage.</p>
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Why Self-Host Your AI Assistant?</h2>
+            </div>
+            <div class="p-6">
+                <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                    <li><strong>Control & Customization:</strong> Run any model compatible with Ollama or LocalGPT.
+                        Tweak
+                        settings, manage your data privately, and choose your hardware.</li>
+                    <li><strong>Cost Savings:</strong> Avoid recurring monthly SaaS fees. Pay only for the AWS resources
+                        you
+                        consume, significantly reduced by using Spot Instances and automated shutdowns during idle
+                        times.</li>
+                    <li><strong>Performance:</strong> Leverage powerful AWS GPU instances (like the G5 family) for much
+                        faster
+                        AI model inference compared to typical local machines.</li>
+                    <li><strong>Learning Opportunity:</strong> Gain valuable hands-on experience with cloud
+                        infrastructure (EC2,
+                        IAM, Nginx, Docker) and AI model deployment practices.</li>
+                </ul>
+            </div>
+        </section>
 
-        <div class="recommendation">
-            <p><strong>Recommendation:</strong> Prioritize G5 instances. Use G4dn only if budget is extremely tight and
-                only small models are needed.</p>
-        </div>
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Choosing Your AWS Hardware: EC2 Instance Guide</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">The Importance of GPUs (Especially VRAM)</h3>
+                <p class="text-gray-700 mb-4">
+                    Running Large Language Models (LLMs) effectively is often limited by the amount of Video RAM (VRAM)
+                    available
+                    on the GPU. Model size (billions of parameters) directly impacts VRAM usage. Techniques like
+                    <strong>quantization</strong> (reducing the numerical precision of model weights) can significantly
+                    lower
+                    VRAM needs, but overly aggressive quantization might reduce model quality.
+                </p>
+                <p class="text-gray-700 mb-4">
+                    For developer tasks (code generation, complex instructions), maintaining model quality is key. Aim
+                    for enough
+                    VRAM to run your desired models with at least 4-bit or 5-bit quantization (e.g., Q4_K_M GGUF) for a
+                    good
+                    balance.
+                </p>
+                <p class="text-gray-700 mb-2"><strong>Estimated VRAM Needs (Quantized Models):</strong></p>
+                <ul class="list-disc pl-5 mb-4 text-gray-700">
+                    <li>~7-13B models (e.g., Llama 3 8B, Mistral 7B, DeepSeek Coder 6.7B, Phi-3-mini): ~4-12 GB (Q4)
+                    </li>
+                    <li>Mixtral 8x7B: ~27-30 GB (Q4), ~24GB (3.5bpw EXL2)</li>
+                    <li>Llama 3 70B: ~40-50 GB (Q4/Q5), ~75GB (Q8), ~140GB+ (FP16)</li>
+                </ul>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <p class="text-blue-700">
+                        <strong>Note:</strong> Running large models like Llama 3 70B on GPUs with insufficient VRAM
+                        (e.g., 24GB)
+                        requires offloading layers to system RAM, which drastically slows down inference speed.
+                    </p>
+                </div>
 
-        <h3>Recommended Instance Types (G5 Family)</h3>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Instance Type</th>
-                    <th>GPU & VRAM</th>
-                    <th>vCPUs</th>
-                    <th>System RAM</th>
-                    <th>Suitability</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>g5.xlarge</code></td>
-                    <td>1 x A10G (24GB)</td>
-                    <td>4</td>
-                    <td>16 GiB</td>
-                    <td>Good start for models up to ~13B, potentially Mixtral (low quant/offload). Best cost/capability
-                        balance for smaller models.</td>
-                </tr>
-                <tr>
-                    <td><code>g5.2xlarge</code></td>
-                    <td>1 x A10G (24GB)</td>
-                    <td>8</td>
-                    <td>32 GiB</td>
-                    <td>Same VRAM, more CPU/RAM for smoother multitasking or minor offloading.</td>
-                </tr>
-                <tr>
-                    <td><code>g5.4xlarge</code></td>
-                    <td>1 x A10G (24GB)</td>
-                    <td>16</td>
-                    <td>64 GiB</td>
-                    <td>More RAM allows more significant layer offloading for larger models (e.g., Mixtral Q4, Llama 70B
-                        Q2/Q3), but expect performance impact.</td>
-                </tr>
-                <tr>
-                    <td><strong><code>g5.12xlarge</code></strong></td>
-                    <td><strong>4 x A10G (96GB total)</strong></td>
-                    <td><strong>48</strong></td>
-                    <td><strong>192 GiB</strong></td>
-                    <td><strong>Recommended for running Llama 3 70B (Q4/Q5) efficiently without significant
-                            offloading.</strong> Also handles Mixtral easily.</td>
-                </tr>
-                <tr>
-                    <td><code>g5.24xlarge</code></td>
-                    <td>4 x A10G (96GB total)</td>
-                    <td>96</td>
-                    <td>384 GiB</td>
-                    <td>More CPU/RAM for demanding workloads or multiple users/models.</td>
-                </tr>
-                <tr>
-                    <td><code>g5.48xlarge</code></td>
-                    <td>8 x A10G (192GB total)</td>
-                    <td>192</td>
-                    <td>768 GiB</td>
-                    <td>High-end for multiple large models, less quantization, or very large context windows.</td>
-                </tr>
-            </tbody>
-        </table>
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">G5 Instances Recommended</h3>
+                <p class="text-gray-700 mb-4">
+                    AWS EC2 G5 instances, featuring NVIDIA A10G GPUs (24GB VRAM each), are generally the best choice for
+                    this
+                    workload. They offer significantly better ML inference performance and price/performance compared to
+                    the
+                    older G4dn instances (NVIDIA T4, 16GB VRAM). The extra VRAM per GPU is also a major advantage.
+                </p>
 
-        <h3>Spot vs. On-Demand Instances</h3>
-        <p><strong>Spot Instances</strong> offer huge savings (often 70-90% off On-Demand) by using spare AWS capacity.
-            The catch is AWS can reclaim the instance with a 2-minute warning. For a personal dev server with
-            auto-shutdown, Spot is highly recommended for cost savings.</p>
-        <p><strong>On-Demand Instances</strong> provide guaranteed availability at a fixed hourly rate, suitable if
-            interruptions are unacceptable.</p>
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <p class="text-green-700">
+                        <strong>Recommendation:</strong> Prioritize G5 instances. Use G4dn only if budget is extremely
+                        tight and
+                        only small models are needed.
+                    </p>
+                </div>
 
-        <h2>Step-by-Step Setup Guide</h2>
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">Recommended Instance Types (G5 Family)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-green-100">
+                                <th class="border border-green-300 px-4 py-2 text-left text-green-800">Instance Type
+                                </th>
+                                <th class="border border-green-300 px-4 py-2 text-left text-green-800">GPU & VRAM</th>
+                                <th class="border border-green-300 px-4 py-2 text-left text-green-800">vCPUs</th>
+                                <th class="border border-green-300 px-4 py-2 text-left text-green-800">System RAM</th>
+                                <th class="border border-green-300 px-4 py-2 text-left text-green-800">Suitability</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2"><code>g5.xlarge</code></td>
+                                <td class="border border-gray-300 px-4 py-2">1 x A10G (24GB)</td>
+                                <td class="border border-gray-300 px-4 py-2">4</td>
+                                <td class="border border-gray-300 px-4 py-2">16 GiB</td>
+                                <td class="border border-gray-300 px-4 py-2">Good start for models up to ~13B,
+                                    potentially Mixtral (low quant/offload). Best cost/capability balance for smaller
+                                    models.</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2"><code>g5.2xlarge</code></td>
+                                <td class="border border-gray-300 px-4 py-2">1 x A10G (24GB)</td>
+                                <td class="border border-gray-300 px-4 py-2">8</td>
+                                <td class="border border-gray-300 px-4 py-2">32 GiB</td>
+                                <td class="border border-gray-300 px-4 py-2">Same VRAM, more CPU/RAM for smoother
+                                    multitasking or minor offloading.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2"><code>g5.4xlarge</code></td>
+                                <td class="border border-gray-300 px-4 py-2">1 x A10G (24GB)</td>
+                                <td class="border border-gray-300 px-4 py-2">16</td>
+                                <td class="border border-gray-300 px-4 py-2">64 GiB</td>
+                                <td class="border border-gray-300 px-4 py-2">More RAM allows more significant layer
+                                    offloading for larger models (e.g., Mixtral Q4, Llama 70B Q2/Q3), but expect
+                                    performance impact.</td>
+                            </tr>
+                            <tr class="bg-green-50 font-semibold">
+                                <td class="border border-green-300 px-4 py-2"><code>g5.12xlarge</code></td>
+                                <td class="border border-green-300 px-4 py-2">4 x A10G (96GB total)</td>
+                                <td class="border border-green-300 px-4 py-2">48</td>
+                                <td class="border border-green-300 px-4 py-2">192 GiB</td>
+                                <td class="border border-green-300 px-4 py-2">Recommended for running Llama 3 70B
+                                    (Q4/Q5) efficiently without significant offloading. Also handles Mixtral easily.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2"><code>g5.24xlarge</code></td>
+                                <td class="border border-gray-300 px-4 py-2">4 x A10G (96GB total)</td>
+                                <td class="border border-gray-300 px-4 py-2">96</td>
+                                <td class="border border-gray-300 px-4 py-2">384 GiB</td>
+                                <td class="border border-gray-300 px-4 py-2">More CPU/RAM for demanding workloads or
+                                    multiple users/models.</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2"><code>g5.48xlarge</code></td>
+                                <td class="border border-gray-300 px-4 py-2">8 x A10G (192GB total)</td>
+                                <td class="border border-gray-300 px-4 py-2">192</td>
+                                <td class="border border-gray-300 px-4 py-2">768 GiB</td>
+                                <td class="border border-gray-300 px-4 py-2">High-end for multiple large models, less
+                                    quantization, or very large context windows.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        <h3>1. Prerequisites</h3>
-        <ul>
-            <li>Active AWS Account with necessary permissions (EC2, IAM, etc.).</li>
-            <li>(Optional but Recommended) Registered domain name for easy access and SSL.</li>
-            <li>Launched EC2 Instance (choose from recommendations above).</li>
-        </ul>
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">Spot vs. On-Demand Instances</h3>
+                <p class="text-gray-700 mb-4">
+                    <strong>Spot Instances</strong> offer huge savings (often 70-90% off On-Demand) by using spare AWS
+                    capacity.
+                    The catch is AWS can reclaim the instance with a 2-minute warning. For a personal dev server with
+                    auto-shutdown, Spot is highly recommended for cost savings.
+                </p>
+                <p class="text-gray-700">
+                    <strong>On-Demand Instances</strong> provide guaranteed availability at a fixed hourly rate,
+                    suitable if
+                    interruptions are unacceptable.
+                </p>
+            </div>
+        </section>
 
-        <h3>2. Foundation: OS and Drivers</h3>
-        <div class="recommendation">
-            <p><strong>Highly Recommended:</strong> Start with an <strong>AWS Deep Learning AMI (DLAMI)</strong> based
-                on Ubuntu (e.g., 22.04 or 24.04). These AMIs come pre-installed with compatible NVIDIA drivers, CUDA
-                toolkit, cuDNN, and often Docker, saving significant setup effort.</p>
-        </div>
-        <p>If not using a DLAMI, you'll need to manually install NVIDIA drivers and the correct CUDA toolkit version
-            compatible with Ollama.</p>
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Step-by-Step Setup Guide</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">1. Prerequisites</h3>
+                <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-6">
+                    <li>Active AWS Account with necessary permissions (EC2, IAM, etc.).</li>
+                    <li>(Optional but Recommended) Registered domain name for easy access and SSL.</li>
+                    <li>Launched EC2 Instance (choose from recommendations above).</li>
+                </ul>
 
-        <h3>3. Core Tools Installation</h3>
-        <p>Ensure these are installed (DLAMIs often include them):</p>
-        <ul>
-            <li><strong>Docker & Docker Compose:</strong> For containerizing Ollama and Code-Server. Follow official
-                Docker installation guides if needed.</li>
-            <li><strong>NVIDIA Container Toolkit:</strong> Allows Docker containers to access the GPU. Installation
-                involves adding NVIDIA's repository and installing the `nvidia-container-toolkit` package, then
-                restarting Docker.</li>
-        </ul>
-        <pre><code class="language-bash"># Example NVIDIA Container Toolkit Install (Verify official docs)
+                <h3 class="text-xl font-semibold mb-4 text-green-700">2. Foundation: OS and Drivers</h3>
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <p class="text-green-700">
+                        <strong>Highly Recommended:</strong> Start with an <strong>AWS Deep Learning AMI
+                            (DLAMI)</strong> based
+                        on Ubuntu (e.g., 22.04 or 24.04). These AMIs come pre-installed with compatible NVIDIA drivers,
+                        CUDA
+                        toolkit, cuDNN, and often Docker, saving significant setup effort.
+                    </p>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    If not using a DLAMI, you'll need to manually install NVIDIA drivers and the correct CUDA toolkit
+                    version
+                    compatible with Ollama.
+                </p>
+
+                <h3 class="text-xl font-semibold mb-4 text-green-700">3. Core Tools Installation</h3>
+                <p class="text-gray-700 mb-3">Ensure these are installed (DLAMIs often include them):</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-4">
+                    <li><strong>Docker & Docker Compose:</strong> For containerizing Ollama and Code-Server. Follow
+                        official
+                        Docker installation guides if needed.</li>
+                    <li><strong>NVIDIA Container Toolkit:</strong> Allows Docker containers to access the GPU.
+                        Installation
+                        involves adding NVIDIA's repository and installing the `nvidia-container-toolkit` package, then
+                        restarting Docker.</li>
+                </ul>
+
+                <pre><code class="language-bash"># Example NVIDIA Container Toolkit Install (Verify official docs)
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
 && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
 sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
@@ -277,10 +332,13 @@ sudo systemctl restart docker
 # Verify GPU access in Docker
 sudo docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu22.04 nvidia-smi</code></pre>
 
-        <h3>4. Deployment with Docker Compose</h3>
-        <p>Create project directories (e.g., `~/ai-server/ollama_data`, `~/ai-server/code-server_data`) and a
-            `docker-compose.yml` file within `~/ai-server`:</p>
-        <pre><code class="language-yaml"># ~/ai-server/docker-compose.yml
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">4. Deployment with Docker Compose</h3>
+                <p class="text-gray-700 mb-3">
+                    Create project directories (e.g., `~/ai-server/ollama_data`, `~/ai-server/code-server_data`) and a
+                    `docker-compose.yml` file within `~/ai-server`:
+                </p>
+
+                <pre><code class="language-yaml"># ~/ai-server/docker-compose.yml
 version: '3.8'
 services:
   ollama:
@@ -314,39 +372,54 @@ services:
 
 volumes:
   ollama_data:
-  code-server_data:
-</code></pre>
-        <div class="warning">
-            <p><strong>Security Alert:</strong> Change <code>YourStrongPasswordHere</code> to a very strong, unique
-                password in the <code>docker-compose.yml</code> file.</p>
-        </div>
-        <p>Start the services: <code>cd ~/ai-server && sudo docker compose up -d</code></p>
+  code-server_data:</code></pre>
 
-        <h3>5. Pull Ollama Models</h3>
-        <p>Download the models you want to use:</p>
-        <pre><code class="language-bash">sudo docker exec ollama ollama pull llama3:8b
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <p class="text-yellow-700">
+                        <strong>Security Alert:</strong> Change <code>YourStrongPasswordHere</code> to a very strong,
+                        unique
+                        password in the <code>docker-compose.yml</code> file.
+                    </p>
+                </div>
+
+                <p class="text-gray-700 mb-3">Start the services:</p>
+                <pre><code class="language-bash">cd ~/ai-server && sudo docker compose up -d</code></pre>
+
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">5. Pull Ollama Models</h3>
+                <p class="text-gray-700 mb-3">Download the models you want to use:</p>
+                <pre><code class="language-bash">sudo docker exec ollama ollama pull llama3:8b
 sudo docker exec ollama ollama pull mistral
 sudo docker exec ollama ollama pull deepseek-coder:6.7b
 # Add other models as needed (e.g., phi-3, starcoder, etc.)</code></pre>
+            </div>
+        </section>
 
-        <h2>Secure Access with Nginx & SSL</h2>
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Secure Access with Nginx & SSL</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Why Nginx?</h3>
+                <p class="text-gray-700 mb-3">Nginx acts as a reverse proxy, providing a single, secure entry point:</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-6">
+                    <li>Handles HTTPS (SSL/TLS encryption).</li>
+                    <li>Hides the direct ports of Ollama and Code-Server.</li>
+                    <li>Allows adding security headers centrally.</li>
+                    <li>Exposes services via your domain name (or IP).</li>
+                </ul>
 
-        <h3>Why Nginx?</h3>
-        <p>Nginx acts as a reverse proxy, providing a single, secure entry point:</p>
-        <ul>
-            <li>Handles HTTPS (SSL/TLS encryption).</li>
-            <li>Hides the direct ports of Ollama and Code-Server.</li>
-            <li>Allows adding security headers centrally.</li>
-            <li>Exposes services via your domain name (or IP).</li>
-        </ul>
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Nginx Installation & Configuration</h3>
+                <p class="text-gray-700 mb-3">Install Nginx:</p>
+                <pre><code class="language-bash">sudo apt update && sudo apt install nginx</code></pre>
+                <p class="text-gray-700 mb-3">
+                    Create an Nginx site configuration file (e.g.,
+                    <code>/etc/nginx/sites-available/ai-server.conf</code>).
+                    Replace <code>your_domain.com</code> with your actual domain or the EC2 instance's public IP address
+                    if not
+                    using a domain.
+                </p>
 
-        <h3>Nginx Installation & Configuration</h3>
-        <p>Install Nginx: <code>sudo apt update && sudo apt install nginx</code></p>
-        <p>Create an Nginx site configuration file (e.g., <code>/etc/nginx/sites-available/ai-server.conf</code>).
-            Replace <code>your_domain.com</code> with your actual domain or the EC2 instance's public IP address if not
-            using a domain.</p>
-
-        <pre><code class="language-nginx"># /etc/nginx/sites-available/ai-server.conf
+                <pre><code class="language-nginx"># /etc/nginx/sites-available/ai-server.conf
 
 # Redirect HTTP to HTTPS (Certbot often handles this better)
 server {
@@ -370,7 +443,7 @@ server {
 
     # SSL Configuration - Managed by Certbot (paths added automatically)
     ssl_certificate /etc/letsencrypt/live/your_domain.com/fullchain.pem;
-    ssl_certificate_key...[source](https://medium.com/swlh/dockerizing-two-web-servers-to-respond-to-the-same-domain-eb9c15734a68)
+    ssl_certificate_key /etc/letsencrypt/live/your_domain.com/privkey.pem;
 
     # Basic Security Headers
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
@@ -409,57 +482,83 @@ server {
     location ~ /\. {
         deny all;
     }
-}
-</code></pre>
-        <p>Enable the site, test config, and reload Nginx:</p>
-        <pre><code class="language-bash">sudo ln -sfn /etc/nginx/sites-available/ai-server.conf /etc/nginx/sites-enabled/ai-server.conf
+}</code></pre>
+
+                <p class="text-gray-700 mb-3">Enable the site, test config, and reload Nginx:</p>
+                <pre><code class="language-bash">sudo ln -sfn /etc/nginx/sites-available/ai-server.conf /etc/nginx/sites-enabled/ai-server.conf
 sudo nginx -t
 sudo systemctl reload nginx</code></pre>
 
-        <h3>SSL Certificates with Let's Encrypt (Certbot)</h3>
-        <p>If using a domain name, get a free SSL certificate:</p>
-        <ol>
-            <li>Install Certbot (snap method recommended):
-                <pre><code class="language-bash">sudo snap install core; sudo snap refresh core
+                <h3 class="text-xl font-semibold mb-4 mt-8 text-green-700">SSL Certificates with Let's Encrypt (Certbot)
+                </h3>
+                <p class="text-gray-700 mb-3">If using a domain name, get a free SSL certificate:</p>
+                <ol class="list-decimal pl-5 space-y-2 text-gray-700 mb-4">
+                    <li>Install Certbot (snap method recommended):
+                        <pre><code class="language-bash">sudo snap install core; sudo snap refresh core
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot</code></pre>
-            </li>
-            <li>Ensure your domain's DNS A record points to the EC2 instance's public IP.</li>
-            <li>Allow HTTPS traffic (port 443) in the EC2 Security Group.</li>
-            <li>Run Certbot:
-                <pre><code class="language-bash">sudo certbot --nginx -d your_domain.com</code></pre>
-                (Replace `your_domain.com`). Follow the prompts. Certbot will obtain the certificate and automatically
-                update your Nginx configuration.
-            </li>
-            <li>Verify auto-renewal: <code>sudo certbot renew --dry-run</code>.</li>
-        </ol>
+                    </li>
+                    <li>Ensure your domain's DNS A record points to the EC2 instance's public IP.</li>
+                    <li>Allow HTTPS traffic (port 443) in the EC2 Security Group.</li>
+                    <li>Run Certbot:
+                        <pre><code class="language-bash">sudo certbot --nginx -d your_domain.com</code></pre>
+                        (Replace `your_domain.com`). Follow the prompts. Certbot will obtain the certificate and
+                        automatically
+                        update your Nginx configuration.
+                    </li>
+                    <li>Verify auto-renewal: <code>sudo certbot renew --dry-run</code>.</li>
+                </ol>
+            </div>
+        </section>
 
-        <h2>Ensuring Reliability & Managing Costs</h2>
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Ensuring Reliability & Managing Costs</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Auto-Start Services</h3>
+                <p class="text-gray-700 mb-4">
+                    The <code>restart: unless-stopped</code> policy in the `docker-compose.yml` file ensures that both
+                    Ollama and
+                    Code-Server containers will automatically restart if they crash or after the EC2 instance reboots.
+                    No
+                    further action is needed if using the provided Docker Compose setup.
+                </p>
+                <p class="text-gray-700 mb-4">
+                    (If installed manually without Docker, you would need to create and enable `systemd` service files
+                    for Ollama
+                    and Code-Server).
+                </p>
 
-        <h3>Auto-Start Services</h3>
-        <p>The <code>restart: unless-stopped</code> policy in the `docker-compose.yml` file ensures that both Ollama and
-            Code-Server containers will automatically restart if they crash or after the EC2 instance reboots. No
-            further action is needed if using the provided Docker Compose setup.</p>
-        <p>(If installed manually without Docker, you would need to create and enable `systemd` service files for Ollama
-            and Code-Server).</p>
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Automated Shutdown (Cost Saving)</h3>
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <p class="text-green-700">
+                        <strong>Recommended Method: AWS Lambda + EventBridge Scheduler</strong>
+                    </p>
+                    <p class="text-green-700">
+                        This is the most secure and reliable way to automatically stop your EC2 instance during off-peak
+                        hours
+                        (e.g., 2 AM daily) to save costs.
+                    </p>
+                </div>
 
-        <h3>Automated Shutdown (Cost Saving)</h3>
-        <div class="recommendation">
-            <p><strong>Recommended Method: AWS Lambda + EventBridge Scheduler</strong></p>
-            <p>This is the most secure and reliable way to automatically stop your EC2 instance during off-peak hours
-                (e.g., 2 AM daily) to save costs.</p>
-        </div>
-        <ol>
-            <li><strong>Create IAM Policy & Role:</strong> Create an IAM policy granting `ec2:StopInstances` permission
-                specifically for your EC2 instance ARN, plus basic CloudWatch Logs permissions. Create an IAM role for
-                Lambda execution and attach this policy.</li>
-            <li><strong>Create Lambda Function:</strong>
-                <ul>
-                    <li>Go to the AWS Lambda console, create a new function (Author from scratch, Python runtime).</li>
-                    <li>Assign the IAM role created above.</li>
-                    <li>Use the following Python code (replace placeholders):</li>
-                </ul>
-                <pre><code class="language-python"># lambda_function.py
+                <ol class="list-decimal pl-5 space-y-4 text-gray-700 mb-6">
+                    <li>
+                        <strong>Create IAM Policy & Role:</strong> Create an IAM policy granting `ec2:StopInstances`
+                        permission
+                        specifically for your EC2 instance ARN, plus basic CloudWatch Logs permissions. Create an IAM
+                        role for
+                        Lambda execution and attach this policy.
+                    </li>
+                    <li>
+                        <strong>Create Lambda Function:</strong>
+                        <ul class="list-disc pl-5 space-y-2 mt-2">
+                            <li>Go to the AWS Lambda console, create a new function (Author from scratch, Python
+                                runtime).</li>
+                            <li>Assign the IAM role created above.</li>
+                            <li>Use the following Python code (replace placeholders):</li>
+                        </ul>
+                        <pre><code class="language-python"># lambda_function.py
 import boto3
 import os
 
@@ -483,118 +582,159 @@ def lambda_handler(event, context):
         print(f"Error stopping instances: {e}")
         return {'statusCode': 500, 'body': f'Error: {str(e)}'}
                 </code></pre>
-                <ul>
-                    <li>Deploy the function.</li>
+                        <ul class="list-disc pl-5 space-y-2 mt-2">
+                            <li>Deploy the function.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Create EventBridge Schedule:</strong>
+                        <ul class="list-disc pl-5 space-y-2 mt-2">
+                            <li>Go to the Amazon EventBridge console, select "Schedules", "Create schedule".</li>
+                            <li>Define a schedule using a cron expression (remember it's in UTC). Example for 2:00 AM
+                                UTC daily:
+                                <code>cron(0 2 ? * * *)</code>. Adjust for your desired local time shutdown.
+                            </li>
+                            <li>Set the target to the Lambda function created above.</li>
+                            <li>Create the schedule.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p class="text-gray-700 italic">
+                    Alternative (Less Recommended): A cron job on the EC2 instance itself using AWS CLI, but this
+                    requires granting permissions directly to the instance.
+                </p>
+            </div>
+        </section>
+
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Understanding the Costs</h2>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Main Cost Components</h3>
+                <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-6">
+                    <li><strong>EC2 Instance Runtime:</strong> Largest cost, depends on instance type (G5), pricing
+                        model (Spot
+                        recommended), and hours running. Auto-shutdown drastically reduces this.</li>
+                    <li><strong>EBS Storage:</strong> Cost for the disk volume (recommend `gp3`). Charged per GB-month
+                        (e.g.,
+                        ~$0.08/GB-month for gp3 in us-east-1). A 250GB volume costs ~$20/month.</li>
+                    <li><strong>Data Transfer OUT:</strong> First 100GB/month OUT to the internet is free. Additional
+                        data costs
+                        ~$0.09/GB. Usually negligible for personal use. Data IN is free.</li>
                 </ul>
-            </li>
-            <li><strong>Create EventBridge Schedule:</strong>
-                <ul>
-                    <li>Go to the Amazon EventBridge console, select "Schedules", "Create schedule".</li>
-                    <li>Define a schedule using a cron expression (remember it's in UTC). Example for 2:00 AM UTC daily:
-                        <code>cron(0 2? * * *)</code>. Adjust for your desired local time shutdown.</li>
-                    <li>Set the target to the Lambda function created above.</li>
-                    <li>Create the schedule.</li>
-                </ul>
-            </li>
-        </ol>
-        <p><em>Alternative (Less Recommended):</em> A cron job on the EC2 instance itself using AWS CLI, but this
-            requires granting permissions directly to the instance.</p>
 
-        <h2>Understanding the Costs</h2>
+                <h3 class="text-xl font-semibold mb-4 text-green-700">Monthly Cost Estimate Sheet (Example: us-east-1,
+                    Linux)</h3>
+                <p class="text-gray-700 mb-3">
+                    Assumptions: 250GB gp3 EBS volume (~$20/month), <100GB data transfer ($0). Spot prices estimated
+                        ~70% off On-Demand (actual prices vary). </p>
 
-        <h3>Main Cost Components</h3>
-        <ul>
-            <li><strong>EC2 Instance Runtime:</strong> Largest cost, depends on instance type (G5), pricing model (Spot
-                recommended), and hours running. Auto-shutdown drastically reduces this.</li>
-            <li><strong>EBS Storage:</strong> Cost for the disk volume (recommend `gp3`). Charged per GB-month (e.g.,
-                ~$0.08/GB-month for gp3 in us-east-1). A 250GB volume costs ~$20/month.</li>
-            <li><strong>Data Transfer OUT:</strong> First 100GB/month OUT to the internet is free. Additional data costs
-                ~$0.09/GB. Usually negligible for personal use. Data IN is free.</li>
-        </ul>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-green-100">
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Scenario
+                                        </th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Instance
+                                            Type</th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Pricing
+                                            Model</th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Monthly
+                                            Hours</th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Est. EC2
+                                            Cost</th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Est. EBS
+                                            Cost</th>
+                                        <th class="border border-green-300 px-4 py-2 text-left text-green-800">Est.
+                                            Total Monthly Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2">Budget Small Models</td>
+                                        <td class="border border-gray-300 px-4 py-2">g4dn.xlarge</td>
+                                        <td class="border border-gray-300 px-4 py-2">Spot</td>
+                                        <td class="border border-gray-300 px-4 py-2">220 (Auto-Shutdown)</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$35</td>
+                                        <td class="border border-gray-300 px-4 py-2">$20</td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>~$55</strong></td>
+                                    </tr>
+                                    <tr class="bg-green-50 font-semibold">
+                                        <td class="border border-green-300 px-4 py-2"><strong>Recommended Start</strong>
+                                        </td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>g5.xlarge</strong></td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>Spot</strong></td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>220
+                                                (Auto-Shutdown)</strong></td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>~$66</strong></td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>$20</strong></td>
+                                        <td class="border border-green-300 px-4 py-2"><strong>~$86</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2">Recommended Start (On-Demand)</td>
+                                        <td class="border border-gray-300 px-4 py-2">g5.xlarge</td>
+                                        <td class="border border-gray-300 px-4 py-2">On-Demand</td>
+                                        <td class="border border-gray-300 px-4 py-2">220 (Auto-Shutdown)</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$221</td>
+                                        <td class="border border-gray-300 px-4 py-2">$20</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$241</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="border border-gray-300 px-4 py-2"><strong>Recommended 70B
+                                                Models</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>g5.12xlarge</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>Spot</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>220
+                                                (Auto-Shutdown)</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>~$374</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>$20</strong></td>
+                                        <td class="border border-gray-300 px-4 py-2"><strong>~$394</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2">Baseline (No Shutdown)</td>
+                                        <td class="border border-gray-300 px-4 py-2">g5.xlarge</td>
+                                        <td class="border border-gray-300 px-4 py-2">Spot</td>
+                                        <td class="border border-gray-300 px-4 py-2">720 (24/7)</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$216</td>
+                                        <td class="border border-gray-300 px-4 py-2">$20</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$236</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="border border-gray-300 px-4 py-2">Baseline (No Shutdown, OD)</td>
+                                        <td class="border border-gray-300 px-4 py-2">g5.xlarge</td>
+                                        <td class="border border-gray-300 px-4 py-2">On-Demand</td>
+                                        <td class="border border-gray-300 px-4 py-2">720 (24/7)</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$724</td>
+                                        <td class="border border-gray-300 px-4 py-2">$20</td>
+                                        <td class="border border-gray-300 px-4 py-2">~$744</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-        <h3>Monthly Cost Estimate Sheet (Example: us-east-1, Linux)</h3>
-        <p>Assumptions: 250GB gp3 EBS volume (~$20/month), <100GB data transfer ($0). Spot prices estimated ~70% off
-                On-Demand (actual prices vary).</p>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Scenario</th>
-                            <th>Instance Type</th>
-                            <th>Pricing Model</th>
-                            <th>Monthly Hours</th>
-                            <th>Est. EC2 Cost</th>
-                            <th>Est. EBS Cost</th>
-                            <th>Est. Total Monthly Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Budget Small Models</td>
-                            <td>g4dn.xlarge</td>
-                            <td>Spot</td>
-                            <td>220 (Auto-Shutdown)</td>
-                            <td>~$35</td>
-                            <td>$20</td>
-                            <td><strong>~$55</strong></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Recommended Start</strong></td>
-                            <td><strong>g5.xlarge</strong></td>
-                            <td><strong>Spot</strong></td>
-                            <td><strong>220 (Auto-Shutdown)</strong></td>
-                            <td><strong>~$66</strong></td>
-                            <td><strong>$20</strong></td>
-                            <td><strong>~$86</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Recommended Start (On-Demand)</td>
-                            <td>g5.xlarge</td>
-                            <td>On-Demand</td>
-                            <td>220 (Auto-Shutdown)</td>
-                            <td>~$221</td>
-                            <td>$20</td>
-                            <td>~$241</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Recommended 70B Models</strong></td>
-                            <td><strong>g5.12xlarge</strong></td>
-                            <td><strong>Spot</strong></td>
-                            <td><strong>220 (Auto-Shutdown)</strong></td>
-                            <td><strong>~$374</strong></td>
-                            <td><strong>$20</strong></td>
-                            <td><strong>~$394</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Baseline (No Shutdown)</td>
-                            <td>g5.xlarge</td>
-                            <td>Spot</td>
-                            <td>720 (24/7)</td>
-                            <td>~$216</td>
-                            <td>$20</td>
-                            <td>~$236</td>
-                        </tr>
-                        <tr>
-                            <td>Baseline (No Shutdown, OD)</td>
-                            <td>g5.xlarge</td>
-                            <td>On-Demand</td>
-                            <td>720 (24/7)</td>
-                            <td>~$724</td>
-                            <td>$20</td>
-                            <td>~$744</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="note">
-                    <p><strong>Key Takeaway:</strong> Combining <strong>Spot Instances</strong> with <strong>Automated
-                            Shutdown</strong> provides massive cost savings compared to running On-Demand 24/7.</p>
-                </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                            <p class="text-blue-700">
+                                <strong>Key Takeaway:</strong> Combining <strong>Spot Instances</strong> with
+                                <strong>Automated
+                                    Shutdown</strong> provides massive cost savings compared to running On-Demand 24/7.
+                            </p>
+                        </div>
+            </div>
+        </section>
 
-                <h2>Conclusion & Next Steps</h2>
-                <p>By following this guide, you can create a powerful, customizable, and cost-effective AI development
+        <section class="mb-12 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 p-6 text-white">
+                <h2 class="text-2xl font-bold">Conclusion & Next Steps</h2>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4">
+                    By following this guide, you can create a powerful, customizable, and cost-effective AI development
                     environment on AWS EC2. You gain control over your tools and data, leverage potent cloud hardware,
-                    and avoid recurring SaaS fees.</p>
-                <p><strong>Next Steps to Explore:</strong></p>
-                <ul>
+                    and avoid recurring SaaS fees.
+                </p>
+                <p class="font-semibold text-gray-700 mb-3"><strong>Next Steps to Explore:</strong></p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-4">
                     <li>Experiment with different Ollama models and quantization levels.</li>
                     <li>Set up monitoring for your instance (CloudWatch).</li>
                     <li>Explore advanced Nginx features (e.g., basic auth for the Ollama endpoint).</li>
@@ -602,8 +742,97 @@ def lambda_handler(event, context):
                     <li>Automate the entire setup using Infrastructure as Code tools like Terraform or AWS
                         CloudFormation.</li>
                 </ul>
+            </div>
+        </section>
 
-    </div>
+        <div class="mt-12 p-6 bg-green-50 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Looking for Other Resources?</h2>
+            <p class="text-gray-700 mb-4">
+                Check out my other AWS research pages:
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="../deepseek/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    DeepSeek AI Config
+                </a>
+                <a href="../flowith/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Flowith AI Deployment
+                </a>
+                <a href="../grok/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Grok AI Configuration
+                </a>
+                <a href="../manus/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Manus AI Implementation
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-white hover:text-green-400">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-white hover:text-green-400">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-white hover:text-green-400">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for copy functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find all pre tags
+            const preTags = document.querySelectorAll('pre');
+
+            // Add copy button to each pre tag
+            preTags.forEach(function (preTag, index) {
+                // Create a wrapper div with relative positioning
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative';
+
+                // Create the copy button
+                const copyButton = document.createElement('button');
+                copyButton.id = `copy-script-button-${index}`;
+                copyButton.className = 'absolute top-2 right-2 bg-green-600 text-white rounded p-1 text-xs hover:bg-green-700';
+                copyButton.textContent = 'Copy Script';
+
+                // Get the parent of the pre tag
+                const parent = preTag.parentNode;
+
+                // Replace pre with wrapper
+                parent.replaceChild(wrapper, preTag);
+
+                // Add button and pre to wrapper
+                wrapper.appendChild(copyButton);
+                wrapper.appendChild(preTag);
+
+                // Add click event to copy button
+                copyButton.addEventListener('click', function () {
+                    const scriptContent = preTag.textContent;
+                    if (scriptContent) {
+                        navigator.clipboard.writeText(scriptContent)
+                            .then(() => {
+                                // Visual feedback that copying worked
+                                const originalText = this.textContent;
+                                this.textContent = 'Copied!';
+                                setTimeout(() => {
+                                    this.textContent = originalText;
+                                }, 2000);
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy: ', err);
+                            });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

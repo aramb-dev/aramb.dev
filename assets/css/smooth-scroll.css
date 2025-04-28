@@ -1,0 +1,18 @@
+/* 
+   Smooth Scrolling CSS
+   Add to all pages to enable smooth scrolling site-wide
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add padding-top to section headings for better anchor positioning */
+section[id] {
+    scroll-margin-top: 80px;
+}
+
+/* Same for any other elements that might be targeted by ID anchors */
+[id] {
+    scroll-margin-top: 80px;
+}

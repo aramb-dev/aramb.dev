@@ -1,72 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Self-Hosted AI Agent Setup Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="style.css">
-    <!-- Fix Lucide icons loading -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <header class="mb-12">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900">Self-Hosted AI Agent Setup Guide</h1>
-                <div class="flex items-center space-x-4">
-                    <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 transition-all">
-                        <i data-lucide="sun" class="h-5 w-5"></i>
-                    </button>
-                    <a href="https://aramb.dev/aws-research/flowith" target="_blank" class="p-2 rounded-full hover:bg-gray-200 transition-all">
-                        <i data-lucide="github" class="h-5 w-5"></i>
-                    </a>
-                </div>
-            </div>
-            <p class="text-xl text-gray-600 max-w-4xl">A comprehensive guide for setting up your own AI agent environment on AWS EC2, including model recommendations, deployment scripts, and cost optimization strategies.</p>
-        </header>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowith AI Deployment | Self-Hosted AI Research</title>
+    <meta name="description"
+        content="Step-by-step guide for setting up a production-ready AI agent environment on AWS EC2 with clean interface">
+    <meta property="og:url" content="https://aramb.dev/aws-research/flowith">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Flowith AI Deployment | Self-Hosted AI Research">
+    <meta property="og:description"
+        content="Step-by-step guide for setting up a production-ready AI agent environment on AWS EC2 with clean interface">
+    <meta property="og:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/aws-research/flowith">
+    <meta name="twitter:title" content="Flowith AI Deployment | Self-Hosted AI Research">
+    <meta name="twitter:description"
+        content="Step-by-step guide for setting up a production-ready AI agent environment on AWS EC2 with clean interface">
+    <meta name="twitter:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
+    <!-- Create a shared CSS file for smooth scrolling across all pages -->
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+        }
+
+        code {
+            background-color: #f0f0f0;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* Fix for header background */
+        header.bg-gradient-to-l {
+            background: linear-gradient(to left, #166534, #16a34a);
+        }
+
+        /* Add smooth scrolling to the entire page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Add padding-top to section headings for better anchor positioning */
+        section[id] {
+            scroll-margin-top: 80px;
+        }
+    </style>
+
+    <!-- For site-wide implementation, create shared files:
+    1. Create file: assets/css/smooth-scroll.css with:
+    html {
+        scroll-behavior: smooth;
+    }
+    section[id] {
+        scroll-margin-top: 80px;
+    }
+
+    2. Create file: assets/js/smooth-scroll.js with the fallback script below
+
+    3. Include in all HTML files with:
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
+    -->
+
+    <link rel="icon" type="image/png" href="../../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../../assets/favicon/site.webmanifest" />
+    <!-- Fix Lucide icons loading -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+        // Initialize Lucide icons after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <header class="bg-gradient-to-l from-green-800 to-green-600 text-white py-12">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <nav class="flex items-center gap-2 mb-8 text-sm text-green-100">
+                <a href="../../" class="text-white hover:text-green-200 transition-colors flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span>/</span>
+                <a href="../" class="hover:text-green-200 transition-colors">AWS Research</a>
+                <span>/</span>
+                <span class="text-white font-medium">Flowith</span>
+            </nav>
+            <div class="flex flex-col items-center text-center">
+                <h1 class="text-4xl font-bold mb-3">Flowith AI Deployment</h1>
+                <p class="text-xl max-w-2xl">Self-Hosted AI Agent Setup Guide</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <nav class="mb-10">
             <ul class="flex flex-wrap gap-2 text-sm">
                 <li>
-                    <a href="#instance-recommendation" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#instance-recommendation"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="server" class="h-4 w-4 mr-2"></i>
                         Instance Recommendations
                     </a>
                 </li>
                 <li>
-                    <a href="#deployment" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#deployment"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="terminal" class="h-4 w-4 mr-2"></i>
                         Deployment Scripts
                     </a>
                 </li>
                 <li>
-                    <a href="#nginx" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#nginx"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="shield" class="h-4 w-4 mr-2"></i>
                         Nginx & SSL Setup
                     </a>
                 </li>
                 <li>
-                    <a href="#auto-start" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#auto-start"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="power" class="h-4 w-4 mr-2"></i>
                         Auto-Start Services
                     </a>
                 </li>
                 <li>
-                    <a href="#code-server" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#code-server"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="code" class="h-4 w-4 mr-2"></i>
                         Code-Server Setup
                     </a>
                 </li>
                 <li>
-                    <a href="#auto-shutdown" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#auto-shutdown"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="clock" class="h-4 w-4 mr-2"></i>
                         EC2 Auto-Shutdown
                     </a>
                 </li>
                 <li>
-                    <a href="#cost-estimate" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                    <a href="#cost-estimate"
+                        class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
                         <i data-lucide="calculator" class="h-4 w-4 mr-2"></i>
                         Cost Estimation
                     </a>
@@ -83,13 +191,17 @@
                         Introduction
                     </h2>
                     <p class="text-gray-700 mb-4">
-                        Self-hosting AI models gives you complete control over your data, customization options, and often costs less than using API services for continuous usage. This guide will walk you through setting up a production-ready AI agent environment on AWS EC2.
+                        Self-hosting AI models gives you complete control over your data, customization options, and
+                        often costs less than using API services for continuous usage. This guide will walk you through
+                        setting up a production-ready AI agent environment on AWS EC2.
                     </p>
                     <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                         <div class="flex">
                             <i data-lucide="lightbulb" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
                             <p class="text-sm text-blue-800">
-                                <strong>Pro Tip:</strong> This setup is ideal for teams needing dedicated AI resources without sending sensitive data to external APIs. The auto-shutdown feature helps manage costs by only running the instance when needed.
+                                <strong>Pro Tip:</strong> This setup is ideal for teams needing dedicated AI resources
+                                without sending sensitive data to external APIs. The auto-shutdown feature helps manage
+                                costs by only running the instance when needed.
                             </p>
                         </div>
                     </div>
@@ -103,9 +215,10 @@
                         <i data-lucide="server" class="h-6 w-6 mr-2 text-purple-600"></i>
                         EC2 Instance Recommendations
                     </h2>
-                    
+
                     <p class="text-gray-700 mb-6">
-                        Choosing the right EC2 instance type is critical for optimal performance. Your selection should be based on the AI models you plan to run and your budget constraints.
+                        Choosing the right EC2 instance type is critical for optimal performance. Your selection should
+                        be based on the AI models you plan to run and your budget constraints.
                     </p>
 
                     <div class="mb-8">
@@ -114,33 +227,45 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model Type</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VRAM Required</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recommended Instance</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hourly Cost (us-east-1)</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Model Type</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            VRAM Required</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Recommended Instance</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Hourly Cost (us-east-1)</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama 3 8B / Phi-3 Mini</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama
+                                            3 8B / Phi-3 Mini</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~8-10 GB</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g4dn.xlarge</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.526</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Deepseek Coder / Mistral 7B</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            Deepseek Coder / Mistral 7B</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~14 GB</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.xlarge</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.006</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama 3 70B / Mixtral 8x7B</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama
+                                            3 70B / Mixtral 8x7B</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~70-80 GB</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.12xlarge</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$4.08</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Multiple Large Models</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            Multiple Large Models</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">140+ GB</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.48xlarge</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$16.288</td>
@@ -155,7 +280,8 @@
                             <h4 class="font-medium text-lg mb-3">Budget-Friendly Option</h4>
                             <p class="text-gray-600 text-sm mb-4">For smaller models or testing environments:</p>
                             <div>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-2">g4dn.xlarge</span>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-2">g4dn.xlarge</span>
                                 <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
                                     <li>4 vCPUs, 16 GB RAM</li>
                                     <li>16 GB GPU Memory (T4)</li>
@@ -168,7 +294,8 @@
                             <h4 class="font-medium text-lg mb-3">Production Recommendation</h4>
                             <p class="text-gray-600 text-sm mb-4">For running larger models with good performance:</p>
                             <div>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-2">g5.4xlarge</span>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-2">g5.4xlarge</span>
                                 <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
                                     <li>16 vCPUs, 64 GB RAM</li>
                                     <li>24 GB GPU Memory (A10G)</li>
@@ -181,17 +308,21 @@
 
                     <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100 mb-4">
                         <div class="flex">
-                            <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <i data-lucide="alert-triangle"
+                                class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
                             <div>
                                 <p class="text-sm text-yellow-800 font-medium">Important Considerations</p>
                                 <p class="text-sm text-yellow-700 mt-1">
-                                    Remember to factor in EBS storage costs ($0.08/GB-month for gp3) and data transfer costs. For cost optimization, consider using spot instances for non-critical workloads (60-70% cheaper) or implementing auto-shutdown scripts.
+                                    Remember to factor in EBS storage costs ($0.08/GB-month for gp3) and data transfer
+                                    costs. For cost optimization, consider using spot instances for non-critical
+                                    workloads (60-70% cheaper) or implementing auto-shutdown scripts.
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
-                    <button id="calculateInstanceBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+
+                    <button id="calculateInstanceBtn"
+                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         <i data-lucide="calculator" class="h-4 w-4 mr-2"></i>
                         Calculate Instance Costs
                     </button>
@@ -219,7 +350,8 @@ sudo apt install -y git curl wget build-essential cmake nvidia-driver-525</code>
                             <div class="flex">
                                 <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <p class="text-sm text-blue-800">
-                                    After installing NVIDIA drivers, you'll need to reboot your instance with: <code class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code>
+                                    After installing NVIDIA drivers, you'll need to reboot your instance with: <code
+                                        class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code>
                                 </p>
                             </div>
                         </div>
@@ -241,19 +373,21 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
 sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker</code></pre>
                         </div>
-                        
+
                         <p class="text-gray-700 mb-4 text-sm">
                             Verify the installation by running:
                         </p>
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>docker run --rm --gpus all nvidia/cuda:11.8.0-base-ubuntu22.04 nvidia-smi</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>docker run --rm --gpus all nvidia/cuda:11.8.0-base-ubuntu22.04 nvidia-smi</code></pre>
                         </div>
                     </div>
 
                     <div class="mb-8">
                         <h3 class="text-xl font-medium mb-4">Ollama Deployment</h3>
                         <p class="text-gray-700 mb-4">
-                            Ollama provides an easy way to run various open-source models locally. Here's how to set it up:
+                            Ollama provides an easy way to run various open-source models locally. Here's how to set it
+                            up:
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
@@ -272,9 +406,12 @@ ollama pull deepseek-coder</code></pre>
 
                         <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-6">
                             <div class="flex">
-                                <i data-lucide="check-circle" class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <i data-lucide="check-circle"
+                                    class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <p class="text-sm text-green-800">
-                                    Once installed, Ollama runs on port 11434. You can verify it's working by running: <code class="bg-green-100 px-1 py-0.5 rounded">curl http://localhost:11434/api/tags</code>
+                                    Once installed, Ollama runs on port 11434. You can verify it's working by running:
+                                    <code
+                                        class="bg-green-100 px-1 py-0.5 rounded">curl http://localhost:11434/api/tags</code>
                                 </p>
                             </div>
                         </div>
@@ -297,7 +434,8 @@ docker run -d --gpus all -p 5000:5000 -v $(pwd):/app localgpt</code></pre>
                         </div>
                     </div>
 
-                    <button id="copyDeploymentBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button id="copyDeploymentBtn"
+                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
                         Copy All Commands
                     </button>
@@ -313,7 +451,8 @@ docker run -d --gpus all -p 5000:5000 -v $(pwd):/app localgpt</code></pre>
                     </h2>
 
                     <p class="text-gray-700 mb-6">
-                        Setting up Nginx as a reverse proxy with SSL encryption allows secure access to your AI services from the internet.
+                        Setting up Nginx as a reverse proxy with SSL encryption allows secure access to your AI services
+                        from the internet.
                     </p>
 
                     <div class="mb-8">
@@ -337,7 +476,8 @@ sudo systemctl enable nginx</code></pre>
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/ollama</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/ollama</code></pre>
                         </div>
 
                         <p class="text-gray-700 mb-4 text-sm">
@@ -355,12 +495,12 @@ sudo systemctl enable nginx</code></pre>
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # WebSocket support
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
-        
+
         # Increase timeouts for long-running AI queries
         proxy_read_timeout 300s;
         proxy_connect_timeout 300s;
@@ -410,15 +550,19 @@ auth_basic_user_file /etc/nginx/.htpasswd;</code></pre>
 
                         <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                             <div class="flex">
-                                <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <i data-lucide="alert-triangle"
+                                    class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <p class="text-sm text-yellow-800">
-                                    <strong>Security Note:</strong> Basic authentication transmits credentials with base64 encoding, which is why SSL is crucial. For production environments, consider implementing more robust authentication methods.
+                                    <strong>Security Note:</strong> Basic authentication transmits credentials with
+                                    base64 encoding, which is why SSL is crucial. For production environments, consider
+                                    implementing more robust authentication methods.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <button id="copyNginxConfigBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                    <button id="copyNginxConfigBtn"
+                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
                         Copy Nginx Configuration
                     </button>
@@ -445,7 +589,8 @@ auth_basic_user_file /etc/nginx/.htpasswd;</code></pre>
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/systemd/system/ollama.service</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>sudo nano /etc/systemd/system/ollama.service</code></pre>
                         </div>
 
                         <p class="text-gray-700 mb-4 text-sm">
@@ -508,13 +653,16 @@ services:
                             <div class="flex">
                                 <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <p class="text-sm text-blue-800">
-                                    <strong>Tip:</strong> To test your auto-start configuration, reboot your instance with <code class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code> and verify all services come back online automatically.
+                                    <strong>Tip:</strong> To test your auto-start configuration, reboot your instance
+                                    with <code class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code> and verify all
+                                    services come back online automatically.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <button id="copyAutoStartBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                    <button id="copyAutoStartBtn"
+                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                         <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
                         Copy Service Configuration
                     </button>
@@ -530,7 +678,8 @@ services:
                     </h2>
 
                     <p class="text-gray-700 mb-6">
-                        Code-Server provides a browser-based VS Code environment, making it easy to develop and maintain your AI applications directly on your server.
+                        Code-Server provides a browser-based VS Code environment, making it easy to develop and maintain
+                        your AI applications directly on your server.
                     </p>
 
                     <div class="mb-8">
@@ -564,7 +713,8 @@ cert: false</code></pre>
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>sudo systemctl restart code-server@$USER</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>sudo systemctl restart code-server@$USER</code></pre>
                         </div>
                     </div>
 
@@ -576,15 +726,15 @@ cert: false</code></pre>
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/code-server</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/code-server</code></pre>
                         </div>
 
                         <p class="text-gray-700 mb-4 text-sm">
                             Add the following configuration:
                         </p>
 
-                        <div class="bg-gray-900 text-gray-100 p
--4 rounded-md mb-4 overflow-x-auto">
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
                             <pre class="text-sm font-geist-mono"><code>server {
     listen 80;
     server_name code.yourdomain.com;
@@ -614,9 +764,11 @@ sudo certbot --nginx -d code.yourdomain.com</code></pre>
 
                         <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
                             <div class="flex">
-                                <i data-lucide="check-circle" class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <i data-lucide="check-circle"
+                                    class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <p class="text-sm text-green-800">
-                                    <strong>Success:</strong> Code-Server should now be available at https://code.yourdomain.com with password protection.
+                                    <strong>Success:</strong> Code-Server should now be available at
+                                    https://code.yourdomain.com with password protection.
                                 </p>
                             </div>
                         </div>
@@ -632,23 +784,30 @@ sudo certbot --nginx -d code.yourdomain.com</code></pre>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                             <div class="border border-gray-200 rounded-lg p-4">
                                 <h4 class="font-medium text-gray-900 mb-2">Python</h4>
-                                <p class="text-sm text-gray-600">Essential Python language support with IntelliSense, linting, and debugging.</p>
+                                <p class="text-sm text-gray-600">Essential Python language support with IntelliSense,
+                                    linting, and debugging.</p>
                                 <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-python.python</div>
                             </div>
                             <div class="border border-gray-200 rounded-lg p-4">
                                 <h4 class="font-medium text-gray-900 mb-2">Jupyter</h4>
-                                <p class="text-sm text-gray-600">Run and view Jupyter notebooks directly within VS Code.</p>
-                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-toolsai.jupyter</div>
+                                <p class="text-sm text-gray-600">Run and view Jupyter notebooks directly within VS Code.
+                                </p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-toolsai.jupyter
+                                </div>
                             </div>
                             <div class="border border-gray-200 rounded-lg p-4">
                                 <h4 class="font-medium text-gray-900 mb-2">Docker</h4>
-                                <p class="text-sm text-gray-600">Manage Docker containers and images directly from the editor.</p>
-                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-azuretools.vscode-docker</div>
+                                <p class="text-sm text-gray-600">Manage Docker containers and images directly from the
+                                    editor.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">
+                                    ms-azuretools.vscode-docker</div>
                             </div>
                             <div class="border border-gray-200 rounded-lg p-4">
                                 <h4 class="font-medium text-gray-900 mb-2">IntelliCode</h4>
-                                <p class="text-sm text-gray-600">AI-assisted development with intelligent code completions.</p>
-                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">visualstudioexptteam.vscodeintellicode</div>
+                                <p class="text-sm text-gray-600">AI-assisted development with intelligent code
+                                    completions.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">
+                                    visualstudioexptteam.vscodeintellicode</div>
                             </div>
                         </div>
 
@@ -675,7 +834,8 @@ code-server --install-extension visualstudioexptteam.vscodeintellicode</code></p
                     </h2>
 
                     <p class="text-gray-700 mb-6">
-                        Implement an auto-shutdown script to automatically turn off your EC2 instance during periods of inactivity, helping to reduce costs significantly.
+                        Implement an auto-shutdown script to automatically turn off your EC2 instance during periods of
+                        inactivity, helping to reduce costs significantly.
                     </p>
 
                     <div class="mb-8">
@@ -719,22 +879,22 @@ done
 # Check if load is below threshold
 if (( $(echo "$LOAD_AVG < $LOAD_THRESHOLD" | bc -l) )); then
     echo "System load ($LOAD_AVG) is below threshold ($LOAD_THRESHOLD)"
-    
+
     # Check for active SSH connections
     SSH_CONNECTIONS=$(netstat -tn | grep :22 | grep ESTABLISHED | wc -l)
     if [ $SSH_CONNECTIONS -gt 0 ]; then
         echo "Active SSH connections found. Aborting shutdown."
         exit 0
     fi
-    
+
     # Check for recent user activity
     LAST_ACTIVITY=$(w -i | grep -v JCPU | awk '{print $5}')
     CURRENT_TIME=$(date +%s)
-    
+
     # If no users are logged in, proceed with shutdown consideration
     if [ -z "$LAST_ACTIVITY" ]; then
         echo "No users logged in. Checking system activity..."
-        
+
         # Check if system has been idle for threshold time
         UPTIME_IDLE=$(grep 'cpu ' /proc/stat | awk '{idle=$5} {total=$1+$2+$3+$4+$5+$6+$7+$8+$9} {printf "%.2f", idle/total*100}')
         if (( $(echo "$UPTIME_IDLE > 95.0" | bc -l) )); then
@@ -779,7 +939,8 @@ fi</code></pre>
                         </p>
 
                         <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
-                            <pre class="text-sm font-geist-mono"><code>*/15 * * * * /home/ubuntu/auto-shutdown.sh >> /home/ubuntu/auto-shutdown.log 2>&1</code></pre>
+                            <pre
+                                class="text-sm font-geist-mono"><code>*/15 * * * * /home/ubuntu/auto-shutdown.sh >> /home/ubuntu/auto-shutdown.log 2>&1</code></pre>
                         </div>
                     </div>
 
@@ -791,26 +952,34 @@ fi</code></pre>
                         </p>
 
                         <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
-                            <li>Deploy the <a href="https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/" class="text-blue-600 hover:underline" target="_blank">AWS Instance Scheduler</a> solution from the AWS Solutions Library</li>
+                            <li>Deploy the <a
+                                    href="https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/"
+                                    class="text-blue-600 hover:underline" target="_blank">AWS Instance Scheduler</a>
+                                solution from the AWS Solutions Library</li>
                             <li>Configure schedules based on your usage patterns (e.g., working hours on weekdays)</li>
                             <li>Tag your EC2 instances with the appropriate schedule identifier</li>
-                            <li>The scheduler will automatically start and stop instances based on the defined schedule</li>
+                            <li>The scheduler will automatically start and stop instances based on the defined schedule
+                            </li>
                         </ol>
 
                         <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                             <div class="flex">
-                                <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <i data-lucide="alert-triangle"
+                                    class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
                                 <div>
                                     <p class="text-sm text-yellow-800 font-medium">Cost Considerations</p>
                                     <p class="text-sm text-yellow-700 mt-1">
-                                        The AWS Instance Scheduler solution costs approximately $13.15 per month to operate, so it makes sense for environments with multiple instances. For a single instance, the script-based approach above is more cost-effective.
+                                        The AWS Instance Scheduler solution costs approximately $13.15 per month to
+                                        operate, so it makes sense for environments with multiple instances. For a
+                                        single instance, the script-based approach above is more cost-effective.
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button id="copyShutdownScriptBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    <button id="copyShutdownScriptBtn"
+                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
                         Copy Shutdown Script
                     </button>
@@ -826,49 +995,71 @@ fi</code></pre>
                     </h2>
 
                     <p class="text-gray-700 mb-6">
-                        Understanding the cost implications of running AI models on AWS is crucial for budgeting. Here's a breakdown of the estimated costs.
+                        Understanding the cost implications of running AI models on AWS is crucial for budgeting. Here's
+                        a breakdown of the estimated costs.
                     </p>
 
                     <div class="overflow-x-auto mb-8">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Cost</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Item</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Description</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Unit Cost</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Quantity</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Monthly Cost</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EC2 Instance (g5.4xlarge)</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mid-sized GPU instance for AI workloads</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EC2
+                                        Instance (g5.4xlarge)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mid-sized GPU instance
+                                        for AI workloads</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.352/hour</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">176 hours (8 hours/day × 22 days)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">176 hours (8 hours/day
+                                        × 22 days)</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$237.95</td>
                                 </tr>
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EBS Storage (gp3)</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">General Purpose SSD storage</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EBS
+                                        Storage (gp3)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">General Purpose SSD
+                                        storage</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.08/GB-month</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">250 GB</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$20.00</td>
                                 </tr>
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Data Transfer Out</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Network egress from AWS to Internet</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Data
+                                        Transfer Out</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Network egress from
+                                        AWS to Internet</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.09/GB</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">50 GB</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$4.50</td>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" colspan="4">Total Monthly Cost (8h/day usage)</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$262.45</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                        colspan="4">Total Monthly Cost (8h/day usage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$262.45
+                                    </td>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" colspan="4">Total Monthly Cost (24h/day usage)</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$993.64</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                        colspan="4">Total Monthly Cost (24h/day usage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$993.64
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -904,8 +1095,10 @@ fi</code></pre>
                             <h3 class="text-xl font-medium mb-4">Cost Calculator</h3>
                             <form id="costCalculator" class="space-y-4">
                                 <div>
-                                    <label for="instanceType" class="block text-sm font-medium text-gray-700">EC2 Instance Type</label>
-                                    <select id="instanceType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <label for="instanceType" class="block text-sm font-medium text-gray-700">EC2
+                                        Instance Type</label>
+                                    <select id="instanceType"
+                                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                         <option value="g4dn.xlarge">g4dn.xlarge (16GB GPU) - $0.526/hr</option>
                                         <option value="g5.xlarge">g5.xlarge (24GB GPU) - $1.006/hr</option>
                                         <option value="g5.2xlarge">g5.2xlarge (24GB GPU) - $1.13/hr</option>
@@ -915,8 +1108,41 @@ fi</code></pre>
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="hoursPerDay" class="block text-sm font-medium text-gray-700">Hours Per Day</label>
-                                    <input type="range" id="hoursPerDay" name="hoursPerDay" min="1" max="24" value="8" class="mt-1 block w-full rounded-md">
+                                    <label for="purchaseOption" class="block text-sm font-medium text-gray-700">Purchase
+                                        Option</label>
+                                    <select id="purchaseOption"
+                                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="on-demand" selected>On-Demand (pay as you go)</option>
+                                        <option value="reserved-1y-no">Reserved - 1 Year, No Upfront (~27% savings)
+                                        </option>
+                                        <option value="reserved-1y-partial">Reserved - 1 Year, Partial Upfront (~33%
+                                            savings)</option>
+                                        <option value="reserved-1y-all">Reserved - 1 Year, All Upfront (~37% savings)
+                                        </option>
+                                        <option value="reserved-3y-no">Reserved - 3 Year, No Upfront (~44% savings)
+                                        </option>
+                                        <option value="reserved-3y-partial">Reserved - 3 Year, Partial Upfront (~54%
+                                            savings)</option>
+                                        <option value="reserved-3y-all">Reserved - 3 Year, All Upfront (~60% savings)
+                                        </option>
+                                        <option value="spot">Spot Instance (~70% savings, variable)</option>
+                                    </select>
+                                </div>
+                                <div id="reservedInstanceInfo"
+                                    class="hidden bg-blue-50 p-3 rounded-md mb-2 text-sm text-blue-800">
+                                    <p><strong>Note:</strong> Reserved instance pricing requires commitment for the full
+                                        term. Showing monthly equivalent for comparison.</p>
+                                </div>
+                                <div id="spotInstanceInfo"
+                                    class="hidden bg-yellow-50 p-3 rounded-md mb-2 text-sm text-yellow-800">
+                                    <p><strong>Warning:</strong> Spot instances can be terminated with short notice when
+                                        EC2 needs capacity back. Not suitable for critical workloads.</p>
+                                </div>
+                                <div>
+                                    <label for="hoursPerDay" class="block text-sm font-medium text-gray-700">Hours Per
+                                        Day</label>
+                                    <input type="range" id="hoursPerDay" name="hoursPerDay" min="1" max="24" value="8"
+                                        class="mt-1 block w-full rounded-md">
                                     <div class="flex justify-between text-sm text-gray-500">
                                         <span>1h</span>
                                         <span id="hoursValue">8h</span>
@@ -924,14 +1150,55 @@ fi</code></pre>
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="storageGB" class="block text-sm font-medium text-gray-700">Storage (GB)</label>
-                                    <input type="number" id="storageGB" name="storageGB" min="50" value="250" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <label for="storageGB" class="block text-sm font-medium text-gray-700">Storage
+                                        (GB)</label>
+                                    <input type="number" id="storageGB" name="storageGB" min="50" value="250"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="dataTransferGB" class="block text-sm font-medium text-gray-700">Data
+                                        Transfer
+                                        (GB/month)</label>
+                                    <input type="number" id="dataTransferGB" name="dataTransferGB" min="0" value="50"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="region" class="block text-sm font-medium text-gray-700">AWS
+                                        Region</label>
+                                    <select id="region"
+                                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="us-east-1" selected>US East (N. Virginia)</option>
+                                        <option value="us-west-2">US West (Oregon)</option>
+                                        <option value="eu-west-1">EU (Ireland)</option>
+                                        <option value="ap-northeast-1">Asia Pacific (Tokyo)</option>
+                                    </select>
                                 </div>
                                 <div class="pt-4 border-t border-gray-200">
                                     <div class="flex justify-between">
                                         <span class="text-gray-700 font-medium">Estimated Monthly Cost:</span>
                                         <span id="totalCost" class="text-gray-900 font-medium">$262.45</span>
                                     </div>
+                                </div>
+                                <div id="costBreakdown" class="mt-3 text-sm text-gray-600 space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>EC2 Instance:</span>
+                                        <span id="instanceCost">$238.00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Storage (EBS):</span>
+                                        <span id="storageCost">$20.00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Data Transfer:</span>
+                                        <span id="transferCost">$4.50</span>
+                                    </div>
+                                </div>
+                                <div id="savingsInfo" class="hidden mt-3 p-2 bg-green-50 rounded-md">
+                                    <p class="text-sm text-green-800">
+                                        <span class="font-semibold">Estimated savings: </span>
+                                        <span id="savingsAmount">$0</span>
+                                        (<span id="savingsPercentage">0%</span> compared to On-Demand)
+                                    </p>
                                 </div>
                             </form>
                         </div>
@@ -941,7 +1208,9 @@ fi</code></pre>
                         <div class="flex">
                             <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
                             <p class="text-sm text-blue-800">
-                                <strong>Reminder:</strong> AWS provides a Free Tier for new accounts which includes 750 hours of EC2 t2.micro instance usage, but this is insufficient for most AI workloads. The cost estimates above assume standard on-demand pricing.
+                                <strong>Reminder:</strong> AWS provides a Free Tier for new accounts which includes 750
+                                hours of EC2 t2.micro instance usage, but this is insufficient for most AI workloads.
+                                The cost estimates above assume standard on-demand pricing.
                             </p>
                         </div>
                     </div>
@@ -949,19 +1218,275 @@ fi</code></pre>
             </section>
         </main>
 
-        <footer class="mt-16 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
-            <p class="mb-2">Compiled by <a href="https://github.com/aramb-dev" target="_blank" class="text-blue-600 hover:underline">Abdur-Rahmān Bilāl (aramb-dev)</a></p>
-            <p class="mb-2"><a href="https://aramb.dev/aws-research/flowith" target="_blank" class="text-blue-600 hover:underline">View full research on aramb.dev</a></p>
-            <p>Built with <a href="https://flowith.net" target="_blank" class="text-blue-600 hover:underline">Flowith Oracle</a>.</p>
-        </footer>
+        <div class="mt-12 p-6 bg-green-50 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Looking for Other Resources?</h2>
+            <p class="text-gray-700 mb-4">
+                Check out my other AWS research pages:
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="../deepseek/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    DeepSeek AI Config
+                </a>
+                <a href="../gemini/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Gemini AI Setup
+                </a>
+                <a href="../grok/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Grok AI Configuration
+                </a>
+                <a href="../manus/"
+                    class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                    Manus AI Implementation
+                </a>
+            </div>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="../../" class="text-white hover:text-green-400">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-white hover:text-green-400">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-white hover:text-green-400">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- New Improved Cost Calculator Script -->
     <script>
-    window.addEventListener("wheel", (e)=> {
-      const isPinching = e.ctrlKey
-      if(isPinching) e.preventDefault()
-    }, { passive: false })
+        document.addEventListener('DOMContentLoaded', function () {
+            // Instance prices per hour
+            const instancePrices = {
+                'g4dn.xlarge': 0.526,
+                'g5.xlarge': 1.006,
+                'g5.2xlarge': 1.13,
+                'g5.4xlarge': 1.352,
+                'g5.8xlarge': 2.704,
+                'g5.16xlarge': 5.408
+            };
+
+            // Regional modifiers (approximate)
+            const regionModifiers = {
+                'us-east-1': 1.0,
+                'us-west-2': 1.05,
+                'eu-west-1': 1.1,
+                'ap-northeast-1': 1.15
+            };
+
+            // Discount rates for different purchase options (approximate)
+            const discountRates = {
+                'on-demand': 0,
+                'reserved-1y-no': 0.27,
+                'reserved-1y-partial': 0.33,
+                'reserved-1y-all': 0.37,
+                'reserved-3y-no': 0.44,
+                'reserved-3y-partial': 0.54,
+                'reserved-3y-all': 0.60,
+                'spot': 0.70
+            };
+
+            // Storage price per GB per month (gp3)
+            const storagePrice = 0.08;
+
+            // Data transfer price per GB
+            const dataTransferPrice = 0.09;
+
+            // Get DOM elements
+            const instanceTypeSelect = document.getElementById('instanceType');
+            const purchaseOptionSelect = document.getElementById('purchaseOption');
+            const hoursPerDayInput = document.getElementById('hoursPerDay');
+            const hoursValueDisplay = document.getElementById('hoursValue');
+            const storageGBInput = document.getElementById('storageGB');
+            const dataTransferGBInput = document.getElementById('dataTransferGB');
+            const regionSelect = document.getElementById('region');
+            const totalCostDisplay = document.getElementById('totalCost');
+            const instanceCostDisplay = document.getElementById('instanceCost');
+            const storageCostDisplay = document.getElementById('storageCost');
+            const transferCostDisplay = document.getElementById('transferCost');
+            const reservedInfoBox = document.getElementById('reservedInstanceInfo');
+            const spotInfoBox = document.getElementById('spotInstanceInfo');
+            const savingsInfoBox = document.getElementById('savingsInfo');
+            const savingsAmountDisplay = document.getElementById('savingsAmount');
+            const savingsPercentageDisplay = document.getElementById('savingsPercentage');
+
+            // Calculate and update cost
+            function calculateCost() {
+                // Get current values
+                const instanceType = instanceTypeSelect.value;
+                const purchaseOption = purchaseOptionSelect.value;
+                const hoursPerDay = parseInt(hoursPerDayInput.value);
+                const storageGB = parseInt(storageGBInput.value);
+                const dataTransferGB = parseInt(dataTransferGBInput.value);
+                const region = regionSelect.value;
+
+                // Update hours display
+                hoursValueDisplay.textContent = `${hoursPerDay}h`;
+
+                // Show/hide appropriate info boxes
+                reservedInfoBox.classList.add('hidden');
+                spotInfoBox.classList.add('hidden');
+                savingsInfoBox.classList.add('hidden');
+
+                if (purchaseOption.startsWith('reserved')) {
+                    reservedInfoBox.classList.remove('hidden');
+                } else if (purchaseOption === 'spot') {
+                    spotInfoBox.classList.remove('hidden');
+                }
+
+                // Calculate costs
+                const baseInstanceHourlyRate = instancePrices[instanceType] * regionModifiers[region];
+                const discountRate = discountRates[purchaseOption];
+                const discountedHourlyRate = baseInstanceHourlyRate * (1 - discountRate);
+                const daysInMonth = 30;
+
+                // Monthly costs
+                const instanceCost = discountedHourlyRate * hoursPerDay * daysInMonth;
+                const storageCost = storageGB * storagePrice;
+                const transferCost = dataTransferGB * dataTransferPrice;
+                const totalCost = instanceCost + storageCost + transferCost;
+
+                // Calculate on-demand cost (for comparison)
+                const onDemandInstanceCost = baseInstanceHourlyRate * hoursPerDay * daysInMonth;
+                const onDemandTotalCost = onDemandInstanceCost + storageCost + transferCost;
+
+                // Calculate savings if not using on-demand
+                if (purchaseOption !== 'on-demand') {
+                    const savingsAmount = onDemandTotalCost - totalCost;
+                    const savingsPercentage = (savingsAmount / onDemandTotalCost) * 100;
+
+                    savingsAmountDisplay.textContent = `$${savingsAmount.toFixed(2)}`;
+                    savingsPercentageDisplay.textContent = `${savingsPercentage.toFixed(0)}%`;
+                    savingsInfoBox.classList.remove('hidden');
+                }
+
+                // Update displays with formatted costs
+                instanceCostDisplay.textContent = `$${instanceCost.toFixed(2)}`;
+                storageCostDisplay.textContent = `$${storageCost.toFixed(2)}`;
+                transferCostDisplay.textContent = `$${transferCost.toFixed(2)}`;
+                totalCostDisplay.textContent = `$${totalCost.toFixed(2)}`;
+            }
+
+            // Handle purchase option change
+            purchaseOptionSelect.addEventListener('change', function () {
+                calculateCost();
+            });
+
+            // Add event listeners for changes
+            instanceTypeSelect.addEventListener('change', calculateCost);
+            hoursPerDayInput.addEventListener('input', calculateCost);
+            storageGBInput.addEventListener('input', calculateCost);
+            dataTransferGBInput.addEventListener('input', calculateCost);
+            regionSelect.addEventListener('change', calculateCost);
+
+            // Calculate initial cost
+            calculateCost();
+        });
+    </script>
+
+    <!-- Script for copy functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find all pre tags
+            const preTags = document.querySelectorAll('pre');
+
+            // Add copy button to each pre tag
+            preTags.forEach(function (preTag, index) {
+                // Create a wrapper div with relative positioning
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative';
+
+                // Create the copy button
+                const copyButton = document.createElement('button');
+                copyButton.id = `copy-script-button-${index}`;
+                copyButton.className = 'absolute top-2 right-2 bg-green-600 text-white rounded p-1 text-xs hover:bg-green-700';
+                copyButton.textContent = 'Copy Script';
+
+                // Get the parent of the pre tag
+                const parent = preTag.parentNode;
+
+                // Replace pre with wrapper
+                parent.replaceChild(wrapper, preTag);
+
+                // Add button and pre to wrapper
+                wrapper.appendChild(copyButton);
+                wrapper.appendChild(preTag);
+
+                // Add click event to copy button
+                copyButton.addEventListener('click', function () {
+                    const scriptContent = preTag.textContent;
+                    if (scriptContent) {
+                        navigator.clipboard.writeText(scriptContent)
+                            .then(() => {
+                                // Visual feedback that copying worked
+                                const originalText = this.textContent;
+                                this.textContent = 'Copied!';
+                                setTimeout(() => {
+                                    this.textContent = originalText;
+                                }, 2000);
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy: ', err);
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Add a script to handle smooth scrolling for older browsers that don't support CSS scroll-behavior -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all anchor links that point to IDs on the page
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+            // Add click event listeners to each anchor link
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    // Get the target element
+                    const targetId = this.getAttribute('href');
+
+                    // Skip if the link is just "#" or if the browser supports smooth scrolling natively
+                    if (targetId === '#' || CSS.supports('scroll-behavior', 'smooth')) {
+                        return;
+                    }
+
+                    const targetElement = document.querySelector(targetId);
+
+                    // If the target element exists, scroll to it smoothly
+                    if (targetElement) {
+                        e.preventDefault();
+
+                        const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
+
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Check for URL hash on page load and scroll to the section
+            if (window.location.hash) {
+                const targetElement = document.querySelector(window.location.hash);
+                if (targetElement) {
+                    // Delay scroll slightly to ensure page is fully loaded
+                    setTimeout(() => {
+                        const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+            }
+        });
     </script>
 </body>
+
 </html>
