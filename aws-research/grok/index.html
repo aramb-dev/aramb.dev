@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Hosted AI Agent Setup on AWS EC2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        code {
+            font-family: monospace;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Self-Hosted AI Agent Setup on AWS EC2</h1>
+    <p>This report provides a comprehensive guide for setting up a self-hosted AI agent on an Amazon Web Services (AWS)
+        EC2 instance, tailored to run AI models like Llama 3 70B, Qwen2.5-Coder-7B, and others listed by the user. The
+        setup leverages the g6.xlarge instance for cost-effective GPU performance, installs Ollama for model execution,
+        Open WebUI for a user-friendly web interface, and Code-Server for remote development. It includes server
+        configuration with Nginx, auto-start mechanisms for reliability, and cost management strategies to minimize
+        expenses, offering a robust alternative to subscription-based services like Replit or Cursor AI.</p>
+
+    <h2>EC2 Instance Recommendation</h2>
+    <p>For running AI models such as Llama 3 70B with quantization, the <strong>g6.xlarge</strong> EC2 instance is
+        recommended. This instance features:</p>
+    <ul>
+        <li><strong>1 NVIDIA L4 GPU</strong> with 24 GB VRAM, suitable for quantized large language models (LLMs).</li>
+        <li><strong>4 vCPUs</strong> and <strong>16 GB RAM</strong>, sufficient for development tasks.</li>
+        <li><strong>Cost</strong>: Approximately $0.8048 per hour in US East (N. Virginia), as per <a
+                href="https://instances.vantage.sh/aws/ec2/g6.xlarge">Vantage</a>.</li>
+    </ul>
+    <p>The L4 GPU, based on NVIDIA’s Ada Lovelace architecture, offers comparable performance to the A10G GPU (in
+        g5.xlarge) for memory-bound inference tasks, but at a lower cost (~20% less than g5.xlarge’s $1.006/hour). The
+        24 GB VRAM supports models like Llama 3 70B when quantized to 4-bit, which reduces memory needs to ~35 GB or
+        less with optimization, fitting within the GPU’s capacity. For larger models without quantization, a more
+        powerful instance like p5.48xlarge (8 H100 GPUs, 640 GB VRAM) may be needed, but it costs significantly more
+        (~$37.92/hour).</p>
+    <p><strong>Why g6.xlarge?</strong> It balances cost and performance, leveraging the newer L4 GPU’s efficiency. The
+        g5.xlarge, while viable, is less cost-effective, and g4dn instances (T4 GPUs, 16 GB VRAM) may not support larger
+        models reliably. The Deep Learning AMI (Ubuntu) is recommended for its pre-installed NVIDIA CUDA drivers,
+        simplifying setup.</p>
+
+    <h2>Deployment Instructions</h2>
+    <p>To deploy the AI agent, follow these steps:</p>
+    <ol>
+        <li><strong>Launch an EC2 Instance</strong>: Select the g6.xlarge instance with the Deep Learning AMI (Ubuntu)
+            from the AWS Marketplace. Ensure the “Shutdown behavior” is set to “Stop” in the EC2 console to enable
+            cost-saving shutdowns.</li>
+        <li><strong>Connect to the Instance</strong>: Use SSH to access the instance (e.g.,
+            <code>ssh -i your-key.pem ubuntu@instance-ip</code>).</li>
+        <li><strong>Run the Setup Script</strong>: Copy and execute the provided script to install and configure all
+            components.</li>
+    </ol>
+
+    <h3>Setup Script</h3>
+    <pre><code>#!/bin/bash
+
+# Configuration variables (replace with your values)
+DOMAIN="your_domain.com"
+EMAIL="your_email@example.com"
+CODE_SERVER_PASSWORD="your_secure_password"
+
+# Update system and install dependencies
+sudo apt update
+sudo apt install -y docker.io nginx certbot python3-certbot-nginx
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Run Open WebUI with Docker
+sudo docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway \
+  -v open-webui:/app/backend/data \
+  -e OLLAMA_API_BASE_URL=http://host.docker.internal:11434 \
+  --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+
+# Configure Nginx for Open WebUI
+cat > /etc/nginx/sites-available/openwebui <<EOF
+server {
+    listen 80;
+    server_name $DOMAIN;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        # Basic security headers
+        add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options DENY;
+        add_header X-XSS-Protection "1; mode=block";
+    }
+}
+EOF
+
+sudo ln -s /etc/nginx/sites-available/openwebui /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+
+# Obtain SSL certificate (requires a domain)
+if [ "$DOMAIN" != "your_domain.com" ]; then
+  sudo certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email $EMAIL
+fi
+
+# Install Code-Server
+curl -fsSL https://code-server.dev/install.sh | sh
+
+# Configure Code-Server service
+sudo cat > /etc/systemd/system/code-server.service <<EOF
+[Unit]
+Description=code-server
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Environment=PASSWORD=$CODE_SERVER_PASSWORD
+ExecStart=/usr/bin/code-server --bind-addr 0.0.0.0:8080 --auth password
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable code-server
+sudo systemctl start code-server
+
+# Set up auto-shutdown cron job (stops instance at 2 AM daily)
+echo "0 2 * * * root shutdown -h now" | sudo tee /etc/cron.d/auto_shutdown
+</code></pre>
+
+    <h3>Script Explanation</h3>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Dependencies</td>
+            <td>Installs Docker for container management, Nginx for web serving, and Certbot for SSL.</td>
+        </tr>
+        <tr>
+            <td>Ollama</td>
+            <td>Installed via the official script, enabling GPU-accelerated model execution.</td>
+        </tr>
+        <tr>
+            <td>Open WebUI</td>
+            <td>Deployed as a Docker container, connected to Ollama’s API at
+                <code>http://host.docker.internal:11434</code>.</td>
+        </tr>
+        <tr>
+            <td>Nginx</td>
+            <td>Configured to proxy requests to Open WebUI, with security headers for protection.</td>
+        </tr>
+        <tr>
+            <td>SSL</td>
+            <td>Optionally configures Let’s Encrypt SSL if a domain is provided.</td>
+        </tr>
+        <tr>
+            <td>Code-Server</td>
+            <td>Installed and set up as a systemd service for browser-based VSCode access.</td>
+        </tr>
+        <tr>
+            <td>Auto-Shutdown</td>
+            <td>Cron job stops the instance at 2 AM daily to reduce costs.</td>
+        </tr>
+    </table>
+    <p>After running the script, access Open WebUI at <code>http://your-instance-ip:80</code> or your domain (if
+        configured). Download models via Open WebUI (e.g., <code>ollama run llama3</code>). Note that some models (e.g.,
+        Qwen2.5-Coder) may require manual GGUF file imports if not available in Ollama’s library.</p>
+
+    <h2>Server Configuration</h2>
+    <p>Nginx serves Open WebUI, proxying requests from port 80 to port 3000. The configuration includes security headers
+        to mitigate common web vulnerabilities. If you have a domain, Certbot automates SSL setup, enabling HTTPS
+        access. Without a domain, use the instance’s public IP over HTTP, though this is less secure. To enhance
+        security, consider a cheap domain or free subdomain service for SSL support.</p>
+
+    <h2>Auto-Start and Reliability</h2>
+    <p>To ensure services run reliably and restart after reboots:</p>
+    <ul>
+        <li><strong>Ollama</strong>: Installed as a systemd service, automatically starting and restarting on failure.
+        </li>
+        <li><strong>Open WebUI</strong>: Docker container with <code>--restart always</code> policy, ensuring uptime.
+        </li>
+        <li><strong>Code-Server</strong>: Configured as a systemd service for consistent operation.</li>
+    </ul>
+    <p>Verify service status with <code>systemctl status ollama</code>, <code>docker ps</code>, and
+        <code>systemctl status code-server</code>.</p>
+
+    <h2>Remote Development</h2>
+    <p>Code-Server provides a browser-based Visual Studio Code environment, accessible at
+        <code>http://your-instance-ip:8080</code>. Set a secure password in the script’s
+        <code>CODE_SERVER_PASSWORD</code> variable. For added security, extend the Nginx configuration to proxy
+        Code-Server with SSL, similar to Open WebUI. This setup allows you to code and manage the server remotely,
+        mimicking the convenience of cloud IDEs.</p>
+
+    <h2>Cost Management</h2>
+    <p>To optimize costs, the script includes a cron job that stops the instance at 2 AM daily, assuming the EC2
+        “Shutdown behavior” is set to “Stop.” This reduces runtime to ~8 hours/day, saving ~60% compared to 24/7
+        operation. To restart, use the AWS console or AWS CLI (<code>aws ec2 start-instances</code>). For more advanced
+        scheduling, consider AWS Instance Scheduler, though the cron job is simpler for basic needs.</p>
+
+    <h2>Cost Estimate</h2>
+    <p>The following table outlines estimated monthly costs for the g6.xlarge setup in US East (N. Virginia):</p>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Details</th>
+            <th>Cost/Month</th>
+        </tr>
+        <tr>
+            <td>Instance (g6.xlarge)</td>
+            <td>$0.8048/hour, 8 hours/day (240 hours/month)</td>
+            <td>$193.15</td>
+        </tr>
+        <tr>
+            <td>Instance (24/7)</td>
+            <td>$0.8048/hour, 730 hours/month</td>
+            <td>$587.50</td>
+        </tr>
+        <tr>
+            <td>Storage (Local)</td>
+            <td>250 GB NVMe SSD (included with g6.xlarge)</td>
+            <td>$0.00</td>
+        </tr>
+        <tr>
+            <td>Storage (EBS)</td>
+            <td>Optional 100 GB gp3 EBS volume, $0.08/GB-month</td>
+            <td>$8.00</td>
+        </tr>
+        <tr>
+            <td>Data Transfer迎</td>
+            <td>100 GB out free, $0.09/GB thereafter (minimal)</td>
+            <td>~$0.00</td>
+        </tr>
+        <tr>
+            <td>Total (8 hours/day)</td>
+            <td>Local storage, minimal data transfer</td>
+            <td>$193.15–$201.15</td>
+        </tr>
+        <tr>
+            <td>Total (24/7)</td>
+            <td>Local storage, minimal data transfer</td>
+            <td>$587.50–$595.50</td>
+        </tr>
+    </table>
+    <p><strong>Notes</strong>: Spot instances (~$0.24/hour for g6.xlarge) could further reduce costs but risk
+        interruptions. Savings Plans or Reserved Instances offer up to 72% savings for long-term commitments but require
+        planning.</p>
+
+    <h2>Additional Considerations</h2>
+    <ul>
+        <li><strong>Model Support</strong>: Verify model availability in Ollama’s library. For unavailable models (e.g.,
+            Qwen2.5-Coder), import GGUF files manually.</li>
+        <li><strong>Security</strong>: HTTP access without SSL is less secure. A domain enables HTTPS, improving safety.
+        </li>
+        <li><strong>Scalability</strong>: For heavier workloads, consider g6.12xlarge (4 GPUs, 96 GB VRAM, ~$4.83/hour).
+        </li>
+        <li><strong>Monitoring</strong>: Use AWS CloudWatch to track usage and set cost alerts.</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>This setup delivers a cost-effective, self-hosted AI agent on AWS EC2, avoiding subscription fees while providing
+        cloud-like accessibility. The g6.xlarge instance, combined with Ollama, Open WebUI, and Code-Server, offers a
+        powerful platform for running AI models and developing remotely. Automated cost management ensures
+        affordability, with monthly costs as low as $193 for moderate use. By following this guide, users can achieve a
+        reliable, secure, and efficient AI development environment tailored to their needs.</p>
+
+    <h2>Citations</h2>
+    <ul>
+        <li><a href="https://aws.amazon.com/ec2/instance-types/g6/">Amazon EC2 G6 Instances Specifications</a></li>
+        <li><a href="https://aws.amazon.com/ec2/instance-types/g5/">Amazon EC2 G5 Instances Specifications</a></li>
+        <li><a href="https://instances.vantage.sh/aws/ec2/g6.xlarge">g6.xlarge Pricing and Specifications</a></li>
+        <li><a href="https://instances.vantage.sh/aws/ec2/g5.xlarge">g5.xlarge Pricing and Specifications</a></li>
+        <li><a href="https://github.com/ollama/ollama/blob/main/docs/linux.md">Ollama Linux Installation Guide</a></li>
+        <li><a href="https://docs.openwebui.com/getting-started/quick-start/">Open WebUI Quick Start Guide</a></li>
+        <li><a href="https://coder.com/docs/code-server/install">Code-Server Installation Instructions</a></li>
+        <li><a href="https://www.nvidia.com/en-us/data-center/l4/">NVIDIA L4 Tensor Core GPU Specifications</a></li>
+        <li><a href="https://www.nvidia.com/en-us/data-center/products/a10-gpu/">NVIDIA A10 Tensor Core GPU
+                Specifications</a></li>
+    </ul>
+</body>
+
+</html>

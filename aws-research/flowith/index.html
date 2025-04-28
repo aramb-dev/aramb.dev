@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Self-Hosted AI Agent Setup Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <!-- Fix Lucide icons loading -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+        <header class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900">Self-Hosted AI Agent Setup Guide</h1>
+                <div class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 transition-all">
+                        <i data-lucide="sun" class="h-5 w-5"></i>
+                    </button>
+                    <a href="https://aramb.dev/aws-research/flowith" target="_blank" class="p-2 rounded-full hover:bg-gray-200 transition-all">
+                        <i data-lucide="github" class="h-5 w-5"></i>
+                    </a>
+                </div>
+            </div>
+            <p class="text-xl text-gray-600 max-w-4xl">A comprehensive guide for setting up your own AI agent environment on AWS EC2, including model recommendations, deployment scripts, and cost optimization strategies.</p>
+        </header>
+
+        <nav class="mb-10">
+            <ul class="flex flex-wrap gap-2 text-sm">
+                <li>
+                    <a href="#instance-recommendation" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="server" class="h-4 w-4 mr-2"></i>
+                        Instance Recommendations
+                    </a>
+                </li>
+                <li>
+                    <a href="#deployment" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="terminal" class="h-4 w-4 mr-2"></i>
+                        Deployment Scripts
+                    </a>
+                </li>
+                <li>
+                    <a href="#nginx" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="shield" class="h-4 w-4 mr-2"></i>
+                        Nginx & SSL Setup
+                    </a>
+                </li>
+                <li>
+                    <a href="#auto-start" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="power" class="h-4 w-4 mr-2"></i>
+                        Auto-Start Services
+                    </a>
+                </li>
+                <li>
+                    <a href="#code-server" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="code" class="h-4 w-4 mr-2"></i>
+                        Code-Server Setup
+                    </a>
+                </li>
+                <li>
+                    <a href="#auto-shutdown" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="clock" class="h-4 w-4 mr-2"></i>
+                        EC2 Auto-Shutdown
+                    </a>
+                </li>
+                <li>
+                    <a href="#cost-estimate" class="px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all inline-flex items-center">
+                        <i data-lucide="calculator" class="h-4 w-4 mr-2"></i>
+                        Cost Estimation
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="space-y-16">
+            <!-- Introduction Section -->
+            <section class="prose max-w-none">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="info" class="h-5 w-5 mr-2 text-blue-600"></i>
+                        Introduction
+                    </h2>
+                    <p class="text-gray-700 mb-4">
+                        Self-hosting AI models gives you complete control over your data, customization options, and often costs less than using API services for continuous usage. This guide will walk you through setting up a production-ready AI agent environment on AWS EC2.
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <div class="flex">
+                            <i data-lucide="lightbulb" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <p class="text-sm text-blue-800">
+                                <strong>Pro Tip:</strong> This setup is ideal for teams needing dedicated AI resources without sending sensitive data to external APIs. The auto-shutdown feature helps manage costs by only running the instance when needed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instance Recommendation Section -->
+            <section id="instance-recommendation" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="server" class="h-6 w-6 mr-2 text-purple-600"></i>
+                        EC2 Instance Recommendations
+                    </h2>
+                    
+                    <p class="text-gray-700 mb-6">
+                        Choosing the right EC2 instance type is critical for optimal performance. Your selection should be based on the AI models you plan to run and your budget constraints.
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Model Size Requirements</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model Type</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VRAM Required</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recommended Instance</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hourly Cost (us-east-1)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama 3 8B / Phi-3 Mini</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~8-10 GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g4dn.xlarge</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.526</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Deepseek Coder / Mistral 7B</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~14 GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.xlarge</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.006</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Llama 3 70B / Mixtral 8x7B</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~70-80 GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.12xlarge</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$4.08</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Multiple Large Models</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">140+ GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">g5.48xlarge</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$16.288</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                        <div class="rounded-lg border border-gray-200 p-6">
+                            <h4 class="font-medium text-lg mb-3">Budget-Friendly Option</h4>
+                            <p class="text-gray-600 text-sm mb-4">For smaller models or testing environments:</p>
+                            <div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-2">g4dn.xlarge</span>
+                                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                                    <li>4 vCPUs, 16 GB RAM</li>
+                                    <li>16 GB GPU Memory (T4)</li>
+                                    <li>Good for 7-13B models</li>
+                                    <li>~$380/month (full time)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="rounded-lg border border-gray-200 p-6">
+                            <h4 class="font-medium text-lg mb-3">Production Recommendation</h4>
+                            <p class="text-gray-600 text-sm mb-4">For running larger models with good performance:</p>
+                            <div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-2">g5.4xlarge</span>
+                                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                                    <li>16 vCPUs, 64 GB RAM</li>
+                                    <li>24 GB GPU Memory (A10G)</li>
+                                    <li>Can run most models up to 30B</li>
+                                    <li>~$1350/month (full time)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100 mb-4">
+                        <div class="flex">
+                            <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <div>
+                                <p class="text-sm text-yellow-800 font-medium">Important Considerations</p>
+                                <p class="text-sm text-yellow-700 mt-1">
+                                    Remember to factor in EBS storage costs ($0.08/GB-month for gp3) and data transfer costs. For cost optimization, consider using spot instances for non-critical workloads (60-70% cheaper) or implementing auto-shutdown scripts.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="calculateInstanceBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <i data-lucide="calculator" class="h-4 w-4 mr-2"></i>
+                        Calculate Instance Costs
+                    </button>
+                </div>
+            </section>
+
+            <!-- Deployment Scripts Section -->
+            <section id="deployment" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="terminal" class="h-6 w-6 mr-2 text-indigo-600"></i>
+                        Deployment Scripts & Steps
+                    </h2>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Initial Server Setup</h3>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Update system and install dependencies
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl wget build-essential cmake nvidia-driver-525</code></pre>
+                        </div>
+
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6">
+                            <div class="flex">
+                                <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-blue-800">
+                                    After installing NVIDIA drivers, you'll need to reboot your instance with: <code class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Installing Docker & NVIDIA Container Toolkit</h3>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+
+# Install NVIDIA Container Toolkit
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker</code></pre>
+                        </div>
+                        
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Verify the installation by running:
+                        </p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>docker run --rm --gpus all nvidia/cuda:11.8.0-base-ubuntu22.04 nvidia-smi</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Ollama Deployment</h3>
+                        <p class="text-gray-700 mb-4">
+                            Ollama provides an easy way to run various open-source models locally. Here's how to set it up:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Start Ollama service
+systemctl --user enable ollama
+systemctl --user start ollama
+
+# Pull models (examples)
+ollama pull llama3
+ollama pull phi3
+ollama pull deepseek-coder</code></pre>
+                        </div>
+
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-6">
+                            <div class="flex">
+                                <i data-lucide="check-circle" class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-green-800">
+                                    Once installed, Ollama runs on port 11434. You can verify it's working by running: <code class="bg-green-100 px-1 py-0.5 rounded">curl http://localhost:11434/api/tags</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">LocalGPT Deployment (Alternative)</h3>
+                        <p class="text-gray-700 mb-4">
+                            LocalGPT provides a more customizable interface for local AI models:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Clone the LocalGPT repository
+git clone https://github.com/PromtEngineer/localGPT.git
+cd localGPT
+
+# Set up with Docker
+docker build -t localgpt .
+docker run -d --gpus all -p 5000:5000 -v $(pwd):/app localgpt</code></pre>
+                        </div>
+                    </div>
+
+                    <button id="copyDeploymentBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
+                        Copy All Commands
+                    </button>
+                </div>
+            </section>
+
+            <!-- Nginx & SSL Setup Section -->
+            <section id="nginx" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="shield" class="h-6 w-6 mr-2 text-teal-600"></i>
+                        Nginx Proxy with SSL Configuration
+                    </h2>
+
+                    <p class="text-gray-700 mb-6">
+                        Setting up Nginx as a reverse proxy with SSL encryption allows secure access to your AI services from the internet.
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Installing Nginx and Certbot</h3>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Install Nginx and Certbot
+sudo apt update
+sudo apt install -y nginx certbot python3-certbot-nginx
+
+# Start and enable Nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Configuring Nginx for Ollama</h3>
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Create a new Nginx config file:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/ollama</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Add the following configuration (replace yourdomain.com with your actual domain):
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>server {
+    listen 80;
+    server_name ai.yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:11434;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # WebSocket support
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        
+        # Increase timeouts for long-running AI queries
+        proxy_read_timeout 300s;
+        proxy_connect_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    # Security headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+}</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Enable the site and get SSL certificate:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo ln -s /etc/nginx/sites-available/ollama /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+
+# Get SSL certificate
+sudo certbot --nginx -d ai.yourdomain.com</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">Basic Authentication (Optional)</h3>
+
+                        <p class="text-gray-700 mb-4">
+                            Add basic authentication to protect your AI service:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Install apache2-utils for htpasswd
+sudo apt install -y apache2-utils
+
+# Create password file
+sudo htpasswd -c /etc/nginx/.htpasswd yourusername
+
+# Add to your Nginx config inside the location block:
+auth_basic "Restricted Access";
+auth_basic_user_file /etc/nginx/.htpasswd;</code></pre>
+                        </div>
+
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                            <div class="flex">
+                                <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-yellow-800">
+                                    <strong>Security Note:</strong> Basic authentication transmits credentials with base64 encoding, which is why SSL is crucial. For production environments, consider implementing more robust authentication methods.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="copyNginxConfigBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                        <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
+                        Copy Nginx Configuration
+                    </button>
+                </div>
+            </section>
+
+            <!-- Auto-Start Services Section -->
+            <section id="auto-start" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="power" class="h-6 w-6 mr-2 text-amber-600"></i>
+                        Auto-Start Services Configuration
+                    </h2>
+
+                    <p class="text-gray-700 mb-6">
+                        Ensure your AI services automatically start when your EC2 instance boots up.
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Systemd Service for Ollama</h3>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Create a systemd service file:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/systemd/system/ollama.service</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Add the following content:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>[Unit]
+Description=Ollama AI Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu
+ExecStart=/usr/local/bin/ollama serve
+Restart=always
+RestartSec=10
+Environment=HOME=/home/ubuntu
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Enable and start the service:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-6 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo systemctl daemon-reload
+sudo systemctl enable ollama.service
+sudo systemctl start ollama.service
+sudo systemctl status ollama.service</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">Docker Auto-Start for Other Services</h3>
+
+                        <p class="text-gray-700 mb-4">
+                            For services running in Docker containers, enable auto-restart:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># For LocalGPT or other Docker containers
+docker update --restart=always container_name_or_id
+
+# Example:
+docker update --restart=always localgpt
+
+# For docker-compose based deployments
+# Modify docker-compose.yml to include:
+services:
+  service_name:
+    restart: always
+    # other configuration...</code></pre>
+                        </div>
+
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <div class="flex">
+                                <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-blue-800">
+                                    <strong>Tip:</strong> To test your auto-start configuration, reboot your instance with <code class="bg-blue-100 px-1 py-0.5 rounded">sudo reboot</code> and verify all services come back online automatically.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="copyAutoStartBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                        <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
+                        Copy Service Configuration
+                    </button>
+                </div>
+            </section>
+
+            <!-- Code-Server Setup Section -->
+            <section id="code-server" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="code" class="h-6 w-6 mr-2 text-gray-800"></i>
+                        Code-Server Installation
+                    </h2>
+
+                    <p class="text-gray-700 mb-6">
+                        Code-Server provides a browser-based VS Code environment, making it easy to develop and maintain your AI applications directly on your server.
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Installing Code-Server</h3>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code># Install Code-Server
+curl -fsSL https://code-server.dev/install.sh | sh
+
+# Start and enable the service
+sudo systemctl enable --now code-server@$USER
+
+# Configure Code-Server
+mkdir -p ~/.config/code-server
+nano ~/.config/code-server/config.yaml</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Edit the configuration file with:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>bind-addr: 127.0.0.1:8080
+auth: password
+password: your_secure_password
+cert: false</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Restart Code-Server to apply changes:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo systemctl restart code-server@$USER</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Nginx Configuration for Code-Server</h3>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Create a new Nginx site configuration:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo nano /etc/nginx/sites-available/code-server</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Add the following configuration:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p
+-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>server {
+    listen 80;
+    server_name code.yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection upgrade;
+        proxy_set_header Accept-Encoding gzip;
+    }
+}</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Enable the site and get SSL certificate:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>sudo ln -s /etc/nginx/sites-available/code-server /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+
+# Get SSL certificate
+sudo certbot --nginx -d code.yourdomain.com</code></pre>
+                        </div>
+
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
+                            <div class="flex">
+                                <i data-lucide="check-circle" class="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-green-800">
+                                    <strong>Success:</strong> Code-Server should now be available at https://code.yourdomain.com with password protection.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">Installing Useful Extensions</h3>
+
+                        <p class="text-gray-700 mb-4">
+                            Enhance your Code-Server with these useful extensions for AI development:
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-900 mb-2">Python</h4>
+                                <p class="text-sm text-gray-600">Essential Python language support with IntelliSense, linting, and debugging.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-python.python</div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-900 mb-2">Jupyter</h4>
+                                <p class="text-sm text-gray-600">Run and view Jupyter notebooks directly within VS Code.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-toolsai.jupyter</div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-900 mb-2">Docker</h4>
+                                <p class="text-sm text-gray-600">Manage Docker containers and images directly from the editor.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">ms-azuretools.vscode-docker</div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-900 mb-2">IntelliCode</h4>
+                                <p class="text-sm text-gray-600">AI-assisted development with intelligent code completions.</p>
+                                <div class="mt-2 text-xs bg-gray-100 p-2 rounded font-geist-mono">visualstudioexptteam.vscodeintellicode</div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Install extensions from the command line:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>code-server --install-extension ms-python.python
+code-server --install-extension ms-toolsai.jupyter
+code-server --install-extension ms-azuretools.vscode-docker
+code-server --install-extension visualstudioexptteam.vscodeintellicode</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EC2 Auto-Shutdown Section -->
+            <section id="auto-shutdown" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="clock" class="h-6 w-6 mr-2 text-red-600"></i>
+                        EC2 Auto-Shutdown Script
+                    </h2>
+
+                    <p class="text-gray-700 mb-6">
+                        Implement an auto-shutdown script to automatically turn off your EC2 instance during periods of inactivity, helping to reduce costs significantly.
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Creating the Auto-Shutdown Script</h3>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Create a new script file:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>nano ~/auto-shutdown.sh</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Add the following content:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>#!/bin/bash
+
+# Auto-shutdown script for EC2 instances
+# This script checks for system activity and shuts down the instance if idle
+
+# Configuration
+IDLE_TIME_THRESHOLD=30  # Minutes of inactivity before shutdown
+LOAD_THRESHOLD=0.1      # Load average threshold (1-minute)
+EXCLUDE_PROCESSES=("ollama" "code-server")  # Processes to exclude from activity check
+
+# Get current load average (1-minute)
+LOAD_AVG=$(cat /proc/loadavg | awk '{print $1}')
+
+# Check if any excluded processes are actively processing
+for PROCESS in "${EXCLUDE_PROCESSES[@]}"; do
+    PROCESS_CPU=$(ps aux | grep $PROCESS | grep -v grep | awk '{sum+=$3} END {print sum}')
+    if (( $(echo "$PROCESS_CPU > 5.0" | bc -l) )); then
+        echo "Process $PROCESS is active (CPU: $PROCESS_CPU%). Aborting shutdown."
+        exit 0
+    fi
+done
+
+# Check if load is below threshold
+if (( $(echo "$LOAD_AVG < $LOAD_THRESHOLD" | bc -l) )); then
+    echo "System load ($LOAD_AVG) is below threshold ($LOAD_THRESHOLD)"
+    
+    # Check for active SSH connections
+    SSH_CONNECTIONS=$(netstat -tn | grep :22 | grep ESTABLISHED | wc -l)
+    if [ $SSH_CONNECTIONS -gt 0 ]; then
+        echo "Active SSH connections found. Aborting shutdown."
+        exit 0
+    fi
+    
+    # Check for recent user activity
+    LAST_ACTIVITY=$(w -i | grep -v JCPU | awk '{print $5}')
+    CURRENT_TIME=$(date +%s)
+    
+    # If no users are logged in, proceed with shutdown consideration
+    if [ -z "$LAST_ACTIVITY" ]; then
+        echo "No users logged in. Checking system activity..."
+        
+        # Check if system has been idle for threshold time
+        UPTIME_IDLE=$(grep 'cpu ' /proc/stat | awk '{idle=$5} {total=$1+$2+$3+$4+$5+$6+$7+$8+$9} {printf "%.2f", idle/total*100}')
+        if (( $(echo "$UPTIME_IDLE > 95.0" | bc -l) )); then
+            echo "System is idle (CPU idle: $UPTIME_IDLE%). Initiating shutdown..."
+            # Log the shutdown
+            echo "Auto-shutdown initiated at $(date)" >> /var/log/auto-shutdown.log
+            # Shutdown the system
+            sudo shutdown -h now
+        else
+            echo "System not idle enough (CPU idle: $UPTIME_IDLE%). Aborting shutdown."
+        fi
+    else
+        echo "Active users detected. Aborting shutdown."
+    fi
+else
+    echo "System load ($LOAD_AVG) is above threshold ($LOAD_THRESHOLD). Aborting shutdown."
+fi</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Make the script executable:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>chmod +x ~/auto-shutdown.sh</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-medium mb-4">Setting Up a Cron Job</h3>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Configure the script to run every 15 minutes:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>crontab -e</code></pre>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 text-sm">
+                            Add this line to the crontab:
+                        </p>
+
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-md mb-4 overflow-x-auto">
+                            <pre class="text-sm font-geist-mono"><code>*/15 * * * * /home/ubuntu/auto-shutdown.sh >> /home/ubuntu/auto-shutdown.log 2>&1</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">Using AWS Instance Scheduler (Alternative)</h3>
+
+                        <p class="text-gray-700 mb-4">
+                            AWS offers a managed solution for scheduled instance starts and stops:
+                        </p>
+
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
+                            <li>Deploy the <a href="https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/" class="text-blue-600 hover:underline" target="_blank">AWS Instance Scheduler</a> solution from the AWS Solutions Library</li>
+                            <li>Configure schedules based on your usage patterns (e.g., working hours on weekdays)</li>
+                            <li>Tag your EC2 instances with the appropriate schedule identifier</li>
+                            <li>The scheduler will automatically start and stop instances based on the defined schedule</li>
+                        </ol>
+
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                            <div class="flex">
+                                <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                                <div>
+                                    <p class="text-sm text-yellow-800 font-medium">Cost Considerations</p>
+                                    <p class="text-sm text-yellow-700 mt-1">
+                                        The AWS Instance Scheduler solution costs approximately $13.15 per month to operate, so it makes sense for environments with multiple instances. For a single instance, the script-based approach above is more cost-effective.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="copyShutdownScriptBtn" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <i data-lucide="clipboard" class="h-4 w-4 mr-2"></i>
+                        Copy Shutdown Script
+                    </button>
+                </div>
+            </section>
+
+            <!-- Cost Estimate Section -->
+            <section id="cost-estimate" class="scroll-mt-20">
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i data-lucide="calculator" class="h-6 w-6 mr-2 text-green-600"></i>
+                        Cost Estimation
+                    </h2>
+
+                    <p class="text-gray-700 mb-6">
+                        Understanding the cost implications of running AI models on AWS is crucial for budgeting. Here's a breakdown of the estimated costs.
+                    </p>
+
+                    <div class="overflow-x-auto mb-8">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EC2 Instance (g5.4xlarge)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mid-sized GPU instance for AI workloads</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.352/hour</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">176 hours (8 hours/day × 22 days)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$237.95</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EBS Storage (gp3)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">General Purpose SSD storage</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.08/GB-month</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">250 GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Data Transfer Out</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Network egress from AWS to Internet</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.09/GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">50 GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$4.50</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" colspan="4">Total Monthly Cost (8h/day usage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$262.45</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" colspan="4">Total Monthly Cost (24h/day usage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$993.64</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="rounded-lg border border-gray-200 p-6">
+                            <h3 class="text-xl font-medium mb-4">Cost Optimization Tips</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex">
+                                    <i data-lucide="check" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <span>Use auto-shutdown scripts during idle periods</span>
+                                </li>
+                                <li class="flex">
+                                    <i data-lucide="check" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <span>Consider Spot Instances for non-critical workloads (up to 70% discount)</span>
+                                </li>
+                                <li class="flex">
+                                    <i data-lucide="check" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <span>Start with smaller instance types and scale up as needed</span>
+                                </li>
+                                <li class="flex">
+                                    <i data-lucide="check" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <span>Use gp3 EBS volumes instead of gp2 for better performance/cost ratio</span>
+                                </li>
+                                <li class="flex">
+                                    <i data-lucide="check" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <span>Consider Reserved Instances if you plan long-term usage</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rounded-lg border border-gray-200 p-6">
+                            <h3 class="text-xl font-medium mb-4">Cost Calculator</h3>
+                            <form id="costCalculator" class="space-y-4">
+                                <div>
+                                    <label for="instanceType" class="block text-sm font-medium text-gray-700">EC2 Instance Type</label>
+                                    <select id="instanceType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="g4dn.xlarge">g4dn.xlarge (16GB GPU) - $0.526/hr</option>
+                                        <option value="g5.xlarge">g5.xlarge (24GB GPU) - $1.006/hr</option>
+                                        <option value="g5.2xlarge">g5.2xlarge (24GB GPU) - $1.13/hr</option>
+                                        <option value="g5.4xlarge" selected>g5.4xlarge (24GB GPU) - $1.352/hr</option>
+                                        <option value="g5.8xlarge">g5.8xlarge (24GB GPU) - $2.704/hr</option>
+                                        <option value="g5.16xlarge">g5.16xlarge (24GB GPU) - $5.408/hr</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="hoursPerDay" class="block text-sm font-medium text-gray-700">Hours Per Day</label>
+                                    <input type="range" id="hoursPerDay" name="hoursPerDay" min="1" max="24" value="8" class="mt-1 block w-full rounded-md">
+                                    <div class="flex justify-between text-sm text-gray-500">
+                                        <span>1h</span>
+                                        <span id="hoursValue">8h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="storageGB" class="block text-sm font-medium text-gray-700">Storage (GB)</label>
+                                    <input type="number" id="storageGB" name="storageGB" min="50" value="250" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div class="pt-4 border-t border-gray-200">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-700 font-medium">Estimated Monthly Cost:</span>
+                                        <span id="totalCost" class="text-gray-900 font-medium">$262.45</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <div class="flex">
+                            <i data-lucide="info" class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <p class="text-sm text-blue-800">
+                                <strong>Reminder:</strong> AWS provides a Free Tier for new accounts which includes 750 hours of EC2 t2.micro instance usage, but this is insufficient for most AI workloads. The cost estimates above assume standard on-demand pricing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-16 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
+            <p class="mb-2">Compiled by <a href="https://github.com/aramb-dev" target="_blank" class="text-blue-600 hover:underline">Abdur-Rahmān Bilāl (aramb-dev)</a></p>
+            <p class="mb-2"><a href="https://aramb.dev/aws-research/flowith" target="_blank" class="text-blue-600 hover:underline">View full research on aramb.dev</a></p>
+            <p>Built with <a href="https://flowith.net" target="_blank" class="text-blue-600 hover:underline">Flowith Oracle</a>.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+    window.addEventListener("wheel", (e)=> {
+      const isPinching = e.ctrlKey
+      if(isPinching) e.preventDefault()
+    }, { passive: false })
+    </script>
+</body>
+</html>

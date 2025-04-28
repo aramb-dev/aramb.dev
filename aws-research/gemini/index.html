@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your Own Cloud AI Dev Box: Self-Hosting on AWS EC2</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 2em;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #0056b3;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3em;
+        }
+
+        h1 {
+            font-size: 2.2em;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin-top: 1.2em;
+        }
+
+        code {
+            background-color: #e9ecef;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        pre {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            /* Allow wrapping */
+            word-wrap: break-word;
+            /* Break long words */
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        th,
+        td {
+            border: 1px solid #dee2e6;
+            padding: 0.75em;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: #fff;
+            padding: 2em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffeeba;
+            padding: 1em;
+            margin: 1em 0;
+        }
+
+        .recommendation {
+            background-color: #d1ecf1;
+            border-left: 5px solid #bee5eb;
+            padding: 1em;
+            margin: 1em 0;
+        }
+
+        .warning {
+            background-color: #f8d7da;
+            border-left: 5px solid #f5c6cb;
+            padding: 1em;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Build Your Own Cloud AI Dev Box: A Guide to Self-Hosting on AWS EC2</h1>
+
+        <p>Ditch the SaaS fees and run your own powerful AI development environment on AWS. Get the convenience of cloud
+            AI tools like Replit Ghostwriter or Cursor AI, but with full control, local models, and optimized costs.</p>
+
+        <p>This guide details how to set up a personal, cost-effective AI development server using AWS EC2, Ollama for
+            running models, Code-Server for a browser-based VS Code experience, and Nginx for secure access.</p>
+
+        <h2>Why Self-Host Your AI Assistant?</h2>
+        <ul>
+            <li><strong>Control & Customization:</strong> Run any model compatible with Ollama or LocalGPT. Tweak
+                settings, manage your data privately, and choose your hardware.</li>
+            <li><strong>Cost Savings:</strong> Avoid recurring monthly SaaS fees. Pay only for the AWS resources you
+                consume, significantly reduced by using Spot Instances and automated shutdowns during idle times.</li>
+            <li><strong>Performance:</strong> Leverage powerful AWS GPU instances (like the G5 family) for much faster
+                AI model inference compared to typical local machines.</li>
+            <li><strong>Learning Opportunity:</strong> Gain valuable hands-on experience with cloud infrastructure (EC2,
+                IAM, Nginx, Docker) and AI model deployment practices.</li>
+        </ul>
+
+        <h2>Choosing Your AWS Hardware: EC2 Instance Guide</h2>
+
+        <h3>The Importance of GPUs (Especially VRAM)</h3>
+        <p>Running Large Language Models (LLMs) effectively is often limited by the amount of Video RAM (VRAM) available
+            on the GPU. Model size (billions of parameters) directly impacts VRAM usage. Techniques like
+            <strong>quantization</strong> (reducing the numerical precision of model weights) can significantly lower
+            VRAM needs, but overly aggressive quantization might reduce model quality.</p>
+        <p>For developer tasks (code generation, complex instructions), maintaining model quality is key. Aim for enough
+            VRAM to run your desired models with at least 4-bit or 5-bit quantization (e.g., Q4_K_M GGUF) for a good
+            balance.</p>
+        <p><strong>Estimated VRAM Needs (Quantized Models):</strong></p>
+        <ul>
+            <li>~7-13B models (e.g., Llama 3 8B, Mistral 7B, DeepSeek Coder 6.7B, Phi-3-mini): ~4-12 GB (Q4)</li>
+            <li>Mixtral 8x7B: ~27-30 GB (Q4), ~24GB (3.5bpw EXL2)</li>
+            <li>Llama 3 70B: ~40-50 GB (Q4/Q5), ~75GB (Q8), ~140GB+ (FP16)</li>
+        </ul>
+        <div class="note">
+            <p><strong>Note:</strong> Running large models like Llama 3 70B on GPUs with insufficient VRAM (e.g., 24GB)
+                requires offloading layers to system RAM, which drastically slows down inference speed.</p>
+        </div>
+
+        <h3>G5 Instances Recommended</h3>
+        <p>AWS EC2 G5 instances, featuring NVIDIA A10G GPUs (24GB VRAM each), are generally the best choice for this
+            workload. They offer significantly better ML inference performance and price/performance compared to the
+            older G4dn instances (NVIDIA T4, 16GB VRAM). The extra VRAM per GPU is also a major advantage.</p>
+
+        <div class="recommendation">
+            <p><strong>Recommendation:</strong> Prioritize G5 instances. Use G4dn only if budget is extremely tight and
+                only small models are needed.</p>
+        </div>
+
+        <h3>Recommended Instance Types (G5 Family)</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Instance Type</th>
+                    <th>GPU & VRAM</th>
+                    <th>vCPUs</th>
+                    <th>System RAM</th>
+                    <th>Suitability</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>g5.xlarge</code></td>
+                    <td>1 x A10G (24GB)</td>
+                    <td>4</td>
+                    <td>16 GiB</td>
+                    <td>Good start for models up to ~13B, potentially Mixtral (low quant/offload). Best cost/capability
+                        balance for smaller models.</td>
+                </tr>
+                <tr>
+                    <td><code>g5.2xlarge</code></td>
+                    <td>1 x A10G (24GB)</td>
+                    <td>8</td>
+                    <td>32 GiB</td>
+                    <td>Same VRAM, more CPU/RAM for smoother multitasking or minor offloading.</td>
+                </tr>
+                <tr>
+                    <td><code>g5.4xlarge</code></td>
+                    <td>1 x A10G (24GB)</td>
+                    <td>16</td>
+                    <td>64 GiB</td>
+                    <td>More RAM allows more significant layer offloading for larger models (e.g., Mixtral Q4, Llama 70B
+                        Q2/Q3), but expect performance impact.</td>
+                </tr>
+                <tr>
+                    <td><strong><code>g5.12xlarge</code></strong></td>
+                    <td><strong>4 x A10G (96GB total)</strong></td>
+                    <td><strong>48</strong></td>
+                    <td><strong>192 GiB</strong></td>
+                    <td><strong>Recommended for running Llama 3 70B (Q4/Q5) efficiently without significant
+                            offloading.</strong> Also handles Mixtral easily.</td>
+                </tr>
+                <tr>
+                    <td><code>g5.24xlarge</code></td>
+                    <td>4 x A10G (96GB total)</td>
+                    <td>96</td>
+                    <td>384 GiB</td>
+                    <td>More CPU/RAM for demanding workloads or multiple users/models.</td>
+                </tr>
+                <tr>
+                    <td><code>g5.48xlarge</code></td>
+                    <td>8 x A10G (192GB total)</td>
+                    <td>192</td>
+                    <td>768 GiB</td>
+                    <td>High-end for multiple large models, less quantization, or very large context windows.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Spot vs. On-Demand Instances</h3>
+        <p><strong>Spot Instances</strong> offer huge savings (often 70-90% off On-Demand) by using spare AWS capacity.
+            The catch is AWS can reclaim the instance with a 2-minute warning. For a personal dev server with
+            auto-shutdown, Spot is highly recommended for cost savings.</p>
+        <p><strong>On-Demand Instances</strong> provide guaranteed availability at a fixed hourly rate, suitable if
+            interruptions are unacceptable.</p>
+
+        <h2>Step-by-Step Setup Guide</h2>
+
+        <h3>1. Prerequisites</h3>
+        <ul>
+            <li>Active AWS Account with necessary permissions (EC2, IAM, etc.).</li>
+            <li>(Optional but Recommended) Registered domain name for easy access and SSL.</li>
+            <li>Launched EC2 Instance (choose from recommendations above).</li>
+        </ul>
+
+        <h3>2. Foundation: OS and Drivers</h3>
+        <div class="recommendation">
+            <p><strong>Highly Recommended:</strong> Start with an <strong>AWS Deep Learning AMI (DLAMI)</strong> based
+                on Ubuntu (e.g., 22.04 or 24.04). These AMIs come pre-installed with compatible NVIDIA drivers, CUDA
+                toolkit, cuDNN, and often Docker, saving significant setup effort.</p>
+        </div>
+        <p>If not using a DLAMI, you'll need to manually install NVIDIA drivers and the correct CUDA toolkit version
+            compatible with Ollama.</p>
+
+        <h3>3. Core Tools Installation</h3>
+        <p>Ensure these are installed (DLAMIs often include them):</p>
+        <ul>
+            <li><strong>Docker & Docker Compose:</strong> For containerizing Ollama and Code-Server. Follow official
+                Docker installation guides if needed.</li>
+            <li><strong>NVIDIA Container Toolkit:</strong> Allows Docker containers to access the GPU. Installation
+                involves adding NVIDIA's repository and installing the `nvidia-container-toolkit` package, then
+                restarting Docker.</li>
+        </ul>
+        <pre><code class="language-bash"># Example NVIDIA Container Toolkit Install (Verify official docs)
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+&& curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+# Verify GPU access in Docker
+sudo docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu22.04 nvidia-smi</code></pre>
+
+        <h3>4. Deployment with Docker Compose</h3>
+        <p>Create project directories (e.g., `~/ai-server/ollama_data`, `~/ai-server/code-server_data`) and a
+            `docker-compose.yml` file within `~/ai-server`:</p>
+        <pre><code class="language-yaml"># ~/ai-server/docker-compose.yml
+version: '3.8'
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "127.0.0.1:11434:11434" # IMPORTANT: Bind only to localhost for security via Nginx
+    volumes:
+      -./ollama_data:/root/.ollama # Persist models and data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # Use all available GPUs
+              capabilities: [gpu]
+    restart: unless-stopped # Auto-start on reboot/crash
+
+  code-server:
+    image: codercom/code-server:latest
+    container_name: code-server
+    user: "$(id -u):$(id -g)" # Run as host user for permissions
+    ports:
+      - "127.0.0.1:8080:8080" # IMPORTANT: Bind only to localhost
+    volumes:
+      -./code-server_data:/home/coder/.local/share/code-server # Persist settings/extensions
+      - $HOME:/home/coder/project # Mount home directory into Code-Server
+    environment:
+      - PASSWORD=YourStrongPasswordHere # CHANGE THIS!
+    restart: unless-stopped # Auto-start on reboot/crash
+
+volumes:
+  ollama_data:
+  code-server_data:
+</code></pre>
+        <div class="warning">
+            <p><strong>Security Alert:</strong> Change <code>YourStrongPasswordHere</code> to a very strong, unique
+                password in the <code>docker-compose.yml</code> file.</p>
+        </div>
+        <p>Start the services: <code>cd ~/ai-server && sudo docker compose up -d</code></p>
+
+        <h3>5. Pull Ollama Models</h3>
+        <p>Download the models you want to use:</p>
+        <pre><code class="language-bash">sudo docker exec ollama ollama pull llama3:8b
+sudo docker exec ollama ollama pull mistral
+sudo docker exec ollama ollama pull deepseek-coder:6.7b
+# Add other models as needed (e.g., phi-3, starcoder, etc.)</code></pre>
+
+        <h2>Secure Access with Nginx & SSL</h2>
+
+        <h3>Why Nginx?</h3>
+        <p>Nginx acts as a reverse proxy, providing a single, secure entry point:</p>
+        <ul>
+            <li>Handles HTTPS (SSL/TLS encryption).</li>
+            <li>Hides the direct ports of Ollama and Code-Server.</li>
+            <li>Allows adding security headers centrally.</li>
+            <li>Exposes services via your domain name (or IP).</li>
+        </ul>
+
+        <h3>Nginx Installation & Configuration</h3>
+        <p>Install Nginx: <code>sudo apt update && sudo apt install nginx</code></p>
+        <p>Create an Nginx site configuration file (e.g., <code>/etc/nginx/sites-available/ai-server.conf</code>).
+            Replace <code>your_domain.com</code> with your actual domain or the EC2 instance's public IP address if not
+            using a domain.</p>
+
+        <pre><code class="language-nginx"># /etc/nginx/sites-available/ai-server.conf
+
+# Redirect HTTP to HTTPS (Certbot often handles this better)
+server {
+    listen 80;
+    listen [::]:80;
+    server_name your_domain.com; # CHANGE THIS
+
+    location /.well-known/acme-challenge/ { # For Certbot validation
+        root /var/www/html;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name your_domain.com; # CHANGE THIS
+
+    # SSL Configuration - Managed by Certbot (paths added automatically)
+    ssl_certificate /etc/letsencrypt/live/your_domain.com/fullchain.pem;
+    ssl_certificate_key...[source](https://medium.com/swlh/dockerizing-two-web-servers-to-respond-to-the-same-domain-eb9c15734a68)
+
+    # Basic Security Headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-XSS-Protection "0" always; # Rely on CSP if implemented
+
+    # Hide Nginx version
+    server_tokens off;
+
+    # Proxy pass to Code-Server (at root path '/')
+    location / {
+        proxy_pass http://127.0.0.1:8080/; # Forward to Code-Server
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket support - CRITICAL for Code-Server
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # Proxy pass to Ollama API (at /ollama/ path)
+    location /ollama/ {
+        proxy_pass http://127.0.0.1:11434/; # Forward to Ollama
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Optional: Deny access to hidden files
+    location ~ /\. {
+        deny all;
+    }
+}
+</code></pre>
+        <p>Enable the site, test config, and reload Nginx:</p>
+        <pre><code class="language-bash">sudo ln -sfn /etc/nginx/sites-available/ai-server.conf /etc/nginx/sites-enabled/ai-server.conf
+sudo nginx -t
+sudo systemctl reload nginx</code></pre>
+
+        <h3>SSL Certificates with Let's Encrypt (Certbot)</h3>
+        <p>If using a domain name, get a free SSL certificate:</p>
+        <ol>
+            <li>Install Certbot (snap method recommended):
+                <pre><code class="language-bash">sudo snap install core; sudo snap refresh core
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot</code></pre>
+            </li>
+            <li>Ensure your domain's DNS A record points to the EC2 instance's public IP.</li>
+            <li>Allow HTTPS traffic (port 443) in the EC2 Security Group.</li>
+            <li>Run Certbot:
+                <pre><code class="language-bash">sudo certbot --nginx -d your_domain.com</code></pre>
+                (Replace `your_domain.com`). Follow the prompts. Certbot will obtain the certificate and automatically
+                update your Nginx configuration.
+            </li>
+            <li>Verify auto-renewal: <code>sudo certbot renew --dry-run</code>.</li>
+        </ol>
+
+        <h2>Ensuring Reliability & Managing Costs</h2>
+
+        <h3>Auto-Start Services</h3>
+        <p>The <code>restart: unless-stopped</code> policy in the `docker-compose.yml` file ensures that both Ollama and
+            Code-Server containers will automatically restart if they crash or after the EC2 instance reboots. No
+            further action is needed if using the provided Docker Compose setup.</p>
+        <p>(If installed manually without Docker, you would need to create and enable `systemd` service files for Ollama
+            and Code-Server).</p>
+
+        <h3>Automated Shutdown (Cost Saving)</h3>
+        <div class="recommendation">
+            <p><strong>Recommended Method: AWS Lambda + EventBridge Scheduler</strong></p>
+            <p>This is the most secure and reliable way to automatically stop your EC2 instance during off-peak hours
+                (e.g., 2 AM daily) to save costs.</p>
+        </div>
+        <ol>
+            <li><strong>Create IAM Policy & Role:</strong> Create an IAM policy granting `ec2:StopInstances` permission
+                specifically for your EC2 instance ARN, plus basic CloudWatch Logs permissions. Create an IAM role for
+                Lambda execution and attach this policy.</li>
+            <li><strong>Create Lambda Function:</strong>
+                <ul>
+                    <li>Go to the AWS Lambda console, create a new function (Author from scratch, Python runtime).</li>
+                    <li>Assign the IAM role created above.</li>
+                    <li>Use the following Python code (replace placeholders):</li>
+                </ul>
+                <pre><code class="language-python"># lambda_function.py
+import boto3
+import os
+
+# Define your instance ID and region
+REGION = 'us-east-1' # CHANGE if needed
+INSTANCE_IDS = ['i-xxxxxxxxxxxxxxxxx'] # *** REPLACE with your actual EC2 instance ID ***
+
+ec2 = boto3.client('ec2', region_name=REGION)
+
+def lambda_handler(event, context):
+    if not INSTANCE_IDS:
+        print("Error: No instance IDs specified.")
+        return {'statusCode': 400, 'body': 'Instance ID not set'}
+
+    try:
+        print(f"Attempting to stop instances: {INSTANCE_IDS} in region {REGION}")
+        ec2.stop_instances(InstanceIds=INSTANCE_IDS)
+        print(f"Successfully initiated stop for instances: {INSTANCE_IDS}")
+        return {'statusCode': 200, 'body': f'Stop initiated for {INSTANCE_IDS}'}
+    except Exception as e:
+        print(f"Error stopping instances: {e}")
+        return {'statusCode': 500, 'body': f'Error: {str(e)}'}
+                </code></pre>
+                <ul>
+                    <li>Deploy the function.</li>
+                </ul>
+            </li>
+            <li><strong>Create EventBridge Schedule:</strong>
+                <ul>
+                    <li>Go to the Amazon EventBridge console, select "Schedules", "Create schedule".</li>
+                    <li>Define a schedule using a cron expression (remember it's in UTC). Example for 2:00 AM UTC daily:
+                        <code>cron(0 2? * * *)</code>. Adjust for your desired local time shutdown.</li>
+                    <li>Set the target to the Lambda function created above.</li>
+                    <li>Create the schedule.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><em>Alternative (Less Recommended):</em> A cron job on the EC2 instance itself using AWS CLI, but this
+            requires granting permissions directly to the instance.</p>
+
+        <h2>Understanding the Costs</h2>
+
+        <h3>Main Cost Components</h3>
+        <ul>
+            <li><strong>EC2 Instance Runtime:</strong> Largest cost, depends on instance type (G5), pricing model (Spot
+                recommended), and hours running. Auto-shutdown drastically reduces this.</li>
+            <li><strong>EBS Storage:</strong> Cost for the disk volume (recommend `gp3`). Charged per GB-month (e.g.,
+                ~$0.08/GB-month for gp3 in us-east-1). A 250GB volume costs ~$20/month.</li>
+            <li><strong>Data Transfer OUT:</strong> First 100GB/month OUT to the internet is free. Additional data costs
+                ~$0.09/GB. Usually negligible for personal use. Data IN is free.</li>
+        </ul>
+
+        <h3>Monthly Cost Estimate Sheet (Example: us-east-1, Linux)</h3>
+        <p>Assumptions: 250GB gp3 EBS volume (~$20/month), <100GB data transfer ($0). Spot prices estimated ~70% off
+                On-Demand (actual prices vary).</p>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Instance Type</th>
+                            <th>Pricing Model</th>
+                            <th>Monthly Hours</th>
+                            <th>Est. EC2 Cost</th>
+                            <th>Est. EBS Cost</th>
+                            <th>Est. Total Monthly Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Budget Small Models</td>
+                            <td>g4dn.xlarge</td>
+                            <td>Spot</td>
+                            <td>220 (Auto-Shutdown)</td>
+                            <td>~$35</td>
+                            <td>$20</td>
+                            <td><strong>~$55</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recommended Start</strong></td>
+                            <td><strong>g5.xlarge</strong></td>
+                            <td><strong>Spot</strong></td>
+                            <td><strong>220 (Auto-Shutdown)</strong></td>
+                            <td><strong>~$66</strong></td>
+                            <td><strong>$20</strong></td>
+                            <td><strong>~$86</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Recommended Start (On-Demand)</td>
+                            <td>g5.xlarge</td>
+                            <td>On-Demand</td>
+                            <td>220 (Auto-Shutdown)</td>
+                            <td>~$221</td>
+                            <td>$20</td>
+                            <td>~$241</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recommended 70B Models</strong></td>
+                            <td><strong>g5.12xlarge</strong></td>
+                            <td><strong>Spot</strong></td>
+                            <td><strong>220 (Auto-Shutdown)</strong></td>
+                            <td><strong>~$374</strong></td>
+                            <td><strong>$20</strong></td>
+                            <td><strong>~$394</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Baseline (No Shutdown)</td>
+                            <td>g5.xlarge</td>
+                            <td>Spot</td>
+                            <td>720 (24/7)</td>
+                            <td>~$216</td>
+                            <td>$20</td>
+                            <td>~$236</td>
+                        </tr>
+                        <tr>
+                            <td>Baseline (No Shutdown, OD)</td>
+                            <td>g5.xlarge</td>
+                            <td>On-Demand</td>
+                            <td>720 (24/7)</td>
+                            <td>~$724</td>
+                            <td>$20</td>
+                            <td>~$744</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note">
+                    <p><strong>Key Takeaway:</strong> Combining <strong>Spot Instances</strong> with <strong>Automated
+                            Shutdown</strong> provides massive cost savings compared to running On-Demand 24/7.</p>
+                </div>
+
+                <h2>Conclusion & Next Steps</h2>
+                <p>By following this guide, you can create a powerful, customizable, and cost-effective AI development
+                    environment on AWS EC2. You gain control over your tools and data, leverage potent cloud hardware,
+                    and avoid recurring SaaS fees.</p>
+                <p><strong>Next Steps to Explore:</strong></p>
+                <ul>
+                    <li>Experiment with different Ollama models and quantization levels.</li>
+                    <li>Set up monitoring for your instance (CloudWatch).</li>
+                    <li>Explore advanced Nginx features (e.g., basic auth for the Ollama endpoint).</li>
+                    <li>Integrate LocalGPT alongside Ollama if you need to interact with local documents.</li>
+                    <li>Automate the entire setup using Infrastructure as Code tools like Terraform or AWS
+                        CloudFormation.</li>
+                </ul>
+
+    </div>
+</body>
+
+</html>
