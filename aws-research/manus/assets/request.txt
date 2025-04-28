@@ -1,0 +1,84 @@
+Hello Manus,
+
+I’m looking for advice and possibly help setting up a **self-hosted AI agent** (similar to Replit Ghostwriter, Vercel v0, or Cursor AI) on an **AWS EC2 instance**.  
+I want it fully local (no third-party SaaS fees) but still convenient to use like cloud services.
+
+Here’s exactly what I need:
+
+---
+
+**1. Instance Recommendation:**
+- What EC2 instance type would you recommend for running AI models locally?  
+  (I'm aiming to run models like those from Ollama or LocalGPT.)
+- Ideally, I want a good balance between GPU power, RAM, and cost.
+
+---
+
+**2. Deployment:**
+- I want to install either **Ollama** or **LocalGPT** on the instance.
+- It should auto-install everything necessary (Docker if needed, NVIDIA drivers, Ollama itself, etc.).
+- A full **setup script** would be appreciated.
+
+---
+
+**3. Server Configuration:**
+- I want to configure **Nginx** to serve the AI app cleanly at a domain (or IP) with proxying and basic security headers.
+- Also, if possible, easy SSL (Let's Encrypt Certbot).
+
+---
+
+**4. Auto-start & Reliability:**
+- The Ollama/LocalGPT service should **auto-start** if the EC2 instance reboots (via systemd, docker-compose, crontab, or your suggestion).
+
+---
+
+**5. Remote Development (VSCode in Browser):**
+- I'd like to install something like **Code-Server** (VSCode via browser) so I can manage the server and code remotely through a browser.
+
+---
+
+**6. Cost Management (Auto Shutdown):**
+- I want an **auto-shutdown script** that will **stop the EC2 instance** during non-usage hours (e.g., 2 AM every day) to save costs.
+- (Preferably via cron or AWS Lambda, but open to your suggestions.)
+
+---
+
+**7. Cost Estimate Sheet:**
+- I'd appreciate a rough **cost estimate** per month for running this setup (assuming moderate use, with and without GPU).
+- Please include estimates for:
+  - Instance cost
+  - Storage cost
+  - Data transfer (if significant)
+
+---
+
+# Why I'm Doing This:
+I want to avoid paying subscription fees to Replit, Vercel, Cursor, etc. by hosting my own developer AI locally on a powerful cloud machine.  
+However, I still want it easy to access, cleanly served, and cost-effective.
+
+---
+
+Please let me know:
+- What you recommend
+- If you can provide the setup scripts
+- And if you can help me optimize the instance and costs further.
+
+Thank you so much in advance!
+
+Best regards,  
+Abdur-Rahman Bilal
+
+---
+
+# ✅ Quick Checklist (if you want to summarize at the end)
+| Goal | Needed? |
+|-----|---------|
+| Best EC2 instance suggestion | ✅ |
+| Full auto setup script | ✅ |
+| Nginx proxy config | ✅ |
+| Auto-start services | ✅ |
+| Code-Server setup | ✅ |
+| Auto-shutdown script | ✅ |
+| Cost estimates sheet | ✅ |
+
+---

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Hosted AI on AWS EC2 - Deployment Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .warning {
+            color: #c0392b;
+            background: #f9ebea;
+            padding: 15px;
+            border-left: 4px solid #c0392b;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Self-Hosted AI on AWS EC2 Deployment Guide</h1>
+
+    <!-- Instance Recommendation -->
+    <div class="section">
+        <h2>1. EC2 Instance Recommendations</h2>
+        <div class="grid">
+            <div>
+                <h3>GPU Instance (g4dn.xlarge)</h3>
+                <ul>
+                    <li>vCPU: 4</li>
+                    <li>RAM: 16GB</li>
+                    <li>GPU: NVIDIA T4 (16GB VRAM)</li>
+                    <li>Cost: ~$380/month (24/7)</li>
+                </ul>
+            </div>
+            <div>
+                <h3>CPU Instance (t3.xlarge)</h3>
+                <ul>
+                    <li>vCPU: 4</li>
+                    <li>RAM: 16GB</li>
+                    <li>Cost: ~$120/month (24/7)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deployment Script -->
+    <div class="section">
+        <h2>2. Auto-Setup Script</h2>
+        <pre><code>#!/bin/bash
+# Install Docker and NVIDIA drivers
+sudo apt-get update
+sudo apt-get install -y docker.io nvidia-driver-535
+sudo systemctl enable docker
+
+# Install NVIDIA Container Toolkit
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+
+# Deploy Ollama with GPU support
+docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama --restart always ollama/ollama
+
+# Install Code-Server
+curl -fsSL https://code-server.dev/install.sh | sh
+sudo systemctl enable --now code-server@$USER</code></pre>
+    </div>
+
+    <!-- Nginx Configuration -->
+    <div class="section">
+        <h2>3. Server Configuration</h2>
+        <h3>Nginx Proxy Setup</h3>
+        <pre><code>server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://localhost:11434;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}</code></pre>
+
+        <h3>SSL Setup</h3>
+        <pre><code>sudo certbot --nginx -d your-domain.com -d code.your-domain.com</code></pre>
+    </div>
+
+    <!-- Cost Estimates -->
+    <div class="section">
+        <h2>4. Monthly Cost Estimates</h2>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>GPU Instance</th>
+                <th>CPU Instance</th>
+            </tr>
+            <tr>
+                <td>Instance (12hr/day)</td>
+                <td>$190</td>
+                <td>$60</td>
+            </tr>
+            <tr>
+                <td>EBS Storage (100GB)</td>
+                <td>$10</td>
+                <td>$10</td>
+            </tr>
+            <tr>
+                <td>Data Transfer</td>
+                <td>$5</td>
+                <td>$5</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>$205</strong></td>
+                <td><strong>$75</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Auto-Shutdown -->
+    <div class="section">
+        <h2>5. Auto-Shutdown Implementation</h2>
+        <h3>AWS Lambda Script</h3>
+        <pre><code>import boto3
+import datetime
+
+def lambda_handler(event, context):
+    ec2 = boto3.client('ec2')
+    instance_id = 'your-instance-id'
+
+    current_hour = datetime.datetime.now().hour
+    if current_hour == 2:  # 2 AM shutdown
+        ec2.stop_instances(InstanceIds=[instance_id])
+
+    return {'statusCode': 200}</code></pre>
+
+        <h3>EC2 Cron Solution</h3>
+        <pre><code>0 2 * * * /usr/sbin/shutdown -h now</code></pre>
+    </div>
+
+    <!-- Checklist -->
+    <div class="section">
+        <h2>Implementation Checklist</h2>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>EC2 Instance Setup</td>
+                <td>✅ Ready</td>
+            </tr>
+            <tr>
+                <td>Automated Deployment</td>
+                <td>✅ Script Provided</td>
+            </tr>
+            <tr>
+                <td>SSL Configuration</td>
+                <td>✅ Certbot Integrated</td>
+            </tr>
+            <tr>
+                <td>Cost Management</td>
+                <td>✅ Lambda + Cron</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="warning">
+        <strong>Important:</strong> Remember to replace placeholders (your-domain.com, your-instance-id)
+        with your actual values before deployment.
+    </div>
+</body>
+
+</html>
