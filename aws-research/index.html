@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Research | Self-Hosted AI Agents</title>
+    <meta name="description"
+        content="Comprehensive research on deploying self-hosted AI agents on AWS EC2 instances, including setup guides for Llama 3, Mistral, DeepSeek, and other models.">
+    <meta property="og:url" content="https://aramb.dev/aws-research">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AWS Research | Self-Hosted AI Agents">
+    <meta property="og:description"
+        content="Comprehensive research on deploying self-hosted AI agents on AWS EC2 instances, including setup guides for Llama 3, Mistral, DeepSeek, and other models.">
+    <meta property="og:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/aws-research">
+    <meta name="twitter:title" content="AWS Research | Self-Hosted AI Agents">
+    <meta name="twitter:description"
+        content="Comprehensive research on deploying self-hosted AI agents on AWS EC2 instances, including setup guides for Llama 3, Mistral, DeepSeek, and other models.">
+    <meta name="twitter:image" content="../assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .research-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4 mb-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+            </div>
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">Self-Hosted AI Agents on AWS EC2</h1>
+                <p class="text-xl">Comprehensive research on deploying AI models across various platforms</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <section class="mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                <h2 class="text-2xl font-bold mb-4">Research Overview</h2>
+                <p class="text-gray-700"></p>
+                This research collection explores different approaches to setting up self-hosted AI environments on AWS
+                EC2 instances. These guides provide detailed instructions for deploying models like Llama 3, Mistral,
+                DeepSeek, and others on cost-effective GPU instances, enabling powerful AI capabilities without
+                recurring SaaS subscription fees.
+                </p>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6">Research Collection</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden research-card hover:shadow-lg">
+                    <div class="bg-green-600 p-6 text-white">
+                        <h3 class="text-xl font-semibold">Gemini AI Setup</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            A comprehensive guide to building your own cloud AI development environment using AWS EC2,
+                            Ollama
+                            for running models, and Code-Server for a browser-based VS Code experience. Includes
+                            detailed
+                            cost-saving strategies and security setup.
+                        </p>
+                        <a href="./gemini/"
+                            class="inline-block bg-green-600 text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors">
+                            View Research
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md overflow-hidden research-card hover:shadow-lg">
+                    <div class="bg-green-600 p-6 text-white">
+                        <h3 class="text-xl font-semibold">Flowith AI Deployment</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-yellow-500 text-white text-xs font-bold py-1 px-2 rounded">COMING
+                                SOON</span>
+                        </div>
+                        <p class="text-gray-600 mb-6">
+                            Step-by-step guide for setting up a production-ready AI agent environment on AWS EC2 with
+                            clean
+                            interface. Features EC2 instance recommendations, deployment scripts, Nginx configuration,
+                            and
+                            automatic shutdown for cost optimization.
+                        </p>
+                        <a href=""
+                            class="inline-block bg-green-600 text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors">
+                            View Research
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md overflow-hidden research-card hover:shadow-lg">
+                    <div class="bg-green-600 p-6 text-white">
+                        <h3 class="text-xl font-semibold">DeepSeek AI Config</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            Focused deployment guide for implementing DeepSeek models on AWS EC2. Includes instance
+                            recommendations, auto-setup scripts, server configuration options, and comprehensive cost
+                            estimates with both GPU and CPU options.
+                        </p>
+                        <a href="./deepseek/"
+                            class="inline-block bg-green-600 text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors">
+                            View Research
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md overflow-hidden research-card hover:shadow-lg">
+                    <div class="bg-green-600 p-6 text-white">
+                        <h3 class="text-xl font-semibold">Grok AI Configuration</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            Tailored setup for AWS EC2 instances using g6.xlarge for cost-effective GPU performance.
+                            Leverages Ollama for model execution with Open WebUI and includes Code-Server for remote
+                            development with detailed cost management strategies.
+                        </p>
+                        <a href="./grok/"
+                            class="inline-block bg-green-600 text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors">
+                            View Research
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md overflow-hidden research-card hover:shadow-lg">
+                    <div class="bg-green-600 p-6 text-white">
+                        <h3 class="text-xl font-semibold">Manus AI Implementation</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-yellow-500 text-white text-xs font-bold py-1 px-2 rounded">COMING
+                                SOON</span>
+                        </div>
+                        <p class="text-gray-600 mb-6">
+                            Detailed implementation guide that includes a comprehensive setup guide, setup scripts, and
+                            extensive documentation for deploying AI agents on AWS EC2 with a focus on security and
+                            performance optimization.
+                        </p>
+                        <a href=""
+                            class="inline-block bg-green-600 text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors">
+                            View Research
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold mb-6 text-center">Comparative Analysis</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full mb-6">
+                        <thead>
+                            <tr class="bg-green-600 text-white">
+                                <th class="py-3 px-4 text-left">Platform</th>
+                                <th class="py-3 px-4 text-left">Recommended Instance</th>
+                                <th class="py-3 px-4 text-left">Monthly Cost (8h/day)</th>
+                                <th class="py-3 px-4 text-left">Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">Gemini</td>
+                                <td class="py-3 px-4">g5.xlarge</td>
+                                <td class="py-3 px-4">~$86 (Spot)</td>
+                                <td class="py-3 px-4">Development environment with code-server integration</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="py-3 px-4">Flowith</td>
+                                <td class="py-3 px-4">g5.4xlarge</td>
+                                <td class="py-3 px-4">~$262</td>
+                                <td class="py-3 px-4">Production environment for larger models (up to 30B)</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">DeepSeek</td>
+                                <td class="py-3 px-4">g4dn.xlarge</td>
+                                <td class="py-3 px-4">~$205</td>
+                                <td class="py-3 px-4">Specialized DeepSeek coder models</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="py-3 px-4">Grok</td>
+                                <td class="py-3 px-4">g6.xlarge</td>
+                                <td class="py-3 px-4">~$193-201</td>
+                                <td class="py-3 px-4">Latest generation GPU performance (NVIDIA L4)</td>
+                            </tr>
+                            <tr class="border-b"></tr>
+                            <td class="py-3 px-4">Manus</td>
+                            <td class="py-3 px-4">g4dn.xlarge or g5.xlarge</td>
+                            <td class="py-3 px-4">~$75-205</td>
+                            <td class="py-3 px-4">Comprehensive deployment with security focus</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-semibold">Key Insights</h3>
+                        <p class="text-gray-700">
+                            All approaches demonstrate significant cost savings compared to subscription AI services,
+                            especially when implementing auto-shutdown features during idle periods. Using spot
+                            instances can further reduce costs by 60-70%. The g4dn.xlarge offers good value for smaller
+                            models, while g5.xlarge/g5.4xlarge provide better performance for larger models or higher
+                            throughput requirements.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold">Best Practices</h3>
+                        <p class="text-gray-700">
+                            Implementing Nginx with SSL certificates ensures secure access, while auto-shutdown scripts
+                            during off-hours minimize costs. Docker containerization simplifies deployment and
+                            maintenance across different server configurations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="bg-green-50 rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Looking for Other Resources?</h2>
+                <p class="text-gray-700 mb-4">
+                    Check out my other technical guides and documentation:
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="../iterm/"
+                        class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                        iTerm2 Configuration
+                    </a>
+                    <a href="../math/"
+                        class="inline-block bg-white border border-green-200 px-4 py-2 rounded hover:bg-green-100 transition-colors text-green-700">
+                        Math Notes
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-white hover:text-green-400">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-white hover:text-green-400">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-white hover:text-green-400">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
