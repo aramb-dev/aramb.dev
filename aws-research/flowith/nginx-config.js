@@ -63,3 +63,43 @@ auth_basic_user_file /etc/nginx/.htpasswd;
 `;
 
 console.log('Nginx configurations generated successfully.');
+
+// Nginx configuration copy functionality
+document.addEventListener('DOMContentLoaded', function () {
+  const copyNginxConfigBtn = document.getElementById('copyNginxConfigBtn');
+
+  if (copyNginxConfigBtn) {
+    copyNginxConfigBtn.addEventListener('click', function () {
+      // Get all the script content from the nginx section
+      const nginxSection = document.getElementById('nginx');
+      const codeBlocks = nginxSection.querySelectorAll('pre code');
+
+      // Combine all code blocks into one string
+      let allConfig = '';
+      codeBlocks.forEach(block => {
+        allConfig += block.textContent + '\n\n';
+      });
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(allConfig)
+        .then(() => {
+          // Change button text temporarily
+          const originalText = copyNginxConfigBtn.innerHTML;
+          copyNginxConfigBtn.innerHTML = '<i data-lucide="check" class="h-4 w-4 mr-2"></i> Copied!';
+
+          // Reinitialize the icon
+          lucide.createIcons();
+
+          // Restore button text after 2 seconds
+          setTimeout(() => {
+            copyNginxConfigBtn.innerHTML = originalText;
+            lucide.createIcons();
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+          alert('Failed to copy text. Please try again.');
+        });
+    });
+  }
+});

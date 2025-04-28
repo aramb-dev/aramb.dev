@@ -103,27 +103,27 @@ WantedBy=multi-user.target
 // Function to run a full deployment
 function runFullDeployment() {
   console.log("Starting full deployment...");
-  
+
   // These would be actual shell commands in a real environment
   console.log("Step 1: Initial system setup");
   console.log(initialSetup);
-  
+
   console.log("Step 2: Docker and NVIDIA setup");
   console.log(dockerSetup);
-  
+
   console.log("Step 3: Ollama setup");
   console.log(ollamaSetup);
-  
+
   console.log("Step 4: Systemd service creation");
   console.log(`Creating /etc/systemd/system/ollama.service with content:`);
   console.log(ollamaSystemdService);
-  
+
   console.log("Step 5 (Optional): LocalGPT setup");
   console.log(localGPTSetup);
-  
+
   console.log("Step 6: Code-Server setup");
   console.log(codeServerSetup);
-  
+
   console.log("Deployment complete!");
 }
 
@@ -137,3 +137,43 @@ module.exports = {
   ollamaSystemdService,
   runFullDeployment
 };
+
+// Deployment scripts copy functionality
+document.addEventListener('DOMContentLoaded', function () {
+  const copyDeploymentBtn = document.getElementById('copyDeploymentBtn');
+
+  if (copyDeploymentBtn) {
+    copyDeploymentBtn.addEventListener('click', function () {
+      // Get all the script content from the deployment section
+      const deploymentSection = document.getElementById('deployment');
+      const codeBlocks = deploymentSection.querySelectorAll('pre code');
+
+      // Combine all code blocks into one string
+      let allCommands = '';
+      codeBlocks.forEach(block => {
+        allCommands += block.textContent + '\n\n';
+      });
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(allCommands)
+        .then(() => {
+          // Change button text temporarily
+          const originalText = copyDeploymentBtn.innerHTML;
+          copyDeploymentBtn.innerHTML = '<i data-lucide="check" class="h-4 w-4 mr-2"></i> Copied!';
+
+          // Reinitialize the icon
+          lucide.createIcons();
+
+          // Restore button text after 2 seconds
+          setTimeout(() => {
+            copyDeploymentBtn.innerHTML = originalText;
+            lucide.createIcons();
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+          alert('Failed to copy text. Please try again.');
+        });
+    });
+  }
+});

@@ -11,7 +11,7 @@ const instancePricing = {
   "g4dn.4xlarge": { vCPUs: 16, ram: 64, gpu: "1 x T4 (16GB)", price: 1.204 },
   "g4dn.8xlarge": { vCPUs: 32, ram: 128, gpu: "1 x T4 (16GB)", price: 2.176 },
   "g4dn.metal": { vCPUs: 96, ram: 384, gpu: "8 x T4 (16GB each)", price: 7.824 },
-  
+
   // G5 instances (NVIDIA A10G GPUs)
   "g5.xlarge": { vCPUs: 4, ram: 16, gpu: "1 x A10G (24GB)", price: 1.006 },
   "g5.2xlarge": { vCPUs: 8, ram: 32, gpu: "1 x A10G (24GB)", price: 1.13 },
@@ -53,10 +53,10 @@ function calculateInstanceCost(instanceType, hoursPerDay, daysPerMonth = 30) {
   if (!instancePricing[instanceType]) {
     throw new Error(`Unknown instance type: ${instanceType}`);
   }
-  
+
   const hourlyRate = instancePricing[instanceType].price;
   const monthlyHours = hoursPerDay * daysPerMonth;
-  
+
   return hourlyRate * monthlyHours;
 }
 
@@ -70,7 +70,7 @@ function calculateStorageCost(sizeGB, volumeType = 'gp3') {
   if (!ebsPricing[volumeType]) {
     throw new Error(`Unknown volume type: ${volumeType}`);
   }
-  
+
   return sizeGB * ebsPricing[volumeType].price;
 }
 
@@ -81,24 +81,24 @@ function calculateStorageCost(sizeGB, volumeType = 'gp3') {
  */
 function calculateDataTransferCost(outboundGB) {
   if (outboundGB <= 0) return 0;
-  
+
   let cost = 0;
   let remainingGB = outboundGB;
-  
+
   for (let i = 0; i < dataTransferPricing.outbound.length; i++) {
     const tier = dataTransferPricing.outbound[i];
     const nextTier = dataTransferPricing.outbound[i + 1];
-    
+
     if (!nextTier) {
       // This is the last tier
       cost += remainingGB * tier.price;
       break;
     }
-    
+
     const tierLimit = tier.limit;
     const nextTierLimit = nextTier.limit;
     const tierSize = nextTierLimit - tierLimit;
-    
+
     if (remainingGB <= tierSize) {
       cost += remainingGB * tier.price;
       break;
@@ -107,7 +107,7 @@ function calculateDataTransferCost(outboundGB) {
       remainingGB -= tierSize;
     }
   }
-  
+
   return cost;
 }
 
@@ -129,13 +129,13 @@ function calculateTotalCost(options) {
     volumeType = 'gp3',
     dataTransferGB = 50
   } = options;
-  
+
   const instanceCost = calculateInstanceCost(instanceType, hoursPerDay);
   const storageCost = calculateStorageCost(storageGB, volumeType);
   const dataTransferCost = calculateDataTransferCost(dataTransferGB);
-  
+
   const totalCost = instanceCost + storageCost + dataTransferCost;
-  
+
   return {
     breakdown: {
       instance: instanceCost.toFixed(2),
@@ -166,3 +166,72 @@ module.exports = {
   ebsPricing,
   dataTransferPricing
 };
+
+// AWS Cost Estimator Helper
+document.addEventListener('DOMContentLoaded', function () {
+  // Elements
+  const instanceTypeSelect = document.getElementById('instanceType');
+  const hoursPerDayInput = document.getElementById('hoursPerDay');
+  const hoursValueSpan = document.getElementById('hoursValue');
+  const storageGBInput = document.getElementById('storageGB');
+  const totalCostSpan = document.getElementById('totalCost');
+  const calculateInstanceBtn = document.getElementById('calculateInstanceBtn');
+
+  // Instance hourly rates
+  const instanceRates = {
+    'g4dn.xlarge': 0.526,
+    'g5.xlarge': 1.006,
+    'g5.2xlarge': 1.13,
+    'g5.4xlarge': 1.352,
+    'g5.8xlarge': 2.704,
+    'g5.16xlarge': 5.408
+  };
+
+  // Update hours value display
+  hoursPerDayInput.addEventListener('input', function () {
+    hoursValueSpan.textContent = `${this.value}h`;
+    calculateCost();
+  });
+
+  // Update when instance type changes
+  instanceTypeSelect.addEventListener('change', calculateCost);
+
+  // Update when storage changes
+  storageGBInput.addEventListener('input', calculateCost);
+
+  // Calculate instance button click
+  if (calculateInstanceBtn) {
+    calculateInstanceBtn.addEventListener('click', function () {
+      // Scroll to cost calculator section
+      const costSection = document.getElementById('cost-estimate');
+      if (costSection) {
+        costSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Calculate and display the cost
+  function calculateCost() {
+    const instanceType = instanceTypeSelect.value;
+    const hoursPerDay = parseInt(hoursPerDayInput.value);
+    const storageGB = parseInt(storageGBInput.value);
+
+    // Calculate instance cost (hourly rate × hours per day × 30 days)
+    const instanceCost = instanceRates[instanceType] * hoursPerDay * 30;
+
+    // Calculate storage cost ($0.08 per GB per month)
+    const storageCost = storageGB * 0.08;
+
+    // Add data transfer cost estimate (fixed at $4.50 for simplicity)
+    const dataTransferCost = 4.50;
+
+    // Calculate total cost
+    const totalCost = instanceCost + storageCost + dataTransferCost;
+
+    // Update the display
+    totalCostSpan.textContent = `$${totalCost.toFixed(2)}`;
+  }
+
+  // Initial calculation
+  calculateCost();
+});
