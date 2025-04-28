@@ -1,0 +1,47 @@
+/* 
+   Back to Top Button CSS
+   Adds a fixed button at the bottom right corner
+*/
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(34, 197, 94, 0.9);
+    /* Green-600 with opacity */
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    z-index: 1000;
+    transform: translateY(20px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-top:hover {
+    background-color: rgba(22, 163, 74, 0.9);
+    /* Green-700 with opacity */
+    transform: translateY(0);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        width: 40px;
+        height: 40px;
+        bottom: 15px;
+        right: 15px;
+    }
+}
