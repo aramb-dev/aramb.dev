@@ -82,7 +82,7 @@
     <!-- Add smooth scrolling to the entire site -->
     <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
     <script src="/assets/js/smooth-scroll.js" defer></script>
-    
+
     <!-- Back to top button -->
     <link rel="stylesheet" href="/assets/css/back-to-top.css">
     <script src="/assets/js/back-to-top.js" defer></script>
@@ -774,6 +774,34 @@ def lambda_handler(event, context):
             </div>
         </div>
     </main>
+
+    <section class="container mx-auto px-4 max-w-4xl mb-12">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-700">Additional Resources</h2>
+            <div class="flex flex-col space-y-4">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <a href="Self-Hosting AI Agent on AWS.pdf"
+                        class="text-green-700 hover:text-green-900 hover:underline">Download PDF Guide: Self-Hosting AI
+                        Agent on AWS</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                    <a href="__Escape Cloud AI Limits_ Build Your Own Powerful AI Dev Environment on AWS__.wav"
+                        class="text-green-700 hover:text-green-900 hover:underline">Audio Walkthrough: Escape Cloud AI
+                        Limits - Build Your Own Powerful AI Dev Environment on AWS</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-4 max-w-4xl">
