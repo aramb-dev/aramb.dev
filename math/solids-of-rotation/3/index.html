@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Concepts in Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Explore advanced topics in solids of rotation including calculus applications, Pappus-Guldinus theorems, and complex shape analysis.">
+    <meta property="og:url" content="https://aramb.dev/math/solids-of-rotation/3">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Advanced Concepts in Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Explore advanced topics in solids of rotation including calculus applications, Pappus-Guldinus theorems, and complex shape analysis.">
+    <meta property="og:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math/solids-of-rotation/3">
+    <meta name="twitter:title" content="Advanced Concepts in Solids of Rotation | Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Explore advanced topics in solids of rotation including calculus applications, Pappus-Guldinus theorems, and complex shape analysis.">
+    <meta name="twitter:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+        });
+    </script>
+    <!-- Include MathJax for mathematical notation -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Add smooth scrolling to the entire site -->
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
+
+    <!-- Back to top button -->
+    <link rel="stylesheet" href="/assets/css/back-to-top.css">
+    <script src="/assets/js/back-to-top.js" defer></script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/" class="text-white hover:underline">Math Notes</a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/solids-of-rotation/" class="text-white hover:underline">Solids of Rotation</a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Advanced Concepts in Solids of Rotation</h1>
+                <p class="text-gray-100">Part 3: Exploring calculus applications and theorems for solids of rotation</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <article class="prose max-w-none">
+                <h2 class="text-xl font-bold mb-4">Calculus and Solids of Rotation</h2>
+
+                <p class="mb-4">
+                    Calculus provides powerful tools for analyzing solids of rotation, especially when dealing with
+                    complex shapes that can't be easily described using basic geometry.
+                </p>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3">The Disk and Washer Methods</h3>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="font-medium text-lg mb-2 text-green-700">Disk Method:</p>
+                    <p class="mb-4">Used when the region being rotated doesn't have a hole. The volume is calculated as:
+                    </p>
+                    <div class="bg-white p-3 rounded">
+                        $$V = \pi \int_{a}^{b} [f(x)]^2 \, dx$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">For rotation around the x-axis, where $f(x)$ is the distance
+                        from the x-axis to the curve.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="font-medium text-lg mb-2 text-green-700">Washer Method:</p>
+                    <p class="mb-4">Used when the region being rotated has a hole. The volume is calculated as:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$V = \pi \int_{a}^{b} [(R(x))^2 - (r(x))^2] \, dx$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Where $R(x)$ is the outer radius function and $r(x)$ is the
+                        inner radius function.</p>
+                </div>
+
+                <h3 class="text-lg font-semibold mt-8 mb-3">The Shell Method</h3>
+
+                <p class="mb-4">
+                    While the disk and washer methods work well for rotation around the x-axis, the shell method is
+                    often
+                    more convenient for rotation around the y-axis.
+                </p>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="font-medium text-lg mb-2 text-green-700">Shell Method Formula:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$V = 2\pi \int_{a}^{b} x \cdot [f(x) - g(x)] \, dx$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Where $x$ is the distance from the axis of rotation, and $f(x)
+                        - g(x)$ is the height of the shell.</p>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6 items-center mb-8">
+                    <div class="md:w-1/2">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Method_of_shells.svg/600px-Method_of_shells.svg.png"
+                            alt="Illustration of the shell method for calculating volume" class="rounded-lg shadow-md">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="text-gray-700">
+                            The shell method conceptualizes the solid as a collection of nested cylindrical shells.
+                            Each shell has a thickness $dx$, a height $f(x) - g(x)$, and a circumference $2\pi x$.
+                        </p>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold mt-10 mb-4">The Pappus-Guldinus Theorems</h2>
+
+                <p class="mb-4">
+                    The Pappus-Guldinus theorems provide elegant ways to calculate the surface area and volume of a
+                    solid of rotation
+                    using the concept of the centroid.
+                </p>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3">First Theorem: Surface Area</h3>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="mb-4">The surface area of a solid of rotation formed by rotating a curve around an axis
+                        is:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$S = 2\pi \bar{x} \cdot L$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Where $\bar{x}$ is the distance from the centroid of the curve
+                        to the axis of rotation, and $L$ is the length of the curve.</p>
+                </div>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3">Second Theorem: Volume</h3>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <p class="mb-4">The volume of a solid of rotation formed by rotating a plane region around an axis
+                        is:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$V = 2\pi \bar{x} \cdot A$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Where $\bar{x}$ is the distance from the centroid of the
+                        region to the axis of rotation, and $A$ is the area of the region.</p>
+                </div>
+
+                <h2 class="text-xl font-bold mt-10 mb-4">Non-Standard Axes of Rotation</h2>
+
+                <p class="mb-4">
+                    While most examples focus on rotation around the x or y axes, we can rotate regions around any line.
+                    For a general line with equation $ax + by + c = 0$, the distance from a point $(x_0, y_0)$ to this
+                    line is:
+                </p>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                    <div class="bg-white p-3 rounded">
+                        $$d = \frac{|ax_0 + by_0 + c|}{\sqrt{a^2 + b^2}}$$
+                    </div>
+                </div>
+
+                <p class="mb-4">
+                    This distance formula can be incorporated into the disk or shell methods to calculate volumes for
+                    rotation around any axis.
+                </p>
+
+                <h2 class="text-xl font-bold mt-10 mb-4">Applications in Engineering and Design</h2>
+
+                <p class="mb-4">
+                    Understanding solids of rotation has significant applications in various fields:
+                </p>
+
+                <ul class="list-disc pl-5 mb-6 space-y-2">
+                    <li>
+                        <strong>Aerospace engineering:</strong> Designing rocket nozzles and aerodynamic surfaces
+                    </li>
+                    <li>
+                        <strong>Mechanical engineering:</strong> Creating components like bearings, flywheels, and
+                        turbine blades
+                    </li>
+                    <li>
+                        <strong>Architecture:</strong> Designing domes, columns, and other rotationally symmetric
+                        structures
+                    </li>
+                    <li>
+                        <strong>Manufacturing:</strong> Programming CNC machines and lathes for precision machining
+                    </li>
+                </ul>
+
+                <div class="bg-blue-50 p-5 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-blue-700">Key Advanced Concepts:</h3>
+                    <ul class="list-disc pl-5 mb-4 space-y-2 text-gray-700">
+                        <li>Different integration methods should be chosen based on the axis of rotation and the shape
+                            being rotated.</li>
+                        <li>The Pappus-Guldinus theorems provide shortcuts for calculating volume and surface area when
+                            the centroid is known.</li>
+                        <li>Practical applications often require combining multiple solids of rotation or subtracting
+                            one from another.</li>
+                        <li>Computer-aided design (CAD) software frequently uses principles of solids of rotation to
+                            model complex 3D objects.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+                    <p class="text-sm text-yellow-800">
+                        <strong>Note:</strong> When working with complex regions, consider breaking them down into
+                        simpler shapes and applying the appropriate integration methods to each part.
+                    </p>
+                </div>
+
+                <p class="text-sm text-gray-600 mt-8">
+                    Concepts based on standard mathematical principles. Visualizations and applications drawn from
+                    various engineering and mathematical resources.
+                </p>
+            </article>
+        </div>
+
+        <div class="flex justify-between items-center mb-8">
+            <a href="../2/"
+                class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Part 2
+            </a>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Explore More Math Topics</h2>
+            <p class="text-gray-700 mb-4">Check out other math topics or return to the main math notes section.</p>
+            <div class="flex gap-4">
+                <a href="/math/"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Math Notes
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add back to top button -->
+    <button id="back-to-top" class="fixed bottom-4 right-4 bg-green-600 text-white p-2 rounded-full shadow-lg hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script>
+        // Back to top button script
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>

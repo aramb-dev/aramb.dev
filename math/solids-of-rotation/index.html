@@ -73,7 +73,7 @@
     <!-- Add smooth scrolling to the entire site -->
     <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
     <script src="/assets/js/smooth-scroll.js" defer></script>
-    
+
     <!-- Back to top button -->
     <link rel="stylesheet" href="/assets/css/back-to-top.css">
     <script src="/assets/js/back-to-top.js" defer></script>
@@ -103,174 +103,108 @@
     <main class="container mx-auto px-4 max-w-4xl py-12">
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <article class="prose max-w-none">
-                <h2 class="text-xl font-bold mb-4">What are Solids of Rotation?</h2>
-
-                <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                    <p class="font-medium text-lg mb-2 text-green-700">Definition:</p>
-                    <p class="mb-2">A <strong>solid of rotation</strong> (or solid of revolution) is a three-dimensional
-                        object formed by rotating a two-dimensional shape around an axis that lies in the same plane.
-                    </p>
-                </div>
-
+                <h2 class="text-xl font-bold mb-4">About This Topic</h2>
                 <p class="mb-4">
-                    Solids of rotation are an important concept in geometry and calculus. They help us understand how to
-                    create and calculate the properties of many common 3D objects like spheres, cylinders, and cones.
+                    Solids of rotation (or solids of revolution) are three-dimensional objects formed by rotating a
+                    two-dimensional
+                    shape around an axis. This mathematical concept allows us to understand and calculate the volumes
+                    and properties
+                    of many common objects like spheres, cylinders, and cones.
+                </p>
+                <p class="mb-6">
+                    This topic is divided into three parts:
                 </p>
 
-                <h3 class="text-lg font-semibold mt-6 mb-3">Real-World Visualization</h3>
-                <p class="mb-4">
-                    You can visualize solids of rotation by imagining a potter's wheel. When a potter places a curved
-                    tool against a spinning lump of clay, the resulting 3D shape is a solid of rotation. Similarly, many
-                    everyday objects like vases, wine glasses, and lampshades are solids of rotation.
-                </p>
-
-                <div class="flex flex-col md:flex-row gap-6 items-center mb-6">
-                    <div class="md:w-1/2">
-                        <img src="/assets/img/solids_of_rotation_example.webp" alt="Example of a solid of rotation"
-                            class="rounded-lg shadow-md">
-                    </div>
-                    <div class="md:w-1/2">
-                        <p class="text-gray-700">
-                            When a 2D shape rotates around an axis, every point in the shape traces out a circular path.
-                            These circular paths collectively form the 3D solid.
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Part 1 Card -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold mb-2">Part 1: Introduction to Solids of Rotation</h3>
+                        <p class="text-gray-700 mb-4">
+                            Learn the fundamental concepts of solids of rotation, including common examples like
+                            cylinders, cones, spheres, and tori. Explore their mathematical properties and
+                            applications in calculus.
                         </p>
+                        <a href="./1/"
+                            class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            View Part 1
+                        </a>
                     </div>
-                </div>
 
-                <h2 class="text-xl font-bold mt-8 mb-4">Common Solids of Rotation</h2>
-
-                <h3 class="text-lg font-semibold mb-3">1. Cylinder</h3>
-                <div class="flex flex-col md:flex-row gap-6 mb-6">
-                    <div class="md:w-1/2">
-                        <img src="/assets/img/cylinder_rotation.webp" alt="Cylinder as a solid of rotation"
-                            class="rounded-lg shadow-md">
+                    <!-- Part 2 Card -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold mb-2">Part 2: Visualizing Solids of Rotation</h3>
+                        <p class="text-gray-700 mb-4">
+                            Explore the axis of rotation concept in detail and understand real-world applications like
+                            the lathe machine. Learn key terminology and see visual representations of solids of
+                            rotation.
+                        </p>
+                        <a href="./2/"
+                            class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            View Part 2
+                        </a>
                     </div>
-                    <div class="md:w-1/2">
-                        <p class="mb-2">A cylinder is formed by rotating a rectangle around an axis that coincides with
-                            one of its sides.</p>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="font-medium mb-2">Volume of a cylinder:</p>
-                            <div class="bg-white p-3 rounded">
-                                $$V = \pi r^2 h$$
-                            </div>
-                            <p class="text-sm text-gray-600 mt-2">where r is the radius and h is the height</p>
-                        </div>
-                    </div>
-                </div>
 
-                <h3 class="text-lg font-semibold mb-3">2. Cone</h3>
-                <div class="flex flex-col md:flex-row gap-6 mb-6">
-                    <div class="md:w-1/2">
-                        <img src="/assets/img/cone_rotation.webp" alt="Cone as a solid of rotation"
-                            class="rounded-lg shadow-md">
+                    <!-- Part 3 Card -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-semibold mb-2">Part 3: Advanced Concepts</h3>
+                        <p class="text-gray-700 mb-4">
+                            Dive into calculus applications with disk, washer, and shell methods. Explore
+                            Pappus-Guldinus theorems,
+                            non-standard axes of rotation, and engineering applications of solids of rotation.
+                        </p>
+                        <a href="./3/"
+                            class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            View Part 3
+                        </a>
                     </div>
-                    <div class="md:w-1/2">
-                        <p class="mb-2">A cone is formed by rotating a right triangle around an axis that coincides with
-                            one of its legs.</p>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="font-medium mb-2">Volume of a cone:</p>
-                            <div class="bg-white p-3 rounded">
-                                $$V = \frac{1}{3} \pi r^2 h$$
-                            </div>
-                            <p class="text-sm text-gray-600 mt-2">where r is the radius of the base and h is the height
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-semibold mb-3">3. Sphere</h3>
-                <div class="flex flex-col md:flex-row gap-6 mb-6">
-                    <div class="md:w-1/2">
-                        <img src="/assets/img/sphere_rotation.webp" alt="Sphere as a solid of rotation"
-                            class="rounded-lg shadow-md">
-                    </div>
-                    <div class="md:w-1/2">
-                        <p class="mb-2">A sphere is formed by rotating a semicircle around its diameter.</p>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="font-medium mb-2">Volume of a sphere:</p>
-                            <div class="bg-white p-3 rounded">
-                                $$V = \frac{4}{3} \pi r^3$$
-                            </div>
-                            <p class="text-sm text-gray-600 mt-2">where r is the radius of the sphere</p>
-                        </div>
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-semibold mb-3">4. Torus (Ring)</h3>
-                <div class="flex flex-col md:flex-row gap-6 mb-6">
-                    <div class="md:w-1/2">
-                        <img src="/assets/img/torus_rotation.webp" alt="Torus as a solid of rotation"
-                            class="rounded-lg shadow-md">
-                    </div>
-                    <div class="md:w-1/2">
-                        <p class="mb-2">A torus (donut shape) is formed by rotating a circle around an axis that does
-                            not intersect the circle.</p>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="font-medium mb-2">Volume of a torus:</p>
-                            <div class="bg-white p-3 rounded">
-                                $$V = 2\pi^2 R r^2$$
-                            </div>
-                            <p class="text-sm text-gray-600 mt-2">where R is the distance from the center of the tube to
-                                the center of the torus and r is the radius of the tube</p>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="text-xl font-bold mt-8 mb-4">Important Principles</h2>
-
-                <div class="bg-blue-50 p-5 rounded-lg mb-6">
-                    <h3 class="text-lg font-semibold mb-2 text-blue-700">Key Concepts:</h3>
-                    <ul class="list-disc pl-5 mb-4 space-y-2 text-gray-700">
-                        <li>If the 2D shape touches the axis of rotation, the resulting 3D solid will be connected at
-                            that point.</li>
-                        <li>If the 2D shape does not touch the axis of rotation, the resulting 3D solid will have a hole
-                            through it (like a torus).</li>
-                        <li>The volume of a solid of rotation can be calculated using integral calculus (using the disk
-                            or shell method).</li>
-                        <li>In calculus, we often use the disk method when rotating around the x-axis and the shell
-                            method when rotating around the y-axis.</li>
-                    </ul>
-                </div>
-
-                <h2 class="text-xl font-bold mt-8 mb-4">Applications in Calculus</h2>
-
-                <p class="mb-4">
-                    In calculus, finding the volume of solids of rotation becomes more complex when dealing with curves
-                    rather than simple shapes. We use integration methods:
-                </p>
-
-                <h3 class="text-lg font-semibold mb-2">Disk Method</h3>
-                <p class="mb-4">
-                    Used when rotating around the x-axis. The volume is:
-                </p>
-                <div class="bg-gray-50 p-4 rounded-lg mb-6">
-                    <div class="bg-white p-3 rounded">
-                        $$V = \pi \int_{a}^{b} [f(x)]^2 \, dx$$
-                    </div>
-                    <p class="text-sm text-gray-600 mt-2">where f(x) is the function being rotated, from x=a to x=b</p>
-                </div>
-
-                <h3 class="text-lg font-semibold mb-2">Shell Method</h3>
-                <p class="mb-4">
-                    Used when rotating around the y-axis. The volume is:
-                </p>
-                <div class="bg-gray-50 p-4 rounded-lg mb-6">
-                    <div class="bg-white p-3 rounded">
-                        $$V = 2\pi \int_{a}^{b} x \cdot f(x) \, dx$$
-                    </div>
-                    <p class="text-sm text-gray-600 mt-2">where f(x) is the function being rotated, from x=a to x=b</p>
                 </div>
 
                 <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
                     <p class="text-sm text-yellow-800">
-                        <strong>Note:</strong> This page presents an introduction to solids of rotation. For more
-                        detailed explanations and practice problems, consider visiting comprehensive mathematics
-                        resources or textbooks on calculus and geometry.
+                        <strong>Note:</strong> Understanding solids of rotation is important for various
+                        applications in mathematics, physics, and engineering. These concepts are particularly
+                        useful in calculus when calculating volumes using integration methods.
                     </p>
                 </div>
 
+                <h3 class="text-lg font-semibold mt-8 mb-4">Key Mathematical Concepts</h3>
+                <ul class="list-disc pl-5 mb-6 space-y-2">
+                    <li><strong>Axis of Rotation:</strong> The line around which a 2D shape is rotated to create a 3D
+                        solid.</li>
+                    <li><strong>Disk Method:</strong> An integration technique used to find volumes when rotating around
+                        the x-axis.</li>
+                    <li><strong>Shell Method:</strong> An integration technique used to find volumes when rotating
+                        around the y-axis.</li>
+                    <li><strong>Cross-Section:</strong> The shape formed when slicing through a solid perpendicular to
+                        an axis.</li>
+                </ul>
+
+                <div class="flex justify-center my-8">
+                    <img src="/assets/img/solids_of_rotation_example.webp" alt="Example of a solid of rotation"
+                        class="rounded-lg shadow-md max-w-md">
+                </div>
+
                 <p class="text-sm text-gray-600 mt-8">
-                    Concepts based on standard mathematical principles. Visualization inspired by materials from various
+                    Concepts based on standard mathematical principles. Visualizations inspired by materials from
+                    various
                     educational resources.
                 </p>
             </article>
