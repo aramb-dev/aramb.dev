@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometric Dilations | Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Learn about geometric dilations: transformations that change size while preserving shape, scale factors, and area calculations.">
+    <meta property="og:url" content="https://aramb.dev/math/geometric-dilations">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Geometric Dilations | Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Learn about geometric dilations: transformations that change size while preserving shape, scale factors, and area calculations.">
+    <meta property="og:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math/geometric-dilations">
+    <meta name="twitter:title" content="Geometric Dilations | Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Learn about geometric dilations: transformations that change size while preserving shape, scale factors, and area calculations.">
+    <meta name="twitter:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        /* Dilation calculator styles */
+        .dilation-calculator input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        .dilation-calculator input:focus {
+            outline: none;
+            border-color: #047857;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <!-- Add smooth scrolling to the entire site -->
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
+    
+    <!-- Back to top button -->
+    <link rel="stylesheet" href="/assets/css/back-to-top.css">
+    <script src="/assets/js/back-to-top.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+
+            // Dilation calculator functionality
+            const originalAreaInput = document.getElementById('original-area');
+            const scaleFactorInput = document.getElementById('scale-factor');
+            const newAreaResult = document.getElementById('new-area-result');
+            const areaRatioInput = document.getElementById('area-ratio');
+            const scaleFactorResult = document.getElementById('scale-factor-result');
+
+            function calculateNewArea() {
+                const originalArea = parseFloat(originalAreaInput.value);
+                const scaleFactor = parseFloat(scaleFactorInput.value);
+
+                if (!isNaN(originalArea) && !isNaN(scaleFactor) && originalArea > 0 && scaleFactor > 0) {
+                    const newArea = originalArea * Math.pow(scaleFactor, 2);
+                    newAreaResult.textContent = newArea.toFixed(2) + " square units";
+                    newAreaResult.classList.remove('text-red-500');
+                    newAreaResult.classList.add('text-green-600');
+                } else {
+                    newAreaResult.textContent = "Please enter valid positive values.";
+                    newAreaResult.classList.remove('text-green-600');
+                    newAreaResult.classList.add('text-red-500');
+                }
+            }
+
+            function calculateScaleFactor() {
+                const areaRatio = parseFloat(areaRatioInput.value);
+
+                if (!isNaN(areaRatio) && areaRatio > 0) {
+                    const scaleFactor = Math.sqrt(areaRatio);
+                    scaleFactorResult.textContent = scaleFactor.toFixed(3);
+                    scaleFactorResult.classList.remove('text-red-500');
+                    scaleFactorResult.classList.add('text-green-600');
+                } else {
+                    scaleFactorResult.textContent = "Please enter a valid positive ratio.";
+                    scaleFactorResult.classList.remove('text-green-600');
+                    scaleFactorResult.classList.add('text-red-500');
+                }
+            }
+
+            originalAreaInput.addEventListener('input', calculateNewArea);
+            scaleFactorInput.addEventListener('input', calculateNewArea);
+            areaRatioInput.addEventListener('input', calculateScaleFactor);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/" class="text-white hover:underline">Math Notes</a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Geometric Dilations</h1>
+                <p class="text-gray-100">Transformations that change size while preserving shape</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <!-- Dilation Calculator Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Dilation Calculator</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Area Calculation -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Calculate New Area After Dilation</h3>
+                    <div class="dilation-calculator">
+                        <div class="mb-4">
+                            <label for="original-area" class="block text-gray-700 font-medium mb-2">Original Area:</label>
+                            <input type="number" id="original-area" placeholder="Enter original area" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="scale-factor" class="block text-gray-700 font-medium mb-2">Scale Factor (k):</label>
+                            <input type="number" id="scale-factor" placeholder="Enter scale factor" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Formula: New Area = Original Area × k²</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">New Area =</span>
+                                <span id="new-area-result" class="text-green-600 font-medium">Enter values to
+                                    calculate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scale Factor Calculation -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Find Scale Factor from Areas</h3>
+                    <div class="dilation-calculator">
+                        <div class="mb-4">
+                            <label for="area-ratio" class="block text-gray-700 font-medium mb-2">Area Ratio (New Area ÷ Original Area):</label>
+                            <input type="number" id="area-ratio" placeholder="Enter area ratio" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Formula: k = √(Area Ratio)</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">Scale Factor =</span>
+                                <span id="scale-factor-result" class="text-green-600 font-medium">Enter ratio to
+                                    calculate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <article class="prose max-w-none">
+                <h2>What is a Geometric Dilation?</h2>
+                <p>A <strong>geometric dilation</strong> is a transformation that changes the size of a figure while preserving its shape. 
+                Every dilation has a <strong>center of dilation</strong> (a fixed point) and a <strong>scale factor</strong> (denoted by k) 
+                that determines how much the figure is enlarged or reduced.</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Key characteristics of dilations:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>The shape of the figure remains unchanged (similar figures)</li>
+                        <li>All corresponding angles remain equal</li>
+                        <li>All corresponding sides are proportional by the scale factor k</li>
+                        <li>The area changes by a factor of k²</li>
+                    </ul>
+                </div>
+
+                <h3>Understanding Scale Factors</h3>
+                <p>The scale factor k determines the type of transformation:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-700 mb-2">Enlargement</h4>
+                        <p class="text-sm">When k > 1</p>
+                        <p class="text-sm text-gray-600">The figure becomes larger than the original</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-700 mb-2">Same Size</h4>
+                        <p class="text-sm">When k = 1</p>
+                        <p class="text-sm text-gray-600">The figure remains congruent to the original</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-orange-700 mb-2">Reduction</h4>
+                        <p class="text-sm">When 0 < k < 1</p>
+                        <p class="text-sm text-gray-600">The figure becomes smaller than the original</p>
+                    </div>
+                </div>
+
+                <h3>Area Changes in Dilations</h3>
+                <p>One of the most important concepts in geometric dilations is how the area changes. When a figure is dilated by a scale factor k, its linear dimensions are multiplied by k, but its area is multiplied by k².</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Area scaling formula:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$\text{New Area} = \text{Original Area} \times k^2$$
+                    </div>
+                </div>
+
+                <h4>Example: Area Calculation</h4>
+                <p>Consider a rectangle with an original area of 36 square units. If it's dilated with a scale factor of 1/3:</p>
+                <p>New Area = 36 × (1/3)² = 36 × (1/9) = 4 square units</p>
+
+                <h3>Finding Scale Factors from Areas</h3>
+                <p>When you know the original and new areas, you can find the scale factor using the relationship:</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Scale factor from areas:</p>
+                    <div class="bg-white p-3 rounded">
+                        $$k = \sqrt{\frac{\text{New Area}}{\text{Original Area}}}$$
+                    </div>
+                </div>
+
+                <h4>Example: Scale Factor Calculation</h4>
+                <p>If a triangle's area changes from 20 cm² to 80 cm², what is the scale factor?</p>
+                <p>k = √(80/20) = √4 = 2</p>
+                <p>The triangle was enlarged by a scale factor of 2.</p>
+
+                <h3>Real-World Applications</h3>
+                <p>Geometric dilations have many practical applications:</p>
+                <ul class="list-disc pl-5 mb-4 space-y-1">
+                    <li><strong>Architecture:</strong> Scaling blueprints and floor plans</li>
+                    <li><strong>Photography:</strong> Enlarging or reducing images</li>
+                    <li><strong>Manufacturing:</strong> Creating scale models</li>
+                    <li><strong>Maps:</strong> Representing real distances at different scales</li>
+                    <li><strong>Computer Graphics:</strong> Resizing digital images and models</li>
+                </ul>
+
+                <h3>Practice Problem</h3>
+                <div class="bg-yellow-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Problem:</p>
+                    <p class="mb-2">A square garden has an area of 100 m². If it's dilated with a scale factor of 1.5, what will be the new area?</p>
+                    <details class="mt-2">
+                        <summary class="cursor-pointer font-semibold text-green-700">Show Solution</summary>
+                        <div class="mt-2 p-2 bg-white rounded">
+                            <p>Given: Original area = 100 m², Scale factor k = 1.5</p>
+                            <p>New Area = Original Area × k²</p>
+                            <p>New Area = 100 × (1.5)²</p>
+                            <p>New Area = 100 × 2.25 = 225 m²</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Explore More Math Topics</h2>
+            <p class="text-gray-700 mb-4">Check out other math topics or return to the main math notes section.</p>
+            <div class="flex gap-4">
+                <a href="/math/"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Math Notes
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

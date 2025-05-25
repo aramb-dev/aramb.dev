@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Density and Volume Relationships | Math Notes | Abdur-Rahmān Bilāl</title>
+    <meta name="description"
+        content="Learn about density: the relationship between mass, volume, and density with calculations and real-world applications.">
+    <meta property="og:url" content="https://aramb.dev/math/density">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Density and Volume Relationships | Math Notes | Abdur-Rahmān Bilāl">
+    <meta property="og:description"
+        content="Learn about density: the relationship between mass, volume, and density with calculations and real-world applications.">
+    <meta property="og:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="aramb.dev">
+    <meta property="twitter:url" content="https://aramb.dev/math/density">
+    <meta name="twitter:title" content="Density and Volume Relationships | Math Notes | Abdur-Rahmān Bilāl">
+    <meta name="twitter:description"
+        content="Learn about density: the relationship between mass, volume, and density with calculations and real-world applications.">
+    <meta name="twitter:image" content="/assets/img/Abdur-Rahmān Bilāl - Social Share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .math-card:hover .math-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* For rendering math equations */
+        .katex-display {
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        /* Density calculator styles */
+        .density-calculator input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        .density-calculator input:focus {
+            outline: none;
+            border-color: #047857;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Abdur-Rahmān Bilāl" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+    <!-- Add smooth scrolling to the entire site -->
+    <link rel="stylesheet" href="/assets/css/smooth-scroll.css">
+    <script src="/assets/js/smooth-scroll.js" defer></script>
+    
+    <!-- Back to top button -->
+    <link rel="stylesheet" href="/assets/css/back-to-top.css">
+    <script src="/assets/js/back-to-top.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ]
+            });
+
+            // Density calculator functionality
+            const massInput = document.getElementById('mass-input');
+            const volumeInput = document.getElementById('volume-input');
+            const densityResult = document.getElementById('density-result');
+            
+            const densityInput = document.getElementById('density-input');
+            const massForVolumeInput = document.getElementById('mass-for-volume');
+            const volumeResult = document.getElementById('volume-result');
+            
+            const densityForMassInput = document.getElementById('density-for-mass');
+            const volumeForMassInput = document.getElementById('volume-for-mass');
+            const massResult = document.getElementById('mass-result');
+
+            function calculateDensity() {
+                const mass = parseFloat(massInput.value);
+                const volume = parseFloat(volumeInput.value);
+
+                if (!isNaN(mass) && !isNaN(volume) && mass > 0 && volume > 0) {
+                    const density = mass / volume;
+                    densityResult.textContent = density.toFixed(3) + " g/cm³";
+                    densityResult.classList.remove('text-red-500');
+                    densityResult.classList.add('text-green-600');
+                } else {
+                    densityResult.textContent = "Please enter valid positive values.";
+                    densityResult.classList.remove('text-green-600');
+                    densityResult.classList.add('text-red-500');
+                }
+            }
+
+            function calculateVolume() {
+                const density = parseFloat(densityInput.value);
+                const mass = parseFloat(massForVolumeInput.value);
+
+                if (!isNaN(density) && !isNaN(mass) && density > 0 && mass > 0) {
+                    const volume = mass / density;
+                    volumeResult.textContent = volume.toFixed(3) + " cm³";
+                    volumeResult.classList.remove('text-red-500');
+                    volumeResult.classList.add('text-green-600');
+                } else {
+                    volumeResult.textContent = "Please enter valid positive values.";
+                    volumeResult.classList.remove('text-green-600');
+                    volumeResult.classList.add('text-red-500');
+                }
+            }
+
+            function calculateMass() {
+                const density = parseFloat(densityForMassInput.value);
+                const volume = parseFloat(volumeForMassInput.value);
+
+                if (!isNaN(density) && !isNaN(volume) && density > 0 && volume > 0) {
+                    const mass = density * volume;
+                    massResult.textContent = mass.toFixed(3) + " g";
+                    massResult.classList.remove('text-red-500');
+                    massResult.classList.add('text-green-600');
+                } else {
+                    massResult.textContent = "Please enter valid positive values.";
+                    massResult.classList.remove('text-green-600');
+                    massResult.classList.add('text-red-500');
+                }
+            }
+
+            massInput.addEventListener('input', calculateDensity);
+            volumeInput.addEventListener('input', calculateDensity);
+            densityInput.addEventListener('input', calculateVolume);
+            massForVolumeInput.addEventListener('input', calculateVolume);
+            densityForMassInput.addEventListener('input', calculateMass);
+            volumeForMassInput.addEventListener('input', calculateMass);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-l to-green-600 from-green-800 text-white py-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-white hover:underline flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <span class="text-gray-200">/</span>
+                <a href="/math/" class="text-white hover:underline">Math Notes</a>
+            </div>
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold mb-2">Density and Volume Relationships</h1>
+                <p class="text-gray-100">Understanding the fundamental relationship between mass, volume, and density</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl py-12">
+        <!-- Density Calculator Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Density Calculator</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Calculate Density -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Calculate Density</h3>
+                    <div class="density-calculator">
+                        <div class="mb-4">
+                            <label for="mass-input" class="block text-gray-700 font-medium mb-2">Mass (g):</label>
+                            <input type="number" id="mass-input" placeholder="Enter mass" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="volume-input" class="block text-gray-700 font-medium mb-2">Volume (cm³):</label>
+                            <input type="number" id="volume-input" placeholder="Enter volume" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Density = Mass ÷ Volume</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">Density =</span>
+                                <span id="density-result" class="text-green-600 font-medium">Enter values</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculate Volume -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Calculate Volume</h3>
+                    <div class="density-calculator">
+                        <div class="mb-4">
+                            <label for="density-input" class="block text-gray-700 font-medium mb-2">Density (g/cm³):</label>
+                            <input type="number" id="density-input" placeholder="Enter density" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="mass-for-volume" class="block text-gray-700 font-medium mb-2">Mass (g):</label>
+                            <input type="number" id="mass-for-volume" placeholder="Enter mass" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Volume = Mass ÷ Density</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">Volume =</span>
+                                <span id="volume-result" class="text-green-600 font-medium">Enter values</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculate Mass -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Calculate Mass</h3>
+                    <div class="density-calculator">
+                        <div class="mb-4">
+                            <label for="density-for-mass" class="block text-gray-700 font-medium mb-2">Density (g/cm³):</label>
+                            <input type="number" id="density-for-mass" placeholder="Enter density" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="volume-for-mass" class="block text-gray-700 font-medium mb-2">Volume (cm³):</label>
+                            <input type="number" id="volume-for-mass" placeholder="Enter volume" min="0" step="0.01"
+                                class="w-full">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Mass = Density × Volume</p>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 font-medium mr-2">Mass =</span>
+                                <span id="mass-result" class="text-green-600 font-medium">Enter values</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <article class="prose max-w-none">
+                <h2>What is Density?</h2>
+                <p><strong>Density</strong> is an intrinsic physical property of a substance that quantifies how much mass is contained within a unit volume. 
+                It describes how tightly packed the matter is in a given space and is independent of the amount of substance present.</p>
+
+                <div class="bg-gray-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">The fundamental density formula:</p>
+                    <div class="bg-white p-3 rounded text-center">
+                        $$\text{Density} = \frac{\text{Mass}}{\text{Volume}}$$
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">This relationship allows us to calculate any one of these three quantities when the other two are known.</p>
+                </div>
+
+                <h3>Rearranging the Density Formula</h3>
+                <p>The density formula can be rearranged to solve for any of the three variables:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-700 mb-2">Calculate Density</h4>
+                        <div class="bg-white p-2 rounded text-center">
+                            $$D = \frac{M}{V}$$
+                        </div>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-700 mb-2">Calculate Volume</h4>
+                        <div class="bg-white p-2 rounded text-center">
+                            $$V = \frac{M}{D}$$
+                        </div>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-orange-700 mb-2">Calculate Mass</h4>
+                        <div class="bg-white p-2 rounded text-center">
+                            $$M = D \times V$$
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Units of Density</h3>
+                <p>Density is expressed in units that combine mass and volume. Common units include:</p>
+                <ul class="list-disc pl-5 mb-4 space-y-1">
+                    <li><strong>g/cm³</strong> (grams per cubic centimeter) - commonly used for solids and liquids</li>
+                    <li><strong>kg/m³</strong> (kilograms per cubic meter) - SI unit, used in scientific calculations</li>
+                    <li><strong>g/mL</strong> (grams per milliliter) - equivalent to g/cm³, often used for liquids</li>
+                    <li><strong>mg/L</strong> (milligrams per liter) - used for very dilute solutions</li>
+                </ul>
+
+                <div class="bg-yellow-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Unit conversion note:</p>
+                    <p class="text-sm">1 g/cm³ = 1 g/mL = 1000 kg/m³</p>
+                </div>
+
+                <h3>Worked Examples</h3>
+                
+                <h4>Example 1: Calculating Volume</h4>
+                <div class="bg-gray-50 p-4 rounded-lg my-4">
+                    <p class="mb-2"><strong>Problem:</strong> Olive oil has a density of 0.92 g/cm³. What volume does 460 grams of olive oil occupy?</p>
+                    <p class="mb-2"><strong>Given:</strong> Density = 0.92 g/cm³, Mass = 460 g</p>
+                    <p class="mb-2"><strong>Formula:</strong> Volume = Mass ÷ Density</p>
+                    <p class="mb-2"><strong>Solution:</strong> V = 460 g ÷ 0.92 g/cm³ = 500 cm³</p>
+                    <p><strong>Answer:</strong> The olive oil occupies 500 cm³ of space.</p>
+                </div>
+
+                <h4>Example 2: Calculating Density</h4>
+                <div class="bg-gray-50 p-4 rounded-lg my-4">
+                    <p class="mb-2"><strong>Problem:</strong> A metal cube has a mass of 216 g and occupies a volume of 27 cm³. What is its density?</p>
+                    <p class="mb-2"><strong>Given:</strong> Mass = 216 g, Volume = 27 cm³</p>
+                    <p class="mb-2"><strong>Formula:</strong> Density = Mass ÷ Volume</p>
+                    <p class="mb-2"><strong>Solution:</strong> D = 216 g ÷ 27 cm³ = 8.0 g/cm³</p>
+                    <p><strong>Answer:</strong> The metal has a density of 8.0 g/cm³ (likely iron or steel).</p>
+                </div>
+
+                <h3>Common Density Values</h3>
+                <p>Here are some typical density values for reference:</p>
+                
+                <div class="overflow-x-auto my-6">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b font-semibold">Substance</th>
+                                <th class="px-4 py-2 border-b font-semibold">Density (g/cm³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="px-4 py-2 border-b">Air (at sea level)</td><td class="px-4 py-2 border-b">0.001</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Water</td><td class="px-4 py-2 border-b">1.00</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Ice</td><td class="px-4 py-2 border-b">0.92</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Olive Oil</td><td class="px-4 py-2 border-b">0.92</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Aluminum</td><td class="px-4 py-2 border-b">2.70</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Iron</td><td class="px-4 py-2 border-b">7.87</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Lead</td><td class="px-4 py-2 border-b">11.34</td></tr>
+                            <tr><td class="px-4 py-2 border-b">Gold</td><td class="px-4 py-2 border-b">19.32</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Real-World Applications</h3>
+                <p>Understanding density is crucial in many fields:</p>
+                <ul class="list-disc pl-5 mb-4 space-y-1">
+                    <li><strong>Materials Science:</strong> Identifying unknown substances and quality control</li>
+                    <li><strong>Engineering:</strong> Designing structures with appropriate weight-to-strength ratios</li>
+                    <li><strong>Geology:</strong> Identifying minerals and understanding Earth's structure</li>
+                    <li><strong>Cooking:</strong> Understanding why oil floats on water</li>
+                    <li><strong>Medicine:</strong> Bone density measurements and fluid analysis</li>
+                    <li><strong>Environmental Science:</strong> Studying ocean currents and atmospheric layers</li>
+                </ul>
+
+                <h3>Key Properties of Density</h3>
+                <div class="bg-blue-50 p-4 rounded-lg my-6">
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Intensive Property:</strong> Density doesn't depend on the amount of substance</li>
+                        <li><strong>Temperature Dependent:</strong> Most substances become less dense when heated</li>
+                        <li><strong>Pressure Dependent:</strong> Gases are highly compressible, affecting their density</li>
+                        <li><strong>Composition Specific:</strong> Each pure substance has a characteristic density</li>
+                    </ul>
+                </div>
+
+                <h3>Practice Problem</h3>
+                <div class="bg-yellow-50 p-4 rounded-lg my-6">
+                    <p class="font-semibold mb-2">Problem:</p>
+                    <p class="mb-2">A rectangular block of wood measures 10 cm × 5 cm × 4 cm and has a mass of 150 g. Calculate its density.</p>
+                    <details class="mt-2">
+                        <summary class="cursor-pointer font-semibold text-green-700">Show Solution</summary>
+                        <div class="mt-2 p-2 bg-white rounded">
+                            <p>Step 1: Calculate the volume</p>
+                            <p>Volume = length × width × height = 10 cm × 5 cm × 4 cm = 200 cm³</p>
+                            <p>Step 2: Apply the density formula</p>
+                            <p>Density = Mass ÷ Volume = 150 g ÷ 200 cm³ = 0.75 g/cm³</p>
+                            <p><strong>Answer:</strong> The wood has a density of 0.75 g/cm³</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Explore More Math Topics</h2>
+            <p class="text-gray-700 mb-4">Check out other math topics or return to the main math notes section.</p>
+            <div class="flex gap-4">
+                <a href="/math/"
+                    class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Math Notes
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2025 Abdur-Rahmān Bilāl. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+                    <a href="https://github.com/aramb-dev" class="text-gray-600 hover:text-green-600">GitHub</a>
+                    <a href="mailto:aramb@aramb.dev" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
