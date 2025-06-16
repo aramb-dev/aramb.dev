@@ -11,7 +11,7 @@ The script should do this: \(ai.prompt)</string>
 	<key>AiModel</key>
 	<string>meta-llama/llama-4-scout-17b-16e-instruct</string>
 	<key>AitermURL</key>
-	<string>https://ai.hackclub.com/chat/completions</string>
+	<string></string>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>BounceOnInactiveBell</key>
